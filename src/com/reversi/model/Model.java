@@ -1,5 +1,8 @@
 package com.reversi.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.reversi.controller.*;
 import com.reversi.view.*;
 
@@ -10,10 +13,12 @@ public class Model implements Runnable {
 	private Controller serverController;
 	private boolean running;
 	private TicTacToe ticTacToe;
+	private List<List<Integer>> board;
 
 	public Model() {
 		running = true;
 		ticTacToe = new TicTacToe();
+		board = new ArrayList<List<Integer>>();
 	}
 	
 	public void setView(View view) {
@@ -38,13 +43,17 @@ public class Model implements Runnable {
 	}
 	
 	public void update(int serverMove, int enemyScore, int playerScore) {
+		// TODO implement
+	}
+	
+	public void boardConverter() {
 		
 	}
 
 	@Override
 	public void run() {
 		while(running) {
-			
+			ticTacToe.start();
 		}
 	}
 
