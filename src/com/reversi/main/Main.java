@@ -1,15 +1,14 @@
 package com.reversi.main;
 
-import com.reversi.controller.ServerController;
-import com.reversi.controller.UserController;
-import com.reversi.model.Model;
-import com.reversi.view.View;
+import com.reversi.controller.*;
+import com.reversi.model.*;
+import com.reversi.view.*;
 
 public class Main {
 
 	public Main() {
 		Model model = new Model();
-		
+
 		// Give model to controllers because they must have a model
 		ServerController serverController = new ServerController(model);
 		UserController userController = new UserController(model);
@@ -20,13 +19,24 @@ public class Main {
 		
 		// Add the view and controllers references to the model
 		model.setView(view);
-		model.setController(serverController);
-		model.setController(userController);
+		model.setServerController(serverController);
+		model.setUserController(userController);
+		
+		Thread modelThread = new Thread(model);
+		Thread viewThread = new Thread(view);
+		Thread serverControllerThread = new Thread(serverController);
+		
+		modelThread.start();
+		viewThread.start();
+		serverControllerThread.start();
 	}
 
 	public static void main(String[] args) {
 		new Main();
+<<<<<<< HEAD
 		System.out.println("Fuck you");
+=======
+>>>>>>> 2430460543d3d535b1c2975f30deef2ced1c453b
 	}
 
 }

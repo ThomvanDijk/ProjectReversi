@@ -4,7 +4,7 @@ import com.reversi.model.Model;
 
 public abstract class Controller {
 	
-	private Model model; // Can and must only have one model
+	protected Model model; // Can and must only have one model
 	
 	/**
 	 * Attach model to controller via constructor
