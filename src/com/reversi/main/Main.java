@@ -1,9 +1,8 @@
 package com.reversi.main;
 
-import com.reversi.controller.ServerController;
-import com.reversi.controller.UserController;
-import com.reversi.model.Model;
-import com.reversi.view.View;
+import com.reversi.controller.*;
+import com.reversi.model.*;
+import com.reversi.view.*;
 
 public class Main {
 

@@ -1,15 +1,19 @@
 package com.reversi.model;
 
-import com.reversi.controller.Controller;
-import com.reversi.view.View;
+import com.reversi.controller.*;
+import com.reversi.view.*;
 
 public class Model implements Runnable {
 	
 	private View mainView;
 	private Controller userController;
 	private Controller serverController;
+	private boolean running;
+	private TicTacToe ticTacToe;
 
 	public Model() {
+		running = true;
+		ticTacToe = new TicTacToe();
 	}
 	
 	public void setView(View view) {
@@ -32,10 +36,16 @@ public class Model implements Runnable {
 		}
 		this.serverController = serverController;
 	}
+	
+	public void update(int serverMove, int enemyScore, int playerScore) {
+		
+	}
 
 	@Override
 	public void run() {
-		
+		while(running) {
+			
+		}
 	}
 
 }
