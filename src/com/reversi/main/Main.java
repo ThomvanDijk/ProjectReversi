@@ -19,9 +19,9 @@ public class Main {
 		view.addUserController(userController);
 		
 		// Add the view and controllers references to the model
-		model.addView(view);
-		model.addController(serverController);
-		model.addController(userController);
+		model.setView(view);
+		model.setController(serverController);
+		model.setController(userController);
 	}
 
 	public static void main(String[] args) {
