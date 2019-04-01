@@ -3,7 +3,7 @@ package com.reversi.model;
 import com.reversi.controller.Controller;
 import com.reversi.view.View;
 
-public class Model {
+public class Model implements Runnable {
 	
 	private View mainView;
 	private Controller userController;
@@ -26,11 +26,16 @@ public class Model {
 		this.userController = userController;
 	}
 	
-	public void setController(Controller serverController) {
+	public void setServerController(Controller serverController) {
 		if (this.serverController!=null) {
 			throw new IllegalStateException("ServerController already set.");
 		}
 		this.serverController = serverController;
+	}
+
+	@Override
+	public void run() {
+		
 	}
 
 }
