@@ -19,7 +19,7 @@ public class Model implements Runnable {
 	public Model() {
 		running = true;
 		ticTacToe = new TicTacToe();
-		reversi = new Reversi();
+		//reversi = new Reversi();
 		board = new ArrayList<List<Integer>>();
 	}
 	
@@ -54,8 +54,8 @@ public class Model implements Runnable {
 
 	@Override
 	public void run() {
-		while(running) {
-			//ticTacToe.start();
+		while(this.running) {
+			//ticTacToe.update();
 			//reversi.start();
 		}
 	}

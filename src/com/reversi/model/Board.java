@@ -1,35 +1,51 @@
 package com.reversi.model;
 
-import java.util.ArrayList;
+import java.util.Scanner;
 
-import com.reversi.model.*;
+import com.reversi.main.*;
 
 public class Board {
 
-	public Board() {
+	private final int boardSize;
+	// private ArrayList<ArrayList> board;
+	private int[][] board;
+
+	public Board(int size) {
+		this.boardSize = size;
+		board = new int[size][size];
+
+		//debugBoard();
 	}
-	
-	public void updateBoard() {
-		int boardsize = 8;
-		ArrayList<String> line = new ArrayList<String>();
-		ArrayList<ArrayList> board = new ArrayList<ArrayList>();
-		int i = 0;
-		
-		while (i < boardsize) {
-			line.add(".");
-			i++;
-		}
-		
-		i = 0;
-		while (i < boardsize) {
-			board.add((ArrayList) line.clone());
-			i++;
+
+	public void setMove(int input, int player) {
+		int row = 0;
+		int col = 0;
+
+		if ((input % boardSize) > 0) {
+			row = input / boardSize;
+			col = input % boardSize;
+		} else {
+			row = input / boardSize;
+			col = 0;
 		}
 
-		for (i = 0; i < boardsize; i++) {
-			ArrayList<String> temp = board.get(i);
-			for (int j = 0; j < boardsize; j++) {
-				System.out.printf(temp.get(j)+" ");
+		//System.out.println(row + " " + col);
+
+		board[row][col] = player;
+		debugBoard();
+	}
+
+	public void debugBoard() {
+		for (int row = 0; row < boardSize; row++) {
+			for (int col = 0; col < boardSize; col++) {
+				if (board[row][col] == 0) {
+					System.out.print(". ");
+				} else if (board[row][col] == 1) {
+					System.out.print("x ");
+				} else {
+					System.out.print("o ");
+				}
+
 			}
 			System.out.println();
 		}

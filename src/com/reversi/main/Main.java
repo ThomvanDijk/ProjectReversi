@@ -5,8 +5,12 @@ import com.reversi.model.*;
 import com.reversi.view.*;
 
 public class Main {
+	
+	public static boolean running;
 
 	public Main() {
+		running = true;
+		
 		Model model = new Model();
 
 		// Give model to controllers because they must have a model
@@ -33,6 +37,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		new Main();
+		running = false;
 	}
 
 }

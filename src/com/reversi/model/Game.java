@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public abstract class Game {
 	
 	private final GameType gameType;
-	private Board board;
+	protected Board board;
 	
 	public Game(final GameType gameType) {
 		this.gameType = gameType;
@@ -28,10 +28,10 @@ public abstract class Game {
 	private void createBoard() {
 		switch(gameType) {
 		case REVERSI:
-			board = new Board();
+			board = new Board(8);
 			break;
 		case TICTACTOE:
-			board = new Board();
+			board = new Board(3);
 			break;
 		default:
 			throw new IllegalStateException();
