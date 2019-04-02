@@ -1,10 +1,10 @@
 package com.reversi.controller;
 
-import com.reversi.model.Model;
+import com.reversi.model.GameModel;
 
 public class ServerController extends Controller implements Runnable {
 
-	public ServerController(Model model) {
+	public ServerController(GameModel model) {
 		super(model);
 	}
 

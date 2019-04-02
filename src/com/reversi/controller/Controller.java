@@ -1,16 +1,16 @@
 package com.reversi.controller;
 
-import com.reversi.model.Model;
+import com.reversi.model.GameModel;
 
 public abstract class Controller {
 	
-	protected Model model; // Can and must only have one model
+	protected GameModel model; // Can and must only have one model
 	
 	/**
 	 * Attach model to controller via constructor
 	 * @param model
 	 */
-	public Controller(Model model) {
+	public Controller(GameModel model) {
 		this.model = model;
 	}
 	

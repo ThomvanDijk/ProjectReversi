@@ -1,29 +1,15 @@
 package com.reversi.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.reversi.controller.Controller;
+import com.reversi.view.GameView;
 
-import com.reversi.controller.*;
-import com.reversi.view.*;
-
-public class Model implements Runnable {
+public abstract class Model implements Runnable {
 	
-	private View mainView;
+	private GameView mainView;
 	private Controller userController;
 	private Controller serverController;
-	private boolean running;
-	private TicTacToe ticTacToe;
-	private Reversi reversi;
-	private List<List<Integer>> board;
-
-	public Model() {
-		running = true;
-		ticTacToe = new TicTacToe();
-		//reversi = new Reversi();
-		board = new ArrayList<List<Integer>>();
-	}
 	
-	public void setView(View view) {
+	public void setView(GameView view) {
 		if (this.mainView!=null) {
 			throw new IllegalStateException("View already set.");
 		}
@@ -42,22 +28,6 @@ public class Model implements Runnable {
 			throw new IllegalStateException("ServerController already set.");
 		}
 		this.serverController = serverController;
-	}
-	
-	public void update(int serverMove, int enemyScore, int playerScore) {
-		// TODO implement
-	}
-	
-	public void boardConverter() {
-		
-	}
-
-	@Override
-	public void run() {
-		while(this.running) {
-			//ticTacToe.update();
-			//reversi.start();
-		}
 	}
 
 }

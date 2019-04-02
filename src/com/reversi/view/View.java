@@ -2,19 +2,12 @@ package com.reversi.view;
 
 import com.reversi.controller.UserController;
 
-public class View implements Runnable {
+public abstract class View implements Runnable {
 	
-	private UserController userController;
-
-	public View() {
-	}
+	private final UserController userController;
 	
-	public void addUserController(UserController userController) {
+	public View(UserController userController) {
 		this.userController = userController;
-	}
-
-	@Override
-	public void run() {
 	}
 
 }

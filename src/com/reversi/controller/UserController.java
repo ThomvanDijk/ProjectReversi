@@ -1,10 +1,10 @@
 package com.reversi.controller;
 
-import com.reversi.model.Model;
+import com.reversi.model.GameModel;
 
 public class UserController extends Controller {
 
-	public UserController(Model model) {
+	public UserController(GameModel model) {
 		super(model);
 	}
 

@@ -11,15 +11,14 @@ public class Main {
 	public Main() {
 		running = true;
 		
-		Model model = new Model();
+		GameModel model = new GameModel();
 
 		// Give model to controllers because they must have a model
 		ServerController serverController = new ServerController(model);
 		UserController userController = new UserController(model);
 		
 		// Make view and add a reference to controller
-		View view = new View();
-		view.addUserController(userController);
+		GameView view = new GameView(userController);
 		
 		// Add the view and controllers references to the model
 		model.setView(view);
