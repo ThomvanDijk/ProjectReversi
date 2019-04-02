@@ -1,9 +1,12 @@
+package com.reversi.model;
+
 import java.awt.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class reversi{
-	 public static void main(String[] args) throws Exception {
+public class Reversi {
+	
+	 public Reversi() {
 		//Verander naar 3 voor tic-tac-toe
 		int boardsize = 8;
 		
@@ -25,7 +28,7 @@ public class reversi{
 		}
 		
 		//Reversi begin zetten(haal dit weg voor tic-tac-toe)
-		reversiStart(board);
+		start(board);
 		
 		//Bord op scherm tonen
 		printBoard(boardsize, board);
@@ -53,7 +56,7 @@ public class reversi{
 		 System.out.println();
 	 }
 	 
-	 public static void reversiStart(ArrayList<ArrayList> board) {
+	 public static void start(ArrayList<ArrayList> board) {
 		 board.get(3).set(3, "W");
 		 board.get(3).set(4, "Z");
 		 board.get(4).set(3, "Z");

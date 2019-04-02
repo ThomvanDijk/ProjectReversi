@@ -13,11 +13,13 @@ public class Model implements Runnable {
 	private Controller serverController;
 	private boolean running;
 	private TicTacToe ticTacToe;
+	private Reversi reversi;
 	private List<List<Integer>> board;
 
 	public Model() {
 		running = true;
 		ticTacToe = new TicTacToe();
+		reversi = new Reversi();
 		board = new ArrayList<List<Integer>>();
 	}
 	
@@ -53,7 +55,8 @@ public class Model implements Runnable {
 	@Override
 	public void run() {
 		while(running) {
-			ticTacToe.start();
+			//ticTacToe.start();
+			//reversi.start();
 		}
 	}
 

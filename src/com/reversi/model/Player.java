@@ -1,4 +1,4 @@
-package com.reversi.controller;
+package com.reversi.model;
 
 public class Player {
 	
