@@ -1,38 +1,29 @@
 package com.reversi.model;
 
-import java.util.Scanner;
-
-import com.reversi.main.*;
-
 public class Board {
 
 	private final int boardSize;
-	// private ArrayList<ArrayList> board;
 	private int[][] board;
 
 	public Board(int size) {
 		this.boardSize = size;
 		board = new int[size][size];
-
-		//debugBoard();
+	}
+	
+	public int[][] getBoard() {
+		return board;
+	}
+	
+	public int getBoardPiece(int row, int col) {
+		return board[row][col];
+	}
+	
+	public void setBoard(int row, int col, int input) {
+		board[row][col] = input;
 	}
 
-	public void setMove(int input, int player) {
-		int row = 0;
-		int col = 0;
-
-		if ((input % boardSize) > 0) {
-			row = input / boardSize;
-			col = input % boardSize;
-		} else {
-			row = input / boardSize;
-			col = 0;
-		}
-
-		//System.out.println(row + " " + col);
-
-		board[row][col] = player;
-		debugBoard();
+	public int getBoardSize() {
+		return boardSize;
 	}
 
 	public void debugBoard() {

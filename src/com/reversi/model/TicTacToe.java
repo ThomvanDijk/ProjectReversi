@@ -6,7 +6,7 @@ import com.reversi.controller.*;
 import com.reversi.main.Main;
 
 public class TicTacToe extends Game {
-	
+
 	private Player player1;
 	private Player player2;
 	private Scanner scanInput;
@@ -14,51 +14,105 @@ public class TicTacToe extends Game {
 
 	public TicTacToe() {
 		super(GameType.TICTACTOE);
-		
+
 		player1 = new Player();
 		player2 = new Player();
-		
+
 		player1.setTurn(true);
 		player2.setTurn(false);
-		
+
 		scanInput = new Scanner(System.in);
-		//data = scanInput.nextLine();
+		// data = scanInput.nextLine();
 		consoleInput();
 	}
-	
+
+	// Check if the move is valid
+	public boolean isValidMove(int input, int player) {
+		int row = 0;
+		int col = 0;
+		int boardSize = board.getBoardSize();
+
+		if ((input % boardSize) > 0) {
+			row = input / boardSize;
+			col = input % boardSize;
+		} else {
+			row = input / boardSize;
+			col = 0;
+		}
+
+		// Check if there isn't already a piece
+		if (board.getBoardPiece(row, col) == 0) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	// Set the move only if it is a valid move
+	public void setMove(int input, int player) throws Exception {
+		int row = 0;
+		int col = 0;
+		int boardSize = board.getBoardSize();
+
+		if ((input % boardSize) > 0) {
+			row = input / boardSize;
+			col = input % boardSize;
+		} else {
+			row = input / boardSize;
+			col = 0;
+		}
+
+		// Check if there isn't already a piece
+		if (board.getBoardPiece(row, col) == 0) {
+			board.setBoard(row, col, player);
+		} else {
+			throw new Exception("The move is not valid!");
+		}
+
+		// Show the board in the console
+		board.debugBoard();
+	}
+
 	public void consoleInput() {
 		System.out.println("--------------");
 		System.out.println("x has the turn");
-		
+
 		while (scanInput.hasNextLine()) {
-			//System.out.println(scanInput.nextLine());
-			//int place = scanInput.nextInt();
-			
-			
-			
-			if(player1.hasTurn()) {
-				board.setMove(scanInput.nextInt(), 1);
+			// System.out.println(scanInput.nextLine());
+			// int place = scanInput.nextInt();
+
+			if (player1.hasTurn()) {
+				try {
+					setMove(scanInput.nextInt(), 1);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				player1.setTurn(false);
 				player2.setTurn(true);
-				
+
 				System.out.println("--------------");
 				System.out.println("o has the turn");
 			} else {
-				board.setMove(scanInput.nextInt(), 2);
+				try {
+					setMove(scanInput.nextInt(), 2);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				player1.setTurn(true);
 				player2.setTurn(false);
-				
+
 				System.out.println("--------------");
 				System.out.println("x has the turn");
 			}
 
 		}
 
-		if(!Main.running) {
+		if (!Main.running) {
 			scanInput.close();
 		}
 	}
-	
+
 	public void update() {
 
 	}
