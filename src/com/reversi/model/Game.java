@@ -1,7 +1,5 @@
 package com.reversi.model;
 
-import java.util.ArrayList;
-
 public abstract class Game {
 	
 	private final GameType gameType;
@@ -11,18 +9,6 @@ public abstract class Game {
 		this.gameType = gameType;
 		
 		createBoard();
-	}
-
-	public boolean checkMove(int row, int col) {
-		switch(gameType) {
-		case REVERSI:
-			break;
-		case TICTACTOE:
-			break;
-		default:
-			throw new IllegalStateException();
-		}
-		return false;
 	}
 	
 	private void createBoard() {
