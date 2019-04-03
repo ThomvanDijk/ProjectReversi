@@ -2,27 +2,25 @@ package com.reversi.model;
 
 import java.util.Scanner;
 
-import com.reversi.controller.*;
-import com.reversi.main.Main;
+import com.reversi.main.*;
 
 public class TicTacToe extends Game {
 
 	private Player player1;
 	private Player player2;
 	private Scanner scanInput;
-	private String data;
 
 	public TicTacToe() {
-		super(GameType.TICTACTOE);
+		super(GameType.TICTACTOE, GameMode.SINGLEPLAYER);
 
-		player1 = new Player();
-		player2 = new Player();
+		player1 = new Player(); // This is a human player or an AI
+		player2 = new Player(); // This is an AI or server
 
 		player1.setTurn(true);
 		player2.setTurn(false);
 
 		scanInput = new Scanner(System.in);
-		// data = scanInput.nextLine();
+		
 		consoleInput();
 	}
 
