@@ -1,8 +1,9 @@
+package com.reversi.model;
 import java.awt.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class reversi{
+public class Reversi{
 	//Verander naar 3 voor tic-tac-toe
 	public final static int boardsize = 8;
 	public static String aanZet = "Z";
