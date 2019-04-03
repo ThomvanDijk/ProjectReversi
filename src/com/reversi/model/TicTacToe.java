@@ -7,29 +7,26 @@ import com.reversi.model.Player.PlayerType;
 
 public class TicTacToe extends Game {
 
-	private Player player1;
-	private Player player2;
 	private Scanner scanInput;
-	
 
-	public TicTacToe() {
-		super(GameType.TICTACTOE, GameMode.SINGLEPLAYER);
-
-		player1 = new Player(PlayerType.HUMAN, 1); // This is a human player or an AI
-		player2 = new Player(PlayerType.AI, 2); // This is an AI or server
-
-		player1.setTurn(true);
-		player2.setTurn(false);
+	public TicTacToe(GameMode gameMode) {
+		super(GameType.TICTACTOE, gameMode);
 
 		scanInput = new Scanner(System.in);
-		ai.setTicTacToe(this);
+		
+		if(player1.type.equals(PlayerType.AI)) {
+			player1.ai.setTicTacToe(this);
+		}
+		
+		if(player2.type.equals(PlayerType.AI)) {
+			player2.ai.setTicTacToe(this);
+		}
 		
 		if(gameMode.equals(GameMode.SINGLEPLAYER)) {
 			consoleInput();
 		} else {
 			
 		}
-		
 	}
 
 	// Check if the move is valid
@@ -90,7 +87,7 @@ public class TicTacToe extends Game {
 			player2.setTurn(true);
 		} else {
 			// AI has to make a move
-			input = ai.calculateMove(board, player);
+			input = player.ai.calculateMove(board, player);
 			
 			player1.setTurn(true);
 			player2.setTurn(false);

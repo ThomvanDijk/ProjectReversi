@@ -1,5 +1,7 @@
 package com.reversi.model;
 
+import com.reversi.model.Game.GameType;
+
 public class Player {
 	
 	public enum PlayerType {
@@ -10,6 +12,7 @@ public class Player {
 	protected final int id;
 	private int score;
 	private boolean hasTurn;
+	protected AI ai = null;
 
 	public Player(PlayerType type, int id) {
 		this.type = type;
@@ -17,6 +20,10 @@ public class Player {
 		
 		score = 0;
 		hasTurn = false;	
+		
+		if(type.equals(PlayerType.AI)) {
+			ai = new AI();
+		}
 	}
 	
 	public int getScore() {

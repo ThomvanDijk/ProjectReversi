@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.reversi.controller.*;
+import com.reversi.model.Game.GameMode;
 import com.reversi.view.*;
 
 public class GameModel extends Model {
@@ -15,7 +16,7 @@ public class GameModel extends Model {
 
 	public GameModel() {
 		running = true;
-		ticTacToe = new TicTacToe();
+		ticTacToe = new TicTacToe(GameMode.SINGLEPLAYER);
 		//reversi = new Reversi();
 		board = new ArrayList<List<Integer>>();
 	}
