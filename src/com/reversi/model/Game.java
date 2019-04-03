@@ -13,10 +13,12 @@ public abstract class Game {
 	private final GameType gameType;
 	protected Board board;
 	protected GameMode gameMode;
+	protected AI ai;
 	
 	public Game(GameType gameType, GameMode gameMode) {
 		this.gameType = gameType;
 		this.gameMode = gameMode;
+		ai = new AI();
 		
 		createBoard();
 	}

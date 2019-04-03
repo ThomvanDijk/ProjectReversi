@@ -4,22 +4,38 @@ public class Board {
 
 	private final int boardSize;
 	private int[][] board;
+	private int placesOccupied;
 
 	public Board(int size) {
 		this.boardSize = size;
 		board = new int[size][size];
+		placesOccupied = 1;
 	}
 	
 	public int[][] getBoard() {
 		return board;
 	}
 	
-	public int getBoardPiece(int row, int col) {
+	public int getPiece(int row, int col) {
 		return board[row][col];
 	}
 	
-	public void setBoard(int row, int col, int input) {
-		board[row][col] = input;
+	public void setPiece(int row, int col, int piece) throws Exception {
+		System.out.println("Number of places occupied: " + placesOccupied);
+		if(placesOccupied >= boardSize * boardSize) {
+			throw new Exception("All places are occupied!");
+		} else {
+			board[row][col] = piece;
+			placesOccupied++;
+		}
+	}
+	
+	public boolean emptyPlaces() {
+		if(placesOccupied >= boardSize * boardSize) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	public int getBoardSize() {

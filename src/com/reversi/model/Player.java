@@ -2,12 +2,21 @@ package com.reversi.model;
 
 public class Player {
 	
+	public enum PlayerType {
+		HUMAN, AI, SERVER
+	}
+	
+	protected final PlayerType type;
+	protected final int id;
 	private int score;
 	private boolean hasTurn;
 
-	public Player() {
+	public Player(PlayerType type, int id) {
+		this.type = type;
+		this.id = id;
+		
 		score = 0;
-		hasTurn = false;
+		hasTurn = false;	
 	}
 	
 	public int getScore() {
