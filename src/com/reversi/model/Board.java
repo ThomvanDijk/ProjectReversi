@@ -21,7 +21,6 @@ public class Board {
 	}
 	
 	public void setPiece(int row, int col, int piece) throws Exception {
-		System.out.println("Number of places occupied: " + placesOccupied);
 		if(placesOccupied >= boardSize * boardSize) {
 			throw new Exception("All places are occupied!");
 		} else {

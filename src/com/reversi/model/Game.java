@@ -14,11 +14,13 @@ public abstract class Game {
 	protected Board board;
 	protected GameMode gameMode;
 	protected AI ai;
+	protected boolean noWinner;
 	
 	public Game(GameType gameType, GameMode gameMode) {
 		this.gameType = gameType;
 		this.gameMode = gameMode;
 		ai = new AI();
+		noWinner = true;
 		
 		createBoard();
 	}

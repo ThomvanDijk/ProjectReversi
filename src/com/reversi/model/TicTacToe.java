@@ -10,6 +10,7 @@ public class TicTacToe extends Game {
 	private Player player1;
 	private Player player2;
 	private Scanner scanInput;
+	
 
 	public TicTacToe() {
 		super(GameType.TICTACTOE, GameMode.SINGLEPLAYER);
@@ -96,18 +97,65 @@ public class TicTacToe extends Game {
 		}
 
 		try {
-			System.out.println(player.id + " plays: " + input);
+			System.out.println("Player " + player.id + " plays: " + input);
 			setMove(input, player.id);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		if(playerWon(player)) {
+			System.out.println("Player " + player.id + " won!");
+			noWinner = false;
+		}
+	}
+	
+	// Based on: https://www.coderslexicon.com/code/15/
+	// Check board for a win by looping through rows, columns and checking diagonals.
+	// If any of them are true, then there is a winning condition.
+	public boolean playerWon(Player player) {
+		int[][] boardArray = board.getBoard();
+		
+		// Loop through the rows
+		for (int i = 0; i < 3; i++) {
+			if (checkRow(boardArray[i][0], boardArray[i][1], boardArray[i][2], player)) {
+				return true;
+			}
+		}
+
+		// Loop through the columns
+		for (int i = 0; i < 3; i++) {
+			if (checkRow(boardArray[0][i], boardArray[1][i], boardArray[2][i], player)) {
+				return true;
+			}
+		}
+
+		// Check diagonals
+		if (checkRow(boardArray[0][0], boardArray[1][1], boardArray[2][2], player)) {
+			return true;
+		}
+
+		if (checkRow(boardArray[0][2], boardArray[1][1], boardArray[2][0], player)) {
+			return true;
+		}
+
+		return false;
+	}
+	
+	// Check three values to see if they are the same. If so, we have a winner.
+	public boolean checkRow(int pos0, int pos1, int pos2, Player player) {
+		if ((pos0 == pos1) && (pos0 == pos2)) {
+			if(player.id == pos0) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	// This input needs to come from the gui
+	// This input needs to come from the GUI
 	public void consoleInput() {
 		board.debugBoard();
 
-		while (scanInput.hasNextLine()) {
+		while (scanInput.hasNextLine() && noWinner) {
 			if (player1.hasTurn() && player1.type.equals(PlayerType.HUMAN)) {
 				makeMove(player1);
 			} else {
