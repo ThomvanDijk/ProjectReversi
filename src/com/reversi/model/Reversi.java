@@ -1,12 +1,10 @@
-package com.reversi.model;
-
 import java.awt.List;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Scanner;
 import java.util.Set;
 
-public class Reversi {
+public class reversi{
 	//Verander naar 3 voor tic-tac-toe
 	public final static int boardsize = 8;
 	public static String aanZet = "Z";
@@ -165,39 +163,47 @@ public class Reversi {
 				 //check of het veld leeg is (volle vakken zijn nooit geldig)
 				 if(temp.equals(".")){
 					 ArrayList<String> tempList = new ArrayList<String>();
-					 
+					 ArrayList<String> tempAdd = new ArrayList<String>();
 					 //check in elke richting of de zet geldig is:
 					 //noordwest
-					 if(checkDirection(x,y,board,-1,-1).isEmpty() == false) {
-						 tempList.addAll(checkDirection(x,y,board,-1,-1));
+					 tempAdd = checkDirection(x,y,board,-1,-1);
+					 if(tempAdd.isEmpty() == false) {
+						 tempList.addAll(tempAdd);
 					 }
-					 //noord				
-					 if(checkDirection(x,y,board,0,-1).isEmpty() == false) {
-						 tempList.addAll(checkDirection(x,y,board,0,-1));
+					 //noord
+					 tempAdd = checkDirection(x,y,board,0,-1);
+					 if(tempAdd.isEmpty() == false) {
+						 tempList.addAll(tempAdd);
 					 }			
-					 //noordoost					
-					 if(checkDirection(x,y,board,1,-1).isEmpty() == false) {
-						 tempList.addAll(checkDirection(x,y,board,1,-1));
+					 //noordoost
+					 tempAdd = checkDirection(x,y,board,1,-1);
+					 if(tempAdd.isEmpty() == false) {
+						 tempList.addAll(tempAdd);
 					 }							
-					 //oost				
-					 if(checkDirection(x,y,board,1,0).isEmpty() == false) {
-						 tempList.addAll(checkDirection(x,y,board,1,0));
+					 //oost
+					 tempAdd = checkDirection(x,y,board,1,0);
+					 if(tempAdd.isEmpty() == false) {
+						 tempList.addAll(tempAdd);
 					 }						
-					 //zuidoost				
-					 if(checkDirection(x,y,board,1,1).isEmpty() == false) {
-						 tempList.addAll(checkDirection(x,y,board,1,1));
+					 //zuidoost
+					 tempAdd = checkDirection(x,y,board,1,1);
+					 if(tempAdd.isEmpty() == false) {
+						 tempList.addAll(tempAdd);
 					 }					
 					 //zuid
-					 if(checkDirection(x,y,board,0,1).isEmpty() == false) {
-						 tempList.addAll(checkDirection(x,y,board,0,1));
+					 tempAdd = checkDirection(x,y,board,0,1);
+					 if(tempAdd.isEmpty() == false) {
+						 tempList.addAll(tempAdd);
 					 }			
 					 //zuidwest
-					 if(checkDirection(x,y,board,-1,1).isEmpty() == false) {
-						 tempList.addAll(checkDirection(x,y,board,-1,1));
+					 tempAdd = checkDirection(x,y,board,-1,1);
+					 if(tempAdd.isEmpty() == false) {
+						 tempList.addAll(tempAdd);
 					 }		
 					 //west
-					 if(checkDirection(x,y,board,-1,0).isEmpty() == false) {
-						 tempList.addAll(checkDirection(x,y,board,-1,0));
+					 tempAdd = checkDirection(x,y,board,-1,0);
+					 if(tempAdd.isEmpty() == false) {
+						 tempList.addAll(tempAdd);
 					 }
 					 
 					 if(tempList.isEmpty() == false) {
@@ -228,29 +234,32 @@ public class Reversi {
 				//increment de richting
 				 intY = intY + yd;
 				 intX = intX + xd;
-				 if((y+intY < 0 || x+intX < 0 || y+intY > boardsize-1 || x+intX > boardsize-1) == false) {					 
+				 if((y+intY < 0 || x+intX < 0 || y+intY > boardsize-1 || x+intX > boardsize-1) == false) {
+					 
 					 //loop totdat er geen tegenstander stukken meer zijn in deze richting
 					 while(loop == true) {
+						 
 						 //als er een leeg vakje gevonden is, is de richting niet geldig voor deze zet.
 						 if(board.get(y+intY).get(x+intX).equals(".")) {
 							 loop = false;
 						 }
-						 //als er een vakje met een eigen steen gevonden wordt, is het een geldige zet.
+						 //als er een vakje met een eigen steen gevonden wordt, is het wel een geldige zet.
 						 else if(board.get(y+intY).get(x+intX).equals(aanZet)){
 							 for (int j = 0; j <= i+1; j++) {
 								 int newX = x+(j*xd);
-								 int newY = y+(j*yd);
-								 fields.add(newX+""+newY);							 
+								 int newY = y+(j*yd);								 
+								 fields.add(newX+""+newY);	
 							 }
-							 loop = false;
-						 }
-						 //als er out of bounds gegaan wordt, is de richting niet geldig voor deze zet.
-						 if(y+intY == 0 || x+intX == 0 || y+intY == boardsize-1 || x+intX == boardsize-1) {
 							 loop = false;
 						 }
 						 //increment de richting
 						 intY = intY + yd;
 						 intX = intX + xd;
+						 
+						//als er out of bounds gegaan wordt, is de richting niet geldig voor deze zet.
+						 if(y+intY < 0 || x+intX < 0 || y+intY > boardsize-1 || x+intX > boardsize-1) {
+							 loop = false;
+						 }
 						 i++;
 					 }
 				 }
