@@ -5,9 +5,6 @@ import java.awt.*;
 import java.awt.event.*;
 
 
-/*
- * The chatting.Client with its GUI
- */
 public class ClientGUI extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = 1L;

@@ -78,24 +78,20 @@ public class Client  {
        
     }
 
-    /*
-     * When something goes wrong
-     * Close the Input/Output streams and disconnect not much to do in the catch clause
-     */
+   
     private void disconnect() {
         try {
             if(sInput != null) sInput.close();
         }
-        catch(Exception e) {} // not much else I can do
+        catch(Exception e) {} 
         try {
             if(sOutput != null) sOutput.close();
         }
-        catch(Exception e) {} // not much else I can do
+        catch(Exception e) {} 
         try{
             if(socket != null) socket.close();
         }
-        catch(Exception e) {} // not much else I can do
-
+        catch(Exception e) {} 
         // inform the GUI
         if(cg != null)
             cg.connectionFailed();
@@ -103,17 +99,13 @@ public class Client  {
     }
     
     public static void main(String[] args) {
-        // default values
         int portNumber = 7789;
         String serverAddress = "localhost";
         String userName = "Anonymous";
 
-        // depending of the number of arguments provided we fall through
         switch(args.length) {
-            // > javac chatting.Client username portNumber serverAddr
             case 3:
                 serverAddress = args[2];
-                // > javac chatting.Client username portNumber
             case 2:
                 try {
                     portNumber = Integer.parseInt(args[1]);
@@ -123,13 +115,10 @@ public class Client  {
                     System.out.println("Usage is: > java chatting.Client [username] [portNumber] [serverAddress]");
                     return;
                 }
-                // > javac chatting.Client username
             case 1:
                 userName = args[0];
-                // > java chatting.Client
             case 0:
                 break;
-            // invalid number of arguments
             default:
                 System.out.println("Usage is: > java chatting.Client [username] [portNumber] {serverAddress]");
                 return;
@@ -149,17 +138,13 @@ public class Client  {
        
     }
 
-    /*
-     * a class that waits for the message from the server and append them to the JTextArea
-     * if we have a GUI or simply System.out.println() it in console mode
-     */
+   
     class ListenFromServer extends Thread {
 
         public void run() {
             while(true) {
                 try {
                     String msg = (String) sInput.readObject();
-                    // if console mode print the message and add back the prompt
                     if(true) {
                         System.out.println(msg);
                         System.out.print("> ");
@@ -174,7 +159,6 @@ public class Client  {
                         cg.connectionFailed();
                     break;
                 }
-                // can't happen with a String object but need the catch anyhow
                 catch(ClassNotFoundException e2) {
                 }
             }
