@@ -52,7 +52,7 @@ public class Board {
 					System.out.print(". ");
 				} else if (board[row][col] == 1) {
 					if (gameType.equals(GameType.REVERSI)) {
-						System.out.print("z ");
+						System.out.print("b ");
 					} else {
 						System.out.print("x ");
 					}

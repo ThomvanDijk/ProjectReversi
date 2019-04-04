@@ -103,7 +103,6 @@ public class Reversi extends Game {
 						boolean add = false;
 
 						for (int i = 0; i < validMoves.size(); i++) {
-
 							if (validMoves.get(i).equals(tempList)) {
 								add = false;
 								break;
@@ -136,7 +135,7 @@ public class Reversi extends Game {
 		if ((y + intY < 0 || x + intX < 0 || y + intY > board.getBoardSize() - 1
 				|| x + intX > board.getBoardSize() - 1) == false) {
 			// check of er een tegenstander aan het veld is
-			if (board.getPiece(y + intY, x + intX) != playerID) {
+			if (board.getPiece(y + intY, x + intX) != playerID && board.getPiece(y + intY, x + intX) != 0) {
 				// increment de richting
 				intY = intY + yd;
 				intX = intX + xd;
@@ -195,6 +194,12 @@ public class Reversi extends Game {
 			col = 0;
 		}
 
+		for (int i = 0; i < validMoves.size(); i++) {
+			if (validMoves.get(i).get(0).equals(col) && validMoves.get(i).get(1).equals(row)) {
+
+			}
+		}
+
 		// Check if the new move is valid
 		boolean validMove = false;
 		for (int check = 0; check < validMoves.size(); check++) {
@@ -203,7 +208,7 @@ public class Reversi extends Game {
 			if (validMoves.get(check).get(0).equals(col) && validMoves.get(check).get(1).equals(row)) {
 				validMove = true;
 
-				// System.out.println("Places to change: " + chopped(validMoves.get(check), 2));
+				System.out.println("Places to change: " + chopped(validMoves.get(check), 2));
 
 				for (int check2 = 0; check2 * 2 < validMoves.get(check).size(); check2++) {
 					int colChange = validMoves.get(check).get(check2 * 2);
@@ -234,13 +239,12 @@ public class Reversi extends Game {
 		if (!validMove) {
 			System.out.println("Not a valid move!");
 		} else {
-			// update score
-			System.out.println("Black: " + player1.getScore() + "          White: " + player2.getScore());
-
-			// update board
-			board.debugBoard();
+			if (playerID == 1) {
+				debugMove(player2.id);
+			} else {
+				debugMove(player1.id);
+			}
 		}
-
 	}
 
 	public void makeMove(Player player) {
@@ -263,16 +267,6 @@ public class Reversi extends Game {
 
 		// Get all the valid moves if there are any
 		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(board.getBoardSize(), player.id);
-		
-		System.out.println("Player: " + player.id + ", make a turn:");
-		// System.out.println("Valid moves: " + chopped(validMoves.get(0), 2));
-
-		// Show the valid moves
-		System.out.print("Valid moves: ");
-		for (List<Integer> intList : chopped(validMoves.get(0), 2)) {
-			System.out.print((intList.get(0) * board.getBoardSize()) + intList.get(1) + 1 + " ");
-		}
-		System.out.println();
 
 		if (!validMoves.isEmpty()) {
 			setMove(input, validMoves, player.id);
@@ -290,9 +284,9 @@ public class Reversi extends Game {
 
 	// This input needs to come from the GUI
 	public void consoleInput() {
-		board.debugBoard();
-		System.out.println("Player: 1 make a turn:");
-		System.out.println("Valid moves: 20 29");
+		System.out.println("Player: 1 is black");
+		System.out.println("Player: 2 is white");
+		debugMove(player1.id);
 
 		while (scanInput.hasNextLine() && noWinner) {
 			if (player1.hasTurn() && player1.type.equals(PlayerType.HUMAN)) {
@@ -305,6 +299,58 @@ public class Reversi extends Game {
 		if (!Main.running) {
 			scanInput.close();
 		}
+	}
+
+	public void debugMove(int playerID) {
+		// Show updated score
+		System.out.println("Black: " + player1.getScore() + "  White: " + player2.getScore());
+
+		// update board
+		board.debugBoard();
+
+		// Get all the valid moves if there are any
+		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(board.getBoardSize(), playerID);
+
+		System.out.println("Player: " + playerID + ", make a turn:");
+		//System.out.println("Valid moves: " + validMoves);
+
+		// Show the valid moves
+		System.out.print("Valid moves:    ");
+		for (int i = 0; i < validMoves.size(); i++) {
+			for (List<Integer> intList : chopped(validMoves.get(i), 2)) {
+				System.out.print((intList.get(0) * board.getBoardSize()) + intList.get(1) + " ");
+			}
+		}
+		System.out.println();
+
+		// THE GREAT FILTER
+		System.out.print("Filtered moves: ");
+		for (int i = 0; i < validMoves.size(); i++) {
+			for (List<Integer> intList : chopped(validMoves.get(i), 2)) {
+				int input = (intList.get(0) * board.getBoardSize()) + intList.get(1);
+
+				for (int j = 0; j < validMoves.size(); j++) {
+					int row = 0;
+					int col = 0;
+					int boardSize = board.getBoardSize();
+
+					// Convert from 1D to 2D
+					if ((input % boardSize) > 0) {
+						row = input / boardSize;
+						col = input % boardSize;
+					} else {
+						row = input / boardSize;
+						col = 0;
+					}
+
+					if (validMoves.get(j).get(0).equals(col) && validMoves.get(j).get(1).equals(row)) {
+						System.out.print(input + " ");
+					}
+				}
+			}
+		}
+		System.out.println();
+		// ################
 	}
 
 	// https://stackoverflow.com/questions/2895342/java-how-can-i-split-an-arraylist-in-multiple-small-arraylists
