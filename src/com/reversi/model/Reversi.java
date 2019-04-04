@@ -1,9 +1,10 @@
-package com.reversi.model;
 import java.awt.List;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.Scanner;
+import java.util.Set;
 
-public class Reversi{
+public class reversi{
 	//Verander naar 3 voor tic-tac-toe
 	public final static int boardsize = 8;
 	public static String aanZet = "Z";
@@ -11,10 +12,13 @@ public class Reversi{
 	
 	 @SuppressWarnings("unchecked")
 	public static void main(String[] args) throws Exception {
-		
-		
+		//staat voor einde van game		
 		boolean gameEnd = false;
+		int gameEndCheck = 0;
 		
+		//score bijhouden
+		int scoreBlack = 2;
+		int scoreWhite = 2;
 		//Bord aanmaken
 		ArrayList<String> line = new ArrayList<String>();
 		ArrayList<ArrayList> board = new ArrayList<ArrayList>();
@@ -43,45 +47,80 @@ public class Reversi{
 	    String coordinate;
 
 	    while(gameEnd == false) {
-		    //Voer coordinaat in en druk op enter (bijv: 44 of 17)
-		    System.out.println("Enter coordinate");
-		    //haal informatie uit scanner
-		    coordinate = myObj.nextLine();
-		    //split string in array met 2 variabelen
-		    String[] explode = coordinate.split("(?!^)");
-		    String currentCoordinate = (Integer.parseInt(explode[0])-1 + "" + (Integer.parseInt(explode[1])-1));
-		    //haal geldige zetten op
+	    	//haal geldige zetten op
 		    ArrayList<ArrayList> validMoves = getValidMoves(boardsize, board);
-		    //check of zet geldig is
-		    boolean geldig = false;
-		    for (int check=0; check<validMoves.size(); check++) {		    	
-		    	if(validMoves.get(check).get(0).equals(currentCoordinate)){
-		    		geldig = true;
-		    		for (int check2=0; check2<validMoves.get(check).size(); check2++) {
-		    			String temp = (String) validMoves.get(check).get(check2);
-		    			String[] explode2 = temp.split("(?!^)");
-		    			board.get(Integer.parseInt(explode2[1])).set(Integer.parseInt(explode2[0]), aanZet);
-		    			System.out.println(explode2[0] + " " + explode2[1]);
-		    		}		    		
-		    	}		    	
-		    }
-		    if(geldig == false) {
-	    		System.out.println("Geen geldige zet");
-	    	}
-		    else {
-			    //update board
-			    printBoard(boardsize, board);
+		    //kijk of er zetten mogelijk zijn
+		    if (validMoves.isEmpty() == false) {
+		    	
+		    
+			    //Voer coordinaat in en druk op enter (bijv: 44 of 17)
+			    System.out.println(aanZet+", voer een coordinaat in:");
+			    //haal informatie uit scanner
+			    coordinate = myObj.nextLine();
+			    //split string in array met 2 variabelen
+			    String[] explode = coordinate.split("(?!^)");
+			    String currentCoordinate = (Integer.parseInt(explode[0])-1 + "" + (Integer.parseInt(explode[1])-1));
 			    
-			    //infinite loop stoppen
-
-			    if (aanZet =="W") {
-			    	aanZet = "Z";
-			    	nietAanZet = "W";
+			    //check of zet geldig is
+			    boolean geldig = false;
+			    for (int check=0; check<validMoves.size(); check++) {		    	
+			    	if(validMoves.get(check).get(0).equals(currentCoordinate)){
+			    		geldig = true;
+			    		for (int check2=0; check2<validMoves.get(check).size(); check2++) {
+			    			String temp = (String) validMoves.get(check).get(check2);
+			    			String[] explode2 = temp.split("(?!^)");
+			    			board.get(Integer.parseInt(explode2[1])).set(Integer.parseInt(explode2[0]), aanZet);
+			    			//score updaten
+			    			if (aanZet.equals("W")) {
+			    				if(check2!=0) {		    					
+			    					scoreBlack--;
+			    				}
+			    				scoreWhite++;	    				
+			    			}
+			    			else {
+			    				if(check2!=0) {		    					
+			    					scoreWhite--;
+			    				}
+			    				scoreBlack++;
+			    			}
+			    		}		    		
+			    	}		    	
 			    }
+			    if(geldig == false) {
+		    		System.out.println("Geen geldige zet");
+		    	}
 			    else {
-			    	aanZet = "W";
-			    	nietAanZet = "Z";
+			    	//update score
+			    	System.out.println("Zwart: "+scoreBlack+"          Wit: "+scoreWhite);
+			    	
+				    //update board
+				    printBoard(boardsize, board);			    
+			    
+				    if (aanZet =="W") {
+				    	aanZet = "Z";
+				    	nietAanZet = "W";
+				    }
+				    else {
+				    	aanZet = "W";
+				    	nietAanZet = "Z";
+				    }
 			    }
+		    }
+		    else {		    	
+				gameEndCheck++;
+		    }
+		    //game beeindigen
+		    if(gameEndCheck > 1) {
+		    	gameEnd = true;
+		    	if (scoreWhite > scoreBlack) {
+		    		System.out.println("Wit wint!");
+		    	}
+		    	else if (scoreWhite < scoreBlack) {
+		    		System.out.println("Zwart wint!");
+		    	}
+		    	else {
+		    		System.out.println("Gelijkspel!");
+		    	}
 		    }
 	    }	    
 	}
@@ -160,9 +199,12 @@ public class Reversi{
 					 }
 					 
 					 if(tempList.isEmpty() == false) {
+						 LinkedHashSet<String> set = new LinkedHashSet<>(tempList);
+						 tempList.clear();
+						 tempList.addAll(set);
+						 //System.out.println(tempList);
 						 validMoves.add(tempList);
 					 }
-	 
 				 }
 			 }
 		 }
@@ -178,35 +220,37 @@ public class Reversi{
 		 boolean loop = true;
 		 
 		 //out of bounds check
-		 if((y+intY < 1 || x+intX < 1 || y+intY > boardsize-2 || x+intX > boardsize-2) == false) {
+		 if((y+intY < 0 || x+intX < 0 || y+intY > boardsize-1 || x+intX > boardsize-1) == false) {
 			 //check of er een tegenstander aan het veld is
 			 if(board.get(y+intY).get(x+intX).equals(nietAanZet)){
-				 //increment de richting
+				//increment de richting
 				 intY = intY + yd;
 				 intX = intX + xd;
-				 //loop totdat er geen tegenstander stukken meer zijn in deze richting
-				 while(loop == true) {
-					 //als er een leeg vakje gevonden is, is de richting niet geldig voor deze zet.
-					 if(board.get(y+intY).get(x+intX).equals(".")) {
-						 loop = false;
-					 }
-					 //als er een vakje met een eigen steen gevonden wordt, is het een geldige zet.
-					 else if(board.get(y+intY).get(x+intX).equals(aanZet)){
-						 for (int j = 0; j <= i+1; j++) {
-							 int newX = x+(j*xd);
-							 int newY = y+(j*yd);
-							 fields.add(newX+""+newY);							 
+				 if((y+intY < 0 || x+intX < 0 || y+intY > boardsize-1 || x+intX > boardsize-1) == false) {					 
+					 //loop totdat er geen tegenstander stukken meer zijn in deze richting
+					 while(loop == true) {
+						 //als er een leeg vakje gevonden is, is de richting niet geldig voor deze zet.
+						 if(board.get(y+intY).get(x+intX).equals(".")) {
+							 loop = false;
 						 }
-						 loop = false;
+						 //als er een vakje met een eigen steen gevonden wordt, is het een geldige zet.
+						 else if(board.get(y+intY).get(x+intX).equals(aanZet)){
+							 for (int j = 0; j <= i+1; j++) {
+								 int newX = x+(j*xd);
+								 int newY = y+(j*yd);
+								 fields.add(newX+""+newY);							 
+							 }
+							 loop = false;
+						 }
+						 //als er out of bounds gegaan wordt, is de richting niet geldig voor deze zet.
+						 if(y+intY == 0 || x+intX == 0 || y+intY == boardsize-1 || x+intX == boardsize-1) {
+							 loop = false;
+						 }
+						 //increment de richting
+						 intY = intY + yd;
+						 intX = intX + xd;
+						 i++;
 					 }
-					 //als er out of bounds gegaan wordt, is de richting niet geldig voor deze zet.
-					 if(y+intY == 0 || x+intX == 0 || y+intY == boardsize-1 || x+intX == boardsize-1) {
-						 loop = false;
-					 }
-					 //increment de richting
-					 intY = intY + yd;
-					 intX = intX + xd;
-					 i++;
 				 }
 
 			 }
