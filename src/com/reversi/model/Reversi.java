@@ -1,7 +1,7 @@
 package com.reversi.model;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Scanner;
 
 import com.reversi.main.Main;
@@ -24,6 +24,10 @@ public class Reversi extends Game {
 			player2.ai.setReversi(this);
 		}
 
+		// Set the scores
+		player1.setScore(2); // black
+		player2.setScore(2); // white
+
 		// Set the first pieces
 		try {
 			board.setPiece(3, 3, 1);
@@ -41,22 +45,9 @@ public class Reversi extends Game {
 		}
 	}
 
-//	public static void printBoard(int boardsize, ArrayList<ArrayList> board) {
-//		System.out.println("  1 2 3 4 5 6 7 8");
-//		for (int i = 0; i < boardsize; i++) {
-//			ArrayList<String> temp = board.get(i);
-//			System.out.printf(i + 1 + " ");
-//			for (int j = 0; j < boardsize; j++) {
-//				System.out.printf(temp.get(j) + " ");
-//			}
-//			System.out.println();
-//		}
-//		System.out.println();
-//	}
-
-	public ArrayList<ArrayList> getValidMoves(int boardsize, Player player) {
+	public ArrayList<ArrayList<Integer>> getValidMoves(int boardsize, int playerID) {
 		// Array met mogelijke zetten
-		ArrayList<ArrayList> validMoves = new ArrayList<ArrayList>();
+		ArrayList<ArrayList<Integer>> validMoves = new ArrayList<ArrayList<Integer>>();
 
 		// alle mogelijke zetten opslaan in arraylist
 		for (int x = 0; x < boardsize; x++) {
@@ -64,65 +55,76 @@ public class Reversi extends Game {
 
 				// check of het veld leeg is (volle vakken zijn nooit geldig)
 				if (board.getPiece(x, y) == 0) {
-					ArrayList<String> tempList = new ArrayList<String>();
-					ArrayList<String> tempAdd = new ArrayList<String>();
+					ArrayList<Integer> tempList = new ArrayList<Integer>();
+					ArrayList<Integer> tempAdd = new ArrayList<Integer>();
 					// check in elke richting of de zet geldig is:
 					// noordwest
-					tempAdd = checkDirection(x, y, -1, -1, player);
+					tempAdd = checkDirection(x, y, -1, -1, playerID);
 					if (tempAdd.isEmpty() == false) {
 						tempList.addAll(tempAdd);
 					}
 					// noord
-					tempAdd = checkDirection(x, y, 0, -1, player);
+					tempAdd = checkDirection(x, y, 0, -1, playerID);
 					if (tempAdd.isEmpty() == false) {
 						tempList.addAll(tempAdd);
 					}
 					// noordoost
-					tempAdd = checkDirection(x, y, 1, -1, player);
+					tempAdd = checkDirection(x, y, 1, -1, playerID);
 					if (tempAdd.isEmpty() == false) {
 						tempList.addAll(tempAdd);
 					}
 					// oost
-					tempAdd = checkDirection(x, y, 1, 0, player);
+					tempAdd = checkDirection(x, y, 1, 0, playerID);
 					if (tempAdd.isEmpty() == false) {
 						tempList.addAll(tempAdd);
 					}
 					// zuidoost
-					tempAdd = checkDirection(x, y, 1, 1, player);
+					tempAdd = checkDirection(x, y, 1, 1, playerID);
 					if (tempAdd.isEmpty() == false) {
 						tempList.addAll(tempAdd);
 					}
 					// zuid
-					tempAdd = checkDirection(x, y, 0, 1, player);
+					tempAdd = checkDirection(x, y, 0, 1, playerID);
 					if (tempAdd.isEmpty() == false) {
 						tempList.addAll(tempAdd);
 					}
 					// zuidwest
-					tempAdd = checkDirection(x, y, -1, 1, player);
+					tempAdd = checkDirection(x, y, -1, 1, playerID);
 					if (tempAdd.isEmpty() == false) {
 						tempList.addAll(tempAdd);
 					}
 					// west
-					tempAdd = checkDirection(x, y, -1, 0, player);
+					tempAdd = checkDirection(x, y, -1, 0, playerID);
 					if (tempAdd.isEmpty() == false) {
 						tempList.addAll(tempAdd);
 					}
 
 					if (tempList.isEmpty() == false) {
-						LinkedHashSet<String> set = new LinkedHashSet<>(tempList);
-						tempList.clear();
-						tempList.addAll(set);
-						// System.out.println(tempList);
-						validMoves.add(tempList);
+						boolean add = false;
+
+						for (int i = 0; i < validMoves.size(); i++) {
+
+							if (validMoves.get(i).equals(tempList)) {
+								add = false;
+								break;
+							} else {
+								add = true;
+							}
+						}
+
+						if (add || validMoves.isEmpty()) {
+							validMoves.add(tempList);
+						}
 					}
 				}
 			}
 		}
+
 		return validMoves;
 	}
 
-	public ArrayList<String> checkDirection(int x, int y, int intX, int intY, Player player) {
-		ArrayList<String> fields = new ArrayList<String>();
+	public ArrayList<Integer> checkDirection(int x, int y, int intX, int intY, int playerID) {
+		ArrayList<Integer> fields = new ArrayList<Integer>();
 
 		// Richting increment
 		int yd = intY;
@@ -134,7 +136,7 @@ public class Reversi extends Game {
 		if ((y + intY < 0 || x + intX < 0 || y + intY > board.getBoardSize() - 1
 				|| x + intX > board.getBoardSize() - 1) == false) {
 			// check of er een tegenstander aan het veld is
-			if (board.getPiece(y + intY, x + intX) != player.id) {
+			if (board.getPiece(y + intY, x + intX) != playerID) {
 				// increment de richting
 				intY = intY + yd;
 				intX = intX + xd;
@@ -150,11 +152,13 @@ public class Reversi extends Game {
 						}
 						// als er een vakje met een eigen steen gevonden wordt, is het wel een geldige
 						// zet.
-						else if (board.getPiece(y + intY, x + intX) == player.id) {
+						else if (board.getPiece(y + intY, x + intX) == playerID) {
 							for (int j = 0; j <= i + 1; j++) {
 								int newX = x + (j * xd);
 								int newY = y + (j * yd);
-								fields.add(newX + "" + newY);
+
+								fields.add(newX);
+								fields.add(newY);
 							}
 							loop = false;
 						}
@@ -173,81 +177,76 @@ public class Reversi extends Game {
 
 			}
 		}
+
 		return fields;
+	}
+
+	public void setMove(int input, ArrayList<ArrayList<Integer>> validMoves, int playerID) {
+		int row = 0;
+		int col = 0;
+		int boardSize = board.getBoardSize();
+
+		// Convert from 1D to 2D
+		if ((input % boardSize) > 0) {
+			row = input / boardSize;
+			col = input % boardSize;
+		} else {
+			row = input / boardSize;
+			col = 0;
+		}
+
+		// Check if the new move is valid
+		boolean validMove = false;
+		for (int check = 0; check < validMoves.size(); check++) {
+
+			// Check if the players input corresponds with one of the valid moves...
+			if (validMoves.get(check).get(0).equals(col) && validMoves.get(check).get(1).equals(row)) {
+				validMove = true;
+
+				// System.out.println("Places to change: " + chopped(validMoves.get(check), 2));
+
+				for (int check2 = 0; check2 * 2 < validMoves.get(check).size(); check2++) {
+					int colChange = validMoves.get(check).get(check2 * 2);
+					int rowChange = validMoves.get(check).get((check2 * 2) + 1);
+
+					try {
+						board.setPiece(rowChange, colChange, playerID);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+					// score update
+					if (playerID == 1) { // if player == 1 or black
+						if (check2 != 0) {
+							player1.decrementScore();
+						}
+						player2.incrementScore();
+					} else { // else player == 2 or while
+						if (check2 != 0) {
+							player2.decrementScore();
+						}
+						player1.incrementScore();
+					}
+				}
+			}
+		}
+
+		if (!validMove) {
+			System.out.println("Not a valid move!");
+		} else {
+			// update score
+			System.out.println("Black: " + player1.getScore() + "          White: " + player2.getScore());
+
+			// update board
+			board.debugBoard();
+		}
 
 	}
 
 	public void makeMove(Player player) {
 		int input = 0;
 
-		// haal geldige zetten op
-		ArrayList<ArrayList> validMoves = getValidMoves(board.getBoardSize(), player);
-
-		// kijk of er zetten mogelijk zijn
-		if (!validMoves.isEmpty()) {
-
-			// Voer coordinaat in en druk op enter (bijv: 20 of 27)
-			System.out.println("Player: " + player.id + ", voer een coordinaat in:");
-
-			input = scanInput.nextInt();
-
-			int row = 0;
-			int col = 0;
-			int boardSize = board.getBoardSize();
-
-			if ((input % boardSize) > 0) {
-				row = input / boardSize;
-				col = input % boardSize;
-			} else {
-				row = input / boardSize;
-				col = 0;
-			}
-
-			String currentCoordinate = (row + "" + col);
-
-			// check of zet geldig is
-			boolean geldig = false;
-			for (int check = 0; check < validMoves.size(); check++) {
-				if (validMoves.get(check).get(0).equals(currentCoordinate)) {
-					geldig = true;
-					for (int check2 = 0; check2 < validMoves.get(check).size(); check2++) {
-						
-						// score update
-						if (player.id == 1) { // If player == 1 or black
-							if (check2 != 0) {
-								player1.decrementScore();
-							}
-							player2.incrementScore();
-						} else {
-							if (check2 != 0) {
-								player2.decrementScore();
-							}
-							player1.incrementScore();
-						}
-					}
-				}
-			}
-
-			if (!geldig) {
-				System.out.println("Geen geldige zet");
-			} else {
-				// update score
-				System.out.println("Zwart: " + player1.getScore() + "          Wit: " + player2.getScore());
-
-				// update board
-				board.debugBoard();
-			}
-		} else {
-			noWinner = false;
-			if (player2.getScore() > player1.getScore()) {
-				System.out.println("Wit wint!");
-			} else if (player2.getScore() < player1.getScore()) {
-				System.out.println("Zwart wint!");
-			} else {
-				System.out.println("Gelijkspel!");
-			}
-		}
-
+		// Check which player is playing
 		if (player.id == 1 && player.type.equals(PlayerType.HUMAN)) {
 			input = scanInput.nextInt();
 
@@ -256,28 +255,46 @@ public class Reversi extends Game {
 		} else {
 			// AI has to make a move
 			// input = player.ai.calculateMove(board, player);
+			input = scanInput.nextInt();
 
 			player1.setTurn(true);
 			player2.setTurn(false);
 		}
 
-//		try {
-//			System.out.println("Player " + player.id + " plays: " + input);
-//			setMove(input, player.id);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		// Get all the valid moves if there are any
+		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(board.getBoardSize(), player.id);
+		
+		System.out.println("Player: " + player.id + ", make a turn:");
+		// System.out.println("Valid moves: " + chopped(validMoves.get(0), 2));
+
+		// Show the valid moves
+		System.out.print("Valid moves: ");
+		for (List<Integer> intList : chopped(validMoves.get(0), 2)) {
+			System.out.print((intList.get(0) * board.getBoardSize()) + intList.get(1) + 1 + " ");
+		}
+		System.out.println();
+
+		if (!validMoves.isEmpty()) {
+			setMove(input, validMoves, player.id);
+		} else {
+			noWinner = false;
+			if (player2.getScore() > player1.getScore()) {
+				System.out.println("White wins!");
+			} else if (player2.getScore() < player1.getScore()) {
+				System.out.println("Black wins!");
+			} else {
+				System.out.println("Draw!");
+			}
+		}
 	}
 
 	// This input needs to come from the GUI
 	public void consoleInput() {
 		board.debugBoard();
-
-		player1.setScore(2); // black
-		player2.setScore(2); // white
+		System.out.println("Player: 1 make a turn:");
+		System.out.println("Valid moves: 20 29");
 
 		while (scanInput.hasNextLine() && noWinner) {
-
 			if (player1.hasTurn() && player1.type.equals(PlayerType.HUMAN)) {
 				makeMove(player1);
 			} else {
@@ -288,5 +305,16 @@ public class Reversi extends Game {
 		if (!Main.running) {
 			scanInput.close();
 		}
+	}
+
+	// https://stackoverflow.com/questions/2895342/java-how-can-i-split-an-arraylist-in-multiple-small-arraylists
+	// chops a list into non-view sublists of length L
+	static <T> List<List<T>> chopped(List<T> list, final int L) {
+		List<List<T>> parts = new ArrayList<List<T>>();
+		final int N = list.size();
+		for (int i = 0; i < N; i += L) {
+			parts.add(new ArrayList<T>(list.subList(i, Math.min(N, i + L))));
+		}
+		return parts;
 	}
 }
