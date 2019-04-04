@@ -41,5 +41,12 @@ public class Player {
 	public boolean hasTurn() {
 		return hasTurn;
 	}
+	
+	public void incrementScore() {
+		score++;
+	}
 
+	public void decrementScore() {
+		score--;
+	}
 }
