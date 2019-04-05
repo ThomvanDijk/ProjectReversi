@@ -180,7 +180,7 @@ public class Reversi extends Game {
 		return fields;
 	}
 
-	public void setMove(int input, ArrayList<ArrayList<Integer>> validMoves, int playerID) {
+	public boolean setMove(int input, ArrayList<ArrayList<Integer>> validMoves, int playerID) {
 		int row = 0;
 		int col = 0;
 		int boardSize = board.getBoardSize();
@@ -238,6 +238,7 @@ public class Reversi extends Game {
 
 		if (!validMove) {
 			System.out.println("Not a valid move!");
+			return false;
 		} else {
 			if (playerID == 1) {
 				debugMove(player2.id);
@@ -245,11 +246,15 @@ public class Reversi extends Game {
 				debugMove(player1.id);
 			}
 		}
+		return true;
 	}
 
 	public void makeMove(Player player) {
 		int input = 0;
-
+		boolean validMove = false;
+		while (validMove == false) {
+			
+		
 		// Check which player is playing
 		if (player.id == 1 && player.type.equals(PlayerType.HUMAN)) {
 			input = scanInput.nextInt();
@@ -269,12 +274,13 @@ public class Reversi extends Game {
 		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(board.getBoardSize(), player.id);
 
 		if (!validMoves.isEmpty()) {
-			setMove(input, validMoves, player.id);
+			validMove = setMove(input, validMoves, player.id);
 			// Reset winnercount
 			noWinnerCount = 0;
 		} else {
 			// 1 player can't move, if this counter reaches 2, that means both players can't move and the game will end
 			noWinnerCount++;
+		}
 		}
 		// If both players can't move, end the game
 		if(noWinnerCount == 2) {
@@ -310,7 +316,7 @@ public class Reversi extends Game {
 
 	public void debugMove(int playerID) {
 		// Show updated score
-		System.out.println("Black: " + player1.getScore() + "  White: " + player2.getScore());
+		System.out.println("Black: " + player2.getScore() + "  White: " + player1.getScore());
 
 		// update board
 		board.debugBoard();
@@ -318,7 +324,7 @@ public class Reversi extends Game {
 		// Get all the valid moves if there are any
 		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(board.getBoardSize(), playerID);
 
-		System.out.println("Player: " + playerID + ", make a turn:");
+		System.out.println("Player: " + playerID + ", make a move:");
 		System.out.println("Valid moves: " + validMoves);
 
 		// Show the valid moves
