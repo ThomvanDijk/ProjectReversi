@@ -81,9 +81,9 @@ public class MainMenu {
         gridPane.add(reversie,0,2);
         gridPane.add(buttonDaaguitReversie, 0, 4);
         gridPane.add(buttonJoinLobbyReversie, 1, 4);
-        gridPane.add(boterkaas, 0, 13);
-        gridPane.add(buttonDaagUitKaas, 0, 15);
-        gridPane.add(buttonJoinLobbyKaas, 1, 15);
+        gridPane.add(boterkaas, 0, 18);
+        gridPane.add(buttonDaagUitKaas, 0, 20);
+        gridPane.add(buttonJoinLobbyKaas, 1, 20);
 
 
         //Create scene

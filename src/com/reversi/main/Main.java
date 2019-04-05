@@ -9,7 +9,8 @@ public class Main {
 	
 	public static boolean running;
 
-	public Main() {
+
+	public Main(String[] args) {
 		running = true;
 		
 		Client client = new Client();
@@ -21,7 +22,7 @@ public class Main {
 		UserController userController = new UserController(model);
 		
 		// Make view and add a reference to controller
-		GameView view = new GameView(userController);
+		GameView view = new GameView(userController, args);
 		
 		// Add the view and controllers references to the model
 		model.setView(view);
@@ -30,13 +31,15 @@ public class Main {
 		
 		Thread modelThread = new Thread(model);
 		Thread viewThread = new Thread(view);
+		Thread serverControllerThread = new Thread(serverController);
 		
 		modelThread.start();
 		viewThread.start();
+		serverControllerThread.start();
 	}
 
 	public static void main(String[] args) {
-		new Main();
+		new Main(args);
 		running = false;
 	}
 

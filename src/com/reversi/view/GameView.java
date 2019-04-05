@@ -4,13 +4,18 @@ import com.reversi.controller.UserController;
 
 public class GameView extends View {
 
-	public GameView(UserController userController) {
+
+	public GameView(UserController userController, String[] args) {
 		super(userController);
+
+		//userController.GiveUserCommando("commando")
+
+		Window window = new Window();
+		window.rmain(args);
 	}
 
-	@Override
+		@Override
 	public void run() {
-		Window window = new Window();
 
 	}
 
