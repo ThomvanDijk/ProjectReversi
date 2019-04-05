@@ -28,11 +28,9 @@ public class Main {
 		
 		Thread modelThread = new Thread(model);
 		Thread viewThread = new Thread(view);
-		Thread serverControllerThread = new Thread(serverController);
 		
 		modelThread.start();
 		viewThread.start();
-		serverControllerThread.start();
 	}
 
 	public static void main(String[] args) {
