@@ -270,7 +270,14 @@ public class Reversi extends Game {
 
 		if (!validMoves.isEmpty()) {
 			setMove(input, validMoves, player.id);
+			// Reset winnercount
+			noWinnerCount = 0;
 		} else {
+			// 1 player can't move, if this counter reaches 2, that means both players can't move and the game will end
+			noWinnerCount++;
+		}
+		// If both players can't move, end the game
+		if(noWinnerCount == 2) {
 			noWinner = false;
 			if (player2.getScore() > player1.getScore()) {
 				System.out.println("White wins!");
