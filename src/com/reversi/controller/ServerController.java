@@ -4,19 +4,15 @@ import com.reversi.model.GameModel;
 import com.reversi.model.Game.GameMode;
 import com.reversi.model.Game.GameType;
 
-public class ServerController extends Controller implements Runnable {
+public class ServerController extends Controller {
 
 	public ServerController(GameModel model) {
 		super(model);
 	}
 
 	@Override
-	public void run() {
-	}
-
-	@Override
-	public void notify(Notification command, String argument) {
-		switch (command) {
+	public void notify(Notification notification, String argument) {
+		switch (notification) {
 		case START_REVERSI_MULTIPLAYER:
 			model.startGame(GameMode.ONLINE, GameType.REVERSI);
 			break;

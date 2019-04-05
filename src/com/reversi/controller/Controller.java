@@ -30,6 +30,6 @@ public abstract class Controller {
 		this.model = model;
 	}
 	
-	public abstract void notify(Notification command, String argument);
+	public abstract void notify(Notification notification, String argument);
 	
 }
