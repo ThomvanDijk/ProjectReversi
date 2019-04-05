@@ -2,6 +2,7 @@ package com.reversi.main;
 
 import com.reversi.controller.*;
 import com.reversi.model.*;
+import com.reversi.server.Client;
 import com.reversi.view.*;
 
 public class Main {
@@ -10,6 +11,8 @@ public class Main {
 
 	public Main() {
 		running = true;
+		
+		Client client = new Client();
 		
 		GameModel model = new GameModel();
 
