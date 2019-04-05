@@ -16,6 +16,7 @@ public abstract class Game {
 	protected Board board;
 	protected GameMode gameMode;
 	protected boolean noWinner;
+	protected int noWinnerCount;
 	protected Player player1;
 	protected Player player2;
 

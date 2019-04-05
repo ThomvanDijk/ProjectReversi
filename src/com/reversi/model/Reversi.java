@@ -30,10 +30,10 @@ public class Reversi extends Game {
 
 		// Set the first pieces
 		try {
-			board.setPiece(3, 3, 1);
-			board.setPiece(3, 4, 2);
-			board.setPiece(4, 3, 2);
-			board.setPiece(4, 4, 1);
+			board.setPiece(3, 3, 2);
+			board.setPiece(3, 4, 1);
+			board.setPiece(4, 3, 1);
+			board.setPiece(4, 4, 2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -54,7 +54,7 @@ public class Reversi extends Game {
 			for (int y = 0; y < boardsize; y++) {
 
 				// check of het veld leeg is (volle vakken zijn nooit geldig)
-				if (board.getPiece(x, y) == 0) {
+				if (board.getPiece(y, x) == 0) {
 					ArrayList<Integer> tempList = new ArrayList<Integer>();
 					ArrayList<Integer> tempAdd = new ArrayList<Integer>();
 					// check in elke richting of de zet geldig is:
@@ -319,45 +319,24 @@ public class Reversi extends Game {
 		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(board.getBoardSize(), playerID);
 
 		System.out.println("Player: " + playerID + ", make a turn:");
-		//System.out.println("Valid moves: " + validMoves);
+		System.out.println("Valid moves: " + validMoves);
 
 		// Show the valid moves
-		System.out.print("Valid moves:    ");
+		System.out.print("Valid moves: ");
 		for (int i = 0; i < validMoves.size(); i++) {
-			for (List<Integer> intList : chopped(validMoves.get(i), 2)) {
-				System.out.print((intList.get(0) * board.getBoardSize()) + intList.get(1) + " ");
+			int row = chopped(validMoves.get(i), 2).get(0).get(0);
+			int col = chopped(validMoves.get(i), 2).get(0).get(1);
+			
+			System.out.print((col * board.getBoardSize()) + row + " ");
+			
+			try {
+				//board.setPiece(row, col, 3);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		System.out.println();
-
-		// THE GREAT FILTER
-		System.out.print("Filtered moves: ");
-		for (int i = 0; i < validMoves.size(); i++) {
-			for (List<Integer> intList : chopped(validMoves.get(i), 2)) {
-				int input = (intList.get(0) * board.getBoardSize()) + intList.get(1);
-
-				for (int j = 0; j < validMoves.size(); j++) {
-					int row = 0;
-					int col = 0;
-					int boardSize = board.getBoardSize();
-
-					// Convert from 1D to 2D
-					if ((input % boardSize) > 0) {
-						row = input / boardSize;
-						col = input % boardSize;
-					} else {
-						row = input / boardSize;
-						col = 0;
-					}
-
-					if (validMoves.get(j).get(0).equals(col) && validMoves.get(j).get(1).equals(row)) {
-						System.out.print(input + " ");
-					}
-				}
-			}
-		}
-		System.out.println();
-		// ################
+		//board.debugBoard();
 	}
 
 	// https://stackoverflow.com/questions/2895342/java-how-can-i-split-an-arraylist-in-multiple-small-arraylists
