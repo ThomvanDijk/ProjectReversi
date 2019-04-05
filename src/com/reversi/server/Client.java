@@ -8,8 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-import com.reversi.controller.ServerController;
-import com.reversi.main.Main;
+import com.reversi.controller.ClientController;
 
 public class Client {
 
@@ -18,19 +17,18 @@ public class Client {
 	private BufferedReader fromServer;
 
 	private Socket socket;
-
 	private Scanner scanInput;
+	private boolean running;
 
-	public Client(ServerController serverController) {
-
+	public Client(ClientController serverController) {
 		scanInput = new Scanner(System.in);
+		running = true;
 
 		System.out.println("Client started and connecting... \n");
 
 		Thread thread = new Thread(() -> {
-			// Create a socket to connect to the server
-			// Socket socket = new Socket("130.254.204.36", 8000);
-			// Socket socket = new Socket("drake.Armstrong.edu", 8000);
+			String messageServer;
+			
 			try {
 				Socket socket = new Socket("localhost", 7789);
 
@@ -55,9 +53,8 @@ public class Client {
 			try {
 				while (true) {
 					// Receive text from the server
-					String textFromServer = fromServer.readLine();
-
-					System.out.println("Other: " + textFromServer + "\n");
+					messageServer = fromServer.readLine();
+					serverMessage(messageServer);
 				}
 			} catch (IOException ex) {
 				System.out.println(ex.toString() + "\n");
@@ -67,47 +64,46 @@ public class Client {
 		thread.setDaemon(true);
 		thread.start();
 
-//		primaryStage.setOnCloseRequest(e -> {
-//			if (socket != null) {
-//				if (!socket.isClosed()) {
-//					try {
-//						socket.close();
-//					} catch (IOException e1) {
-//						e1.printStackTrace();
-//					}
-//				}
-//			}
-//		});
-
 		consoleInput();
 	}
+	
+	// Send commands to model via serverController
+	public void serverMessage(String message) {
+		System.out.println("Other: " + message + "\n");
+	}
 
+	// Send commands to server
 	public void consoleInput() {
-		String input;
+		String textToSend;
 
-		while (scanInput.hasNextLine()) {
+		while (scanInput.hasNextLine() && running) {
 			try {
-				input = scanInput.nextLine();
-				System.out.println(input);
-
-				// Get the text from the text field
-				String textToSend = input;
-				// window.clearTextField();
+				textToSend = scanInput.nextLine();
+				System.out.println(textToSend);
 
 				// Send the text to the server
 				toServer.write(textToSend);
 				toServer.newLine();
 				toServer.flush();
-				
+
 				// Display text to the text area
 				System.out.println("You: " + textToSend + "\n");
+
+				if (textToSend.equals("exit")) {
+					running = false;
+					
+					scanInput.close();
+					
+					try {
+						socket.close();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-
-		if (!Main.running) {
-			scanInput.close();
-		}
 	}
+	
 }
