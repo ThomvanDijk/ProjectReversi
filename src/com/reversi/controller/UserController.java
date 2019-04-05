@@ -10,10 +10,10 @@ public class UserController extends Controller {
 		super(model);
 	}
 
-	// From GameView request an action from the model. Arguments can be null...
+	// From GameView use this notify function to send a notification to model. Arguments can be null...
 	@Override
-	public void request(Command command, String argument) {
-		switch (command) {
+	public void notify(Notification notification, String argument) {
+		switch (notification) {
 		case START_REVERSI_SINGLEPLAYER:
 			model.startGame(GameMode.SINGLEPLAYER, GameType.REVERSI);
 			break;

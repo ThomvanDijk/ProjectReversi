@@ -4,7 +4,7 @@ import com.reversi.model.GameModel;
 
 public abstract class Controller {
 	
-	public enum Command {
+	public enum Notification {
 		START_REVERSI_SINGLEPLAYER,
 		START_TICTACTOE_SINGLEPLAYER,
 		END_REVERSI_SINGLEPLAYER,
@@ -30,6 +30,6 @@ public abstract class Controller {
 		this.model = model;
 	}
 	
-	public abstract void request(Command command, String argument);
+	public abstract void notify(Notification command, String argument);
 	
 }

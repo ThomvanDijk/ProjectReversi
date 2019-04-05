@@ -1,18 +1,9 @@
 package com.reversi.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.reversi.controller.*;
 import com.reversi.model.Game.GameMode;
 import com.reversi.model.Game.GameType;
-import com.reversi.view.*;
 
 public class GameModel extends Model {
-
-	public enum state {
-
-	}
 
 	private TicTacToe ticTacToe;
 	private Reversi reversi;
