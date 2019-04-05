@@ -5,15 +5,15 @@ import com.reversi.view.GameView;
 
 public abstract class Model implements Runnable {
 	
-	private GameView mainView;
+	protected GameView gameView;
 	private Controller userController;
 	private Controller serverController;
 	
 	public void setView(GameView view) {
-		if (this.mainView!=null) {
+		if (this.gameView!=null) {
 			throw new IllegalStateException("View already set.");
 		}
-		this.mainView = view;
+		this.gameView = view;
 	}
 	
 	public void setUserController(Controller userController) {

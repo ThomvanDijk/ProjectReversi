@@ -9,13 +9,12 @@ public class ServerController extends Controller implements Runnable {
 	}
 
 	@Override
-	public void notifyModel() {
-		// Give the model the new move from the server and the sores
-		model.update(1, 1, 1);
+	public void run() {
 	}
 
 	@Override
-	public void run() {
+	public void request(Command command, String arguments) {
+		
 	}
 
 }
