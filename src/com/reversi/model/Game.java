@@ -42,10 +42,10 @@ public abstract class Game {
 	private void createBoard() {
 		switch (gameType) {
 		case REVERSI:
-			board = new Board(8);
+			board = new Board(8, gameType);
 			break;
 		case TICTACTOE:
-			board = new Board(3);
+			board = new Board(3, gameType);
 			break;
 		default:
 			throw new IllegalStateException();

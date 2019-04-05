@@ -17,7 +17,7 @@ public class GameModel extends Model {
 	public GameModel() {
 		running = true;
 		//ticTacToe = new TicTacToe(GameMode.SINGLEPLAYER);
-		reversi = new Reversi();
+		reversi = new Reversi(GameMode.SINGLEPLAYER);
 		board = new ArrayList<List<Integer>>();
 	}
 

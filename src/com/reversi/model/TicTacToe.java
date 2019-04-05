@@ -52,7 +52,7 @@ public class TicTacToe extends Game {
 	}
 
 	// Set the move only if it is a valid move
-	public void setMove(int input, int player) throws Exception {
+	public void setMove(int input, int playerID) throws Exception {
 		int row = 0;
 		int col = 0;
 		int boardSize = board.getBoardSize();
@@ -67,7 +67,7 @@ public class TicTacToe extends Game {
 
 		// Check if there isn't already a piece
 		if (board.getPiece(row, col) == 0) {
-			board.setPiece(row, col, player);
+			board.setPiece(row, col, playerID);
 		} else {
 			throw new Exception("The move is not valid!");
 		}
@@ -163,10 +163,6 @@ public class TicTacToe extends Game {
 		if (!Main.running) {
 			scanInput.close();
 		}
-	}
-
-	public void update() {
-
 	}
 
 }

@@ -1,36 +1,40 @@
 package com.reversi.model;
 
+import com.reversi.model.Game.GameType;
+
 public class Board {
 
 	private final int boardSize;
 	private int[][] board;
 	private int placesOccupied;
+	private GameType gameType;
 
-	public Board(int size) {
+	public Board(int size, GameType gameType) {
 		this.boardSize = size;
 		board = new int[size][size];
 		placesOccupied = 1;
+		this.gameType = gameType;
 	}
-	
+
 	public int[][] getBoard() {
 		return board;
 	}
-	
+
 	public int getPiece(int row, int col) {
 		return board[row][col];
 	}
-	
+
 	public void setPiece(int row, int col, int piece) throws Exception {
-		if(placesOccupied >= boardSize * boardSize) {
+		if (placesOccupied >= boardSize * boardSize) {
 			throw new Exception("All places are occupied!");
 		} else {
 			board[row][col] = piece;
 			placesOccupied++;
 		}
 	}
-	
+
 	public boolean emptyPlaces() {
-		if(placesOccupied >= boardSize * boardSize) {
+		if (placesOccupied >= boardSize * boardSize) {
 			return false;
 		} else {
 			return true;
@@ -47,9 +51,17 @@ public class Board {
 				if (board[row][col] == 0) {
 					System.out.print(". ");
 				} else if (board[row][col] == 1) {
-					System.out.print("x ");
+					if (gameType.equals(GameType.REVERSI)) {
+						System.out.print("b ");
+					} else {
+						System.out.print("x ");
+					}
 				} else {
-					System.out.print("o ");
+					if (gameType.equals(GameType.REVERSI)) {
+						System.out.print("w ");
+					} else {
+						System.out.print("o ");
+					}
 				}
 
 			}
