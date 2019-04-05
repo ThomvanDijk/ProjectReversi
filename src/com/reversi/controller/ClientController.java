@@ -4,9 +4,9 @@ import com.reversi.model.GameModel;
 import com.reversi.model.Game.GameMode;
 import com.reversi.model.Game.GameType;
 
-public class ServerController extends Controller {
+public class ClientController extends Controller {
 
-	public ServerController(GameModel model) {
+	public ClientController(GameModel model) {
 		super(model);
 	}
 
