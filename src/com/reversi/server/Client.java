@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+import com.reversi.controller.ServerController;
 import com.reversi.main.Main;
 
 public class Client {
@@ -20,7 +21,7 @@ public class Client {
 
 	private Scanner scanInput;
 
-	public Client() {
+	public Client(ServerController serverController) {
 
 		scanInput = new Scanner(System.in);
 

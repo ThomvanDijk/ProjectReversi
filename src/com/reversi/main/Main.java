@@ -12,14 +12,15 @@ public class Main {
 
 	public Main(String[] args) {
 		running = true;
-		
-		Client client = new Client();
-		
+
 		GameModel model = new GameModel();
 
 		// Give model to controllers because they must have a model
 		ServerController serverController = new ServerController(model);
 		UserController userController = new UserController(model);
+		
+		// Make a client that connects to the server
+		Client client = new Client(serverController);
 		
 		// Make view and add a reference to controller
 		GameView view = new GameView(userController, args);
