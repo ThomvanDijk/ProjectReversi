@@ -1,115 +1,98 @@
 package com.reversi.client;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
+import com.reversi.client.Parser.ArgumentKey;
+import com.reversi.client.Parser.ServerCommand;
 import com.reversi.controller.ClientController;
 
 public class Client {
-	
-	private ClientController clientController;
-	
-	// IO streams
-	private BufferedWriter toServer;
-	private BufferedReader fromServer;
 
-	private Socket socket;
+	private ClientController clientController;
+	private Listener listener;
+	private Parser parser;
+
 	private Scanner scanInput;
-	private boolean running;
 
 	public Client(ClientController clientController) {
 		this.clientController = clientController;
 		
+		parser = new Parser();
+
 		scanInput = new Scanner(System.in);
-		running = true;
 
 		System.out.println("Client started and connecting... \n");
 
-		Thread thread = new Thread(() -> {
-			String messageServer;
-			
-			try {
-				Socket socket = new Socket("localhost", 7789);
+		listener = new Listener(this);
+		Thread listenerThread = new Thread(listener);
 
-				toServer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-				fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-				System.out.println("Client connected to " + socket.getRemoteSocketAddress() + "\n");
-			} catch (IOException ex) {
-				if (socket != null) {
-					if (!socket.isClosed()) {
-						try {
-							socket.close();
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-					}
-				}
-				System.out.println(ex.toString() + "\n");
-			}
-
-			try {
-				while (true) {
-					// Receive text from the server
-					messageServer = fromServer.readLine();
-					serverMessage(messageServer);
-				}
-			} catch (IOException ex) {
-				System.out.println(ex.toString() + "\n");
-			}
-		});
-
-		thread.setDaemon(true);
-		thread.start();
+		listenerThread.setDaemon(true);
+		listenerThread.start();
 
 		consoleInput();
 	}
-	
+
 	// Send commands to model via serverController
-	public void serverMessage(String message) {
-		System.out.println("Other: " + message + "\n");
+	public void notifyController(String message) {
+		System.out.println("Server: " + message);
 		
-		//clientController.notify(notification, argument);
+		//Map<ServerCommands, Map<ArgumentKey, String>>
+		HashMap<ServerCommand, HashMap<ArgumentKey, String>> map = parser.parseMessage(message);
+
+//			if() {
+//				clientController.notify(Notification.SET_MOVE_TICTACTOE, message);
+//			}	
+		
+		// Input the first element of the server command
+//				switch(parts[0]) {
+//				case ERR:
+//					break;
+//				case OK:
+//					break;
+//				case SVR_HELP:
+//					break;
+//				case SVR_GAME_MATCH:
+//					break;
+//				case SVR_GAME_YOURTURN,:
+//					break;
+//				case SVR_GAME_MOVE:
+//					break;
+//				case SVR_GAME_CHALLENGE:
+//					break;
+//				case SVR_GAME:
+//					break;
+//				default:
+//					throw new IllegalStateException();
+//				}
+
 	}
 
 	// Send commands to server
 	public void consoleInput() {
 		String textToSend;
 
-		while (scanInput.hasNextLine() && running) {
+		while (scanInput.hasNextLine() && !Thread.currentThread().isInterrupted()) {
 			try {
 				textToSend = scanInput.nextLine();
-				System.out.println(textToSend);
 
 				// Send the text to the server
-				toServer.write(textToSend);
-				toServer.newLine();
-				toServer.flush();
+				listener.sendMessage(textToSend);
 
 				// Display text to the text area
 				System.out.println("You: " + textToSend + "\n");
 
 				if (textToSend.equals("exit")) {
-					running = false;
-					
-					scanInput.close();
-					
-					try {
-						socket.close();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
+					break;
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+
+		scanInput.close();
 	}
-	
+
 }
