@@ -53,8 +53,8 @@ public class Reversi {
             @Override
             public void handle(ActionEvent actionEvent) {
 
-                MainMenu mainmenu = new MainMenu();
-                mainmenu.start(reversiStage);
+                logIn login = new logIn();
+                login.start(reversiStage);
             }
         });
 

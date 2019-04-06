@@ -55,8 +55,8 @@ public class boterKaas {
             @Override
             public void handle(ActionEvent actionEvent) {
 
-                MainMenu mainmenu = new MainMenu();
-                mainmenu.start(boterKaasStage);
+                logIn login = new logIn();
+                login.start(boterKaasStage);
             }
         });
 
