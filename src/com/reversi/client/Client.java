@@ -1,4 +1,4 @@
-package com.reversi.server;
+package com.reversi.client;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,7 +11,9 @@ import java.util.Scanner;
 import com.reversi.controller.ClientController;
 
 public class Client {
-
+	
+	private ClientController clientController;
+	
 	// IO streams
 	private BufferedWriter toServer;
 	private BufferedReader fromServer;
@@ -20,7 +22,9 @@ public class Client {
 	private Scanner scanInput;
 	private boolean running;
 
-	public Client(ClientController serverController) {
+	public Client(ClientController clientController) {
+		this.clientController = clientController;
+		
 		scanInput = new Scanner(System.in);
 		running = true;
 
@@ -70,6 +74,8 @@ public class Client {
 	// Send commands to model via serverController
 	public void serverMessage(String message) {
 		System.out.println("Other: " + message + "\n");
+		
+		//clientController.notify(notification, argument);
 	}
 
 	// Send commands to server

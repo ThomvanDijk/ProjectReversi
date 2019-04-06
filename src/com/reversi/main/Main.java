@@ -1,8 +1,8 @@
 package com.reversi.main;
 
+import com.reversi.client.Client;
 import com.reversi.controller.*;
 import com.reversi.model.*;
-import com.reversi.server.Client;
 import com.reversi.view.*;
 
 public class Main {
