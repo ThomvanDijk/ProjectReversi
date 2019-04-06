@@ -29,7 +29,9 @@ public class Board {
 			throw new Exception("All places are occupied!");
 		} else {
 			board[row][col] = piece;
-			placesOccupied++;
+			if(getPiece(row, col) == 0) {
+				placesOccupied++;
+			}			
 		}
 	}
 

@@ -5,15 +5,17 @@ import javafx.stage.Stage;
 
 public class Window extends Application {
 
-    public void start(Stage primaryStage){
-
-        MainMenu menu = new MainMenu();
-        menu.start(primaryStage);
-    }
-
-    public static void main(String[] args) {
+    public void rmain(String[] args){
         launch(args);
     }
+
+    public void start(Stage primaryStage){
+
+        logIn login = new logIn();
+        login.start(primaryStage);
+    }
+
+
 
 }
 
