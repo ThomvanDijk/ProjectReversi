@@ -26,7 +26,18 @@ public class Parser {
 	}
 	
 	public enum ArgumentKey {
-		
+		DEFAULT,
+		GAMETYPE,		// "<game type>"
+		PLAYERTOMOVE,	// "<name player who has turn>"
+		OPPONENT,		// "<name opponent>"
+		PLAYER,			// "<player name>"
+		DETAILS,		// "<reaction on game setup>"
+		MOVE,			// "<move>"
+		PLAYERONESCORE, // "<score player1>" 
+		PLAYERTWOSCORE, // "<score player2>" 
+		COMMENT, 		// "<comments on result>"
+		CHALLENGER, 	// "<name of challenger>"
+		CHALLENGENUMBER	// "<number of challenge>"
 	}
 
 	public Parser() {
@@ -68,9 +79,12 @@ public class Parser {
 		// Second part HashMap<ArgumentKey, String>
 		// Split the arguments up
 		String[] arguments = parts[1].split(",");
-		String[][] keyValuePairs = new String[arguments.length][2];
+		HashMap<ArgumentKey, String> keyValueMap = new HashMap<>();
 		
-		for(int i = 0; i < keyValuePairs.length; i++) {
+		// Add the keys as ArgumentKey and the values as String
+		for(int i = 0; i < arguments.length; i++) {
+			ArgumentKey tempKey = ArgumentKey.DEFAULT;
+			
 			// Make pair [key, value]
 			String[] keyValue = arguments[i].split(":");
 			
@@ -79,17 +93,18 @@ public class Parser {
 			keyValue[1] = keyValue[1].replace("\"", "");
 			keyValue[1] = keyValue[1].replaceAll("\\}", " ");
 			keyValue[1] = keyValue[1].trim();
-			
-			// Store in an array of key value pairs
-			keyValuePairs[i] = keyValue;
-			
-			System.out.println(Arrays.toString(keyValuePairs[i]));
+
+			// Match the right ArgumentKey to return
+			for(ArgumentKey key: ArgumentKey.values()) {
+				if(key.name().equals(keyValue[0])) {
+					keyValueMap.put(key, keyValue[1]);
+					break;
+				}
+			}
 		}
 		
-		// Further implementation needed
-		
-		HashMap<ArgumentKey, String> keyValueMap = new HashMap<>();
-		
+		//System.out.println(keyValueMap.toString());
+
 		map.put(tempCommand, keyValueMap);
 		return map;
 	}
