@@ -43,6 +43,7 @@ public class UserController extends Controller {
 		case SET_MOVE_REVERSI:
 			break;
 		case SET_MOVE_TICTACTOE:
+			// Argument should be a valid number
 			model.setMove(GameType.TICTACTOE, argument);
 			break;
 		default:
