@@ -3,6 +3,7 @@ package com.reversi.view;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -49,6 +50,9 @@ public class boterKaas {
 
         //button to go back to log in
         Button buttonGoBack = new Button("back to menu");
+        buttonGoBack.setStyle("-fx-padding: 10 20 10 20");
+
+        gridPane.setPadding(new Insets(60));
         gridPane.add(buttonGoBack, 12, 9);
 
         buttonGoBack.setOnAction(new EventHandler<ActionEvent>() {

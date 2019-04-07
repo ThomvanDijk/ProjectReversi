@@ -3,6 +3,7 @@ package com.reversi.view;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -16,6 +17,7 @@ public class Reversi {
 
         //create gridpane
         GridPane gridPane = new GridPane();
+        gridPane.setPadding(new Insets(60));
         gridPane.setVgap(5);
         gridPane.setHgap(5);
 
@@ -47,7 +49,10 @@ public class Reversi {
 
         //button to go back to menu
         Button buttonGoBack = new Button("back to menu");
+        buttonGoBack.setStyle("-fx-padding: 10 20 10 20");
+
         gridPane.add(buttonGoBack, 12, 9);
+
 
         buttonGoBack.setOnAction(new EventHandler<ActionEvent>() {
             @Override

@@ -2,6 +2,7 @@ package com.reversi.view;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,6 +17,7 @@ public class MainMenu {
 /** daag uit en join lobby knoppen voor reversi */
 
         Button buttonJoinLobbyReversie = new Button("Join lobby");
+        buttonJoinLobbyReversie.setStyle("-fx-padding: 10 20 10 20");
 
 
         buttonJoinLobbyReversie.setOnAction(new EventHandler<ActionEvent>() {
@@ -29,6 +31,7 @@ public class MainMenu {
 
 
        Button buttonDaaguitReversie = new Button("Daag uit");
+        buttonDaaguitReversie.setStyle("-fx-padding: 10 20 10 20");
 
 
         buttonDaaguitReversie.setOnAction(new EventHandler<ActionEvent>() {
@@ -45,6 +48,8 @@ public class MainMenu {
 
         //button to start boter kaas en eieren
         Button buttonJoinLobbyKaas = new Button("Join Lobby");
+        buttonJoinLobbyKaas.setStyle("-fx-padding: 10 20 10 20");
+
 
         buttonJoinLobbyKaas.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -58,6 +63,8 @@ public class MainMenu {
 
         //button to start boter kaas en eieren
         Button buttonDaagUitKaas = new Button("Daag uit");
+        buttonDaagUitKaas.setStyle("-fx-padding: 10 20 10 20");
+
 
         buttonDaagUitKaas.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -76,6 +83,7 @@ public class MainMenu {
 
         //create gridpane
         GridPane gridPane = new GridPane();
+        gridPane.setPadding(new Insets(60));
         gridPane.setVgap(5);
         gridPane.setHgap(5);
         gridPane.add(reversie,0,2);
