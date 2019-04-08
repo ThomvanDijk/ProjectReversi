@@ -19,11 +19,11 @@ public class GameModel extends Model {
 			currentGame = gameType;
 			if (gameMode.equals(GameMode.SINGLEPLAYER)) {
 				ticTacToe = new TicTacToe(GameMode.SINGLEPLAYER);
-				gameView.updateBoard(ticTacToe.getBoard());
+				notifyView();
 				break;
 			} else {
 				ticTacToe = new TicTacToe(GameMode.ONLINE);
-				gameView.updateBoard(ticTacToe.getBoard());
+				notifyView();
 				break;
 			}
 		case TICTACTOE:

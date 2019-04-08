@@ -11,13 +11,15 @@ public class ClientController extends Controller {
 	}
 
 	@Override
-	public void notify(Notification notification, String argument) {
-		switch (notification) {
+	public void notifyModel(int notification_id, String argument) {
+		GameModel gameModel = (GameModel) model; // cast
+		
+		switch (notification_id) {
 		case START_REVERSI_MULTIPLAYER:
-			model.startGame(GameMode.ONLINE, GameType.REVERSI);
+			gameModel.startGame(GameMode.ONLINE, GameType.REVERSI);
 			break;
 		case START_TICTACTOE_MULTIPLAYER:
-			model.startGame(GameMode.ONLINE, GameType.TICTACTOE);
+			gameModel.startGame(GameMode.ONLINE, GameType.TICTACTOE);
 			break;
 		case END_REVERSI_MULTIPLAYER:
 			break;
@@ -29,7 +31,7 @@ public class ClientController extends Controller {
 			break;
 		case SET_MOVE_TICTACTOE:
 			// Argument has to be a valid number
-			model.setMove(GameType.TICTACTOE, argument);
+			gameModel.setMove(GameType.TICTACTOE, argument);
 			break;
 		default:
 			throw new IllegalStateException();

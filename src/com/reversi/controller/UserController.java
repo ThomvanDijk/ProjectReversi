@@ -12,23 +12,25 @@ public class UserController extends Controller {
 
 	// From GameView use this notify function to send a notification to model. Arguments can be null...
 	@Override
-	public void notify(Notification notification, String argument) {
-		switch (notification) {
+	public void notifyModel(int notification_id, String argument) {
+		GameModel gameModel = (GameModel) model; // cast
+		
+		switch (notification_id) {
 		case START_REVERSI_SINGLEPLAYER:
-			model.startGame(GameMode.SINGLEPLAYER, GameType.REVERSI);
+			gameModel.startGame(GameMode.SINGLEPLAYER, GameType.REVERSI);
 			break;
 		case START_TICTACTOE_SINGLEPLAYER:
-			model.startGame(GameMode.SINGLEPLAYER, GameType.TICTACTOE);
+			gameModel.startGame(GameMode.SINGLEPLAYER, GameType.TICTACTOE);
 			break;
 		case END_REVERSI_SINGLEPLAYER:
 			break;
 		case END_TICTACTOE_SINGLEPLAYER:
 			break;
 		case START_REVERSI_MULTIPLAYER:
-			model.startGame(GameMode.ONLINE, GameType.REVERSI);
+			gameModel.startGame(GameMode.ONLINE, GameType.REVERSI);
 			break;
 		case START_TICTACTOE_MULTIPLAYER:
-			model.startGame(GameMode.ONLINE, GameType.TICTACTOE);
+			gameModel.startGame(GameMode.ONLINE, GameType.TICTACTOE);
 			break;
 		case END_REVERSI_MULTIPLAYER:
 			break;
@@ -44,7 +46,7 @@ public class UserController extends Controller {
 			break;
 		case SET_MOVE_TICTACTOE:
 			// Argument should be a valid number
-			model.setMove(GameType.TICTACTOE, argument);
+			gameModel.setMove(GameType.TICTACTOE, argument);
 			break;
 		default:
 			throw new IllegalStateException();
