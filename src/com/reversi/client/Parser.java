@@ -9,6 +9,7 @@
 
 package com.reversi.client;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -127,18 +128,31 @@ public class Parser {
 		return command;
 	}
 	
-	public List<String> convertStringToList(String listString) {
-		return null;
+	public List<String> stringToList(String listString) {
+		// Create a new list
+		List<String> list = new ArrayList<>();
+
+		// Split the elements up
+		String[] elements = listString.split(",");
+
+		// Add the keys as ArgumentKey and the values as String
+		for (int i = 0; i < elements.length; i++) {
+			// Remove unwanted stuff
+			elements[i] = elements[i].trim();
+			elements[i] = elements[i].replaceAll(Pattern.quote("["), "");
+			elements[i] = elements[i].replaceAll(Pattern.quote("]"), "");
+			
+			list.add(elements[i]);
+		}
+
+		return list;
 	}
 	
-	public HashMap<ArgumentKey, String> convertStringToMap(String mapString) {
-		// Create a new map
-		HashMap<ServerCommand, HashMap<ArgumentKey, String>> map = new HashMap<>();
-		
-		// Second part HashMap<ArgumentKey, String>
-		// Split the arguments up
-		String[] arguments = mapString.split(",");
+	public HashMap<ArgumentKey, String> stringToMap(String mapString) {
 		HashMap<ArgumentKey, String> keyValueMap = new HashMap<>();
+		
+		// Split the arguments up
+		String[] arguments = mapString.split(",");		
 		
 		// Add the keys as ArgumentKey and the values as String
 		for(int i = 0; i < arguments.length; i++) {

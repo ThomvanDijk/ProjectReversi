@@ -2,8 +2,10 @@ package com.reversi.client;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 import com.reversi.client.Parser.ArgumentKey;
 import com.reversi.client.Parser.ServerCommand;
@@ -40,57 +42,47 @@ public class Client {
 		System.out.println("Server: " + message);
 		
 		HashMap<ServerCommand, String> commandMap = parser.getCommand(message);
-		System.out.println("Map: " + commandMap != null);
+		
+		// Display the raw first map
+		//System.out.println("Map: " + commandMap); 
 
 		// If ERR just use the value with this key because the value is just a single string
-		if(!commandMap.containsKey(ServerCommand.ERR) && commandMap != null) {
+		if(!commandMap.containsKey(ServerCommand.ERR) && !commandMap.isEmpty()) {
 			
 			// Parse to a list if ServerCommand == SVR_GAMELIST or SVR_PLAYERLIST
 			if(commandMap.containsKey(ServerCommand.SVR_GAMELIST) || 
 			   commandMap.containsKey(ServerCommand.SVR_PLAYERLIST)) {
+				HashMap.Entry<ServerCommand, String> entry = commandMap.entrySet().iterator().next();
 				
+				List<String> elemenstsList = parser.stringToList(commandMap.get(entry.getKey()));
+				//System.out.println("Elemensts list: " + elemenstsList);
 				
 			} else { // Parse to a map
 				HashMap.Entry<ServerCommand, String> entry = commandMap.entrySet().iterator().next();
 //				ServerCommand key = entry.getKey();
 //				String value = entry.getValue();
 				 
-				HashMap<ArgumentKey, String> keyValueMap = parser.convertStringToMap(commandMap.get(entry.getKey()));
-				System.out.println("Map: " + commandMap.get(entry.getKey()) + " " + keyValueMap);
+				HashMap<ArgumentKey, String> keyValueMap = parser.stringToMap(commandMap.get(entry.getKey()));
+				//System.out.println("Map key: " + entry.getKey()); 
+				//System.out.println("Key value map: " + keyValueMap);
+				
+				// Input the first element of the server command
+				switch(entry.getKey()) {
+				case SVR_GAME_MATCH:
+					break;
+				case SVR_GAME_YOURTURN:
+					break;
+				case SVR_GAME_MOVE:
+					break;
+				case SVR_GAME_CHALLENGE:
+					break;
+				case SVR_GAME:
+					break;
+				default:
+					throw new IllegalStateException();
+				}
 			}
 		} 
-		
-		
-		
-		//Map<ServerCommands, Map<ArgumentKey, String>>
-		//HashMap<ServerCommand, HashMap<ArgumentKey, String>> map = parser.parseMessage(message);
-
-//			if() {
-//				clientController.notify(Notification.SET_MOVE_TICTACTOE, message);
-//			}	
-		
-		// Input the first element of the server command
-//				switch(parts[0]) {
-//				case ERR:
-//					break;
-//				case OK:
-//					break;
-//				case SVR_HELP:
-//					break;
-//				case SVR_GAME_MATCH:
-//					break;
-//				case SVR_GAME_YOURTURN,:
-//					break;
-//				case SVR_GAME_MOVE:
-//					break;
-//				case SVR_GAME_CHALLENGE:
-//					break;
-//				case SVR_GAME:
-//					break;
-//				default:
-//					throw new IllegalStateException();
-//				}
-
 	}
 
 	// Send commands to server
