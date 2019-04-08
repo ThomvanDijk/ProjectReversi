@@ -1,26 +1,19 @@
 package com.reversi.model;
 
-import com.reversi.controller.*;
-import com.reversi.view.*;
+import com.reversi.controller.Controller;
+import com.reversi.view.GameView;
 
-public class Model implements Runnable {
+public abstract class Model implements Runnable {
 	
-	private View mainView;
+	protected GameView gameView;
 	private Controller userController;
 	private Controller serverController;
-	private boolean running;
-	private TicTacToe ticTacToe;
-
-	public Model() {
-		running = true;
-		ticTacToe = new TicTacToe();
-	}
 	
-	public void setView(View view) {
-		if (this.mainView!=null) {
+	public void setView(GameView view) {
+		if (this.gameView!=null) {
 			throw new IllegalStateException("View already set.");
 		}
-		this.mainView = view;
+		this.gameView = view;
 	}
 	
 	public void setUserController(Controller userController) {
@@ -35,17 +28,6 @@ public class Model implements Runnable {
 			throw new IllegalStateException("ServerController already set.");
 		}
 		this.serverController = serverController;
-	}
-	
-	public void update(int serverMove, int enemyScore, int playerScore) {
-		
-	}
-
-	@Override
-	public void run() {
-		while(running) {
-			
-		}
 	}
 
 }
