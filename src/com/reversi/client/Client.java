@@ -39,8 +39,31 @@ public class Client {
 	public void notifyController(String message) {
 		System.out.println("Server: " + message);
 		
+		HashMap<ServerCommand, String> commandMap = parser.getCommand(message);
+		System.out.println("Map: " + commandMap != null);
+
+		// If ERR just use the value with this key because the value is just a single string
+		if(!commandMap.containsKey(ServerCommand.ERR) && commandMap != null) {
+			
+			// Parse to a list if ServerCommand == SVR_GAMELIST or SVR_PLAYERLIST
+			if(commandMap.containsKey(ServerCommand.SVR_GAMELIST) || 
+			   commandMap.containsKey(ServerCommand.SVR_PLAYERLIST)) {
+				
+				
+			} else { // Parse to a map
+				HashMap.Entry<ServerCommand, String> entry = commandMap.entrySet().iterator().next();
+//				ServerCommand key = entry.getKey();
+//				String value = entry.getValue();
+				 
+				HashMap<ArgumentKey, String> keyValueMap = parser.convertStringToMap(commandMap.get(entry.getKey()));
+				System.out.println("Map: " + commandMap.get(entry.getKey()) + " " + keyValueMap);
+			}
+		} 
+		
+		
+		
 		//Map<ServerCommands, Map<ArgumentKey, String>>
-		HashMap<ServerCommand, HashMap<ArgumentKey, String>> map = parser.parseMessage(message);
+		//HashMap<ServerCommand, HashMap<ArgumentKey, String>> map = parser.parseMessage(message);
 
 //			if() {
 //				clientController.notify(Notification.SET_MOVE_TICTACTOE, message);

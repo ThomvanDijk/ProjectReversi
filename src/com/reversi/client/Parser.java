@@ -1,7 +1,17 @@
+/**
+* This class converts strings from the server to workable lists, maps or strings
+* and converts the message header to a valid command
+* 
+* @author Thom van Dijk
+* @version 1.0
+* @since 08-04-2019
+*/
+
 package com.reversi.client;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -44,41 +54,90 @@ public class Parser {
 		
 	}
 	
-	public HashMap<ServerCommand, HashMap<ArgumentKey, String>> parseMessage(String message) {
-		// Create a new map
-		HashMap<ServerCommand, HashMap<ArgumentKey, String>> map = new HashMap<>();
+	/**
+	* This function converts a server message to a map with ServerCommand and arguments.
+	* Help messages from the server are not allowed and will not be captured!
+	* 
+	* @param message A message from the server
+	* @return HashMap<ServerCommand, String> This returns a map with 
+	* correct ServerCommand and its arguments
+	*/
+	public HashMap<ServerCommand, String> getCommand(String message) {
+		HashMap<ServerCommand, String> map = new HashMap<>();
 		
-		// Split the message in two parts ServerCommand and Map<ArgumentKey, String>
-		String[] parts = message.split(Pattern.quote("{"));
-			
-		// First part ServerCommand
-		//parts[0] = parts[0].substring(0, parts[0].length() - 1); // Remove last char
-		parts[0] = parts[0].trim(); // Remove last whitespace
-		parts[0] = parts[0].replaceAll(" ", "_");
-		
-		ServerCommand tempCommand = null;
-		
-		// Pick the right ServerCommand to return
-		for(ServerCommand cmd: ServerCommand.values()) {
-			if(cmd.name().equals(parts[0])) {
-				tempCommand = cmd;
-				break;
-			}
-		}
-		
-		if(tempCommand == null) {
-			return null;
-		}
-
-		// If the ServerCommand has no arguments return null
-		if(tempCommand.equals(ServerCommand.OK)) {
-			map.put(tempCommand, null);
+		// Filter useless server messages
+		if(message.equals("OK")) {
 			return map;
 		}
 		
+		if(message.equals("Strategic Game Server Fixed [Version 1.1.0]")) {
+			return map;
+		}
+		
+		if(message.equals("(C) Copyright 2015 Hanzehogeschool Groningen")) {
+			return map;
+		}
+		
+		// Split the message in two parts ServerCommand and arguments
+		// Try the split in a curly bracket
+		String[] parts = message.split(Pattern.quote("{"));
+
+		if(parts.length == 1) {
+			
+			// No map return so check for list return on a bracket
+			parts = message.split(Pattern.quote("["));
+			
+			if(parts.length == 1) {
+				
+				// Also no list return so split the message after the server message
+				// this can only be ERR and SVR HELP
+				parts = message.split("(?<=ERR) ");
+				
+				if(parts.length == 1) {
+					// exception
+				}
+			}
+		}
+
+		map.put(stringToCommand(parts[0]), parts[1]);	
+		return map;
+	}
+	
+	public ServerCommand stringToCommand(String commandString) {
+		// parts[0] = parts[0].substring(0, parts[0].length() - 1); // Remove last char
+		commandString = commandString.trim(); // Remove last whitespace
+		// Match the ServerCommand format
+		commandString = commandString.replaceAll(" ", "_");
+
+		ServerCommand command = null;
+
+		// Pick the right ServerCommand to return
+		for (ServerCommand cmd : ServerCommand.values()) {
+			if (cmd.name().equals(commandString)) {
+				command = cmd;
+				break;
+			}
+		}
+
+		// Should not happen
+		if (command == null) {
+			return null;
+		}
+		
+		return command;
+	}
+	
+	public List<String> convertStringToList(String listString) {
+		return null;
+	}
+	
+	public HashMap<ArgumentKey, String> convertStringToMap(String mapString) {
+		// Create a new map
+		HashMap<ServerCommand, HashMap<ArgumentKey, String>> map = new HashMap<>();
+		
 		// Second part HashMap<ArgumentKey, String>
 		// Split the arguments up
-		String[] arguments = parts[1].split(",");
+		String[] arguments = mapString.split(",");
 		HashMap<ArgumentKey, String> keyValueMap = new HashMap<>();
 		
 		// Add the keys as ArgumentKey and the values as String
@@ -102,11 +161,8 @@ public class Parser {
 				}
 			}
 		}
-		
-		//System.out.println(keyValueMap.toString());
 
-		map.put(tempCommand, keyValueMap);
-		return map;
+		return keyValueMap;
 	}
 
 }
