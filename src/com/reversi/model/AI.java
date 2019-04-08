@@ -194,6 +194,7 @@ public class AI {
 	            for (int i = 0; i < (list.size()/2); i++) {	                
 	                int move = list.get(i).get(0) + (list.get(i).get(1)*8);
 	                //int score = reversi.calculateValueDiff(player.id);
+	                reversi.makeMove(player, move, b);
 	                int score = 0;
 	                for (int j = 0; j<b.getBoardSize(); j++) {
 	                	for (int n = 0; n<b.getBoardSize(); n++) {
@@ -204,7 +205,7 @@ public class AI {
 	                		}
 	                	}
 	                }
-	                System.out.println(score);
+	                System.out.println("Score van "+player.id +": "+score);
 
 	                Player nextPlayer;
 	                if (player.id == 1) {

@@ -319,12 +319,12 @@ public class Reversi extends Game {
 			if (player.id == 1) {
 				player1.setTurn(true);
 				player2.setTurn(false);
-				debugMove(player2.id, b);
+				
 			}
 			else {
 				player1.setTurn(false);
 				player2.setTurn(true);
-				debugMove(player1.id, b);
+				
 			}
 			
 		}
@@ -357,7 +357,7 @@ public class Reversi extends Game {
 					input = scanInput.nextInt();
 				}
 				else {
-					input = player.ai.minimax(b, player, 0,4,0,0);
+					input = player.ai.minimax(b, player, 0,2,0,0);
 					//input = player.ai.boardWeighting(b, player);
 					System.out.println("Computer is doing the following move: "+input);
 					
