@@ -28,6 +28,7 @@ public class ClientController extends Controller {
 		case SET_MOVE_REVERSI:
 			break;
 		case SET_MOVE_TICTACTOE:
+			// Argument has to be a valid number
 			model.setMove(GameType.TICTACTOE, argument);
 			break;
 		default:

@@ -1,5 +1,6 @@
 package com.reversi.main;
 
+import com.reversi.client.Client;
 import com.reversi.controller.*;
 import com.reversi.model.*;
 import com.reversi.view.*;
@@ -8,15 +9,17 @@ public class Main {
 	
 	public static boolean running;
 
-
 	public Main(String[] args) {
 		running = true;
-		
+
 		GameModel model = new GameModel();
 
 		// Give model to controllers because they must have a model
 		ClientController clientController = new ClientController(model);
 		UserController userController = new UserController(model);
+		
+		// Make a client that connects to the server
+		Client client = new Client(clientController);
 		
 		// Make view and add a reference to controller
 		GameView view = new GameView(userController, args);
