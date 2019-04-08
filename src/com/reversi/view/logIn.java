@@ -81,9 +81,6 @@ public class logIn {
 
 
 
-
-
-
         //Create scene
         Scene scene = new Scene(gridPane, 500, 350);
 

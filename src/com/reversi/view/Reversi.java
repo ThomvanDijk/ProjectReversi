@@ -32,20 +32,29 @@ public class Reversi {
         //Displaying the contents of the stage
         reversiStage.show();
 
-        final int size = 8;
-        for (int row = 0; row < size; row++) {
-            for (int col = 0; col < size; col ++) {
+        //draw board
+        int[][] boardReversi = new int[8][8];
+        char ch = '1';
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++) {
+                boardReversi[i][j] = ch++;
                 StackPane square = new StackPane();
                 String color ;
                 color = "black";
                 square.setStyle("-fx-border-color: "+color+";");
-                gridPane.add(square, col, row);
+                gridPane.add(square, i, j);
             }
         }
-        for (int i = 0; i < size; i++) {
+
+        for (int i = 0; i < 8; i++) {
             gridPane.getColumnConstraints().add(new ColumnConstraints(5, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true));
             gridPane.getRowConstraints().add(new RowConstraints(5, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.CENTER, true));
         }
+
+
+
+
+
 
         //button to go back to menu
         Button buttonGoBack = new Button("back to menu");
