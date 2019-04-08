@@ -5,34 +5,37 @@ import com.reversi.model.*;
 import com.reversi.view.*;
 
 public class Main {
+	
+	public static boolean running;
 
-	public Main() {
-		Model model = new Model();
+
+	public Main(String[] args) {
+		running = true;
+		
+		GameModel model = new GameModel();
 
 		// Give model to controllers because they must have a model
-		ServerController serverController = new ServerController(model);
+		ClientController clientController = new ClientController(model);
 		UserController userController = new UserController(model);
 		
 		// Make view and add a reference to controller
-		View view = new View();
-		view.addUserController(userController);
+		GameView view = new GameView(userController, args);
 		
 		// Add the view and controllers references to the model
 		model.setView(view);
-		model.setServerController(serverController);
+		model.setServerController(clientController);
 		model.setUserController(userController);
 		
 		Thread modelThread = new Thread(model);
 		Thread viewThread = new Thread(view);
-		Thread serverControllerThread = new Thread(serverController);
 		
 		modelThread.start();
 		viewThread.start();
-		serverControllerThread.start();
 	}
 
 	public static void main(String[] args) {
-		new Main();
+		new Main(args);
+		running = false;
 	}
 
 }
