@@ -46,6 +46,10 @@ public class Board implements Cloneable{
 	public int getBoardSize() {
 		return boardSize;
 	}
+	
+	public void setBoard(int[][] newBoard) {
+		board = newBoard;
+	}
 
 	public void debugBoard() {
 		for (int row = 0; row < boardSize; row++) {

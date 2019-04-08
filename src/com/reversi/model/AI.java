@@ -47,7 +47,7 @@ public class AI {
 		return move;
 	}
 	
-	public int calculateMove2(Board b, Player player) {
+	public int random(Board b, Player player) {
 		// haal mogelijke zetten op
 		ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
 		
@@ -170,15 +170,22 @@ public class AI {
 	}
 	
 	public int minimax(Board b, Player player, int depth, int max_depth, int chosen_score, int chosen_move){
-		
+		int[][] backup = b.getBoard();
 	    if (depth == max_depth) {
 	    	System.out.println("Reached end depth");
-	        return chosen_move;
+	        return 0;
 	    }
 	    
 	    else {
+	    	 int opponentID = 0;
+	    	 if (player.id == 1) {
+	         	opponentID = 2;
+	         }
+	         else {
+	         	opponentID = 1;
+	         }
 	    	int bestScore = 100;
-	    	int bestMove = 0;
+	    	int bestMove = -1;
 	    	ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
 	        if (list.size() == 0) {
 	            return 0;
@@ -186,17 +193,19 @@ public class AI {
 	        else {
 	            for (int i = 0; i < (list.size()/2); i++) {	                
 	                int move = list.get(i).get(0) + (list.get(i).get(1)*8);
-	                int score = reversi.calculateValueDiff(player.id);
-	                Board newBoard = new Board(8, GameType.REVERSI);
-	                newBoard = reversi.makeMove(player, move, b);
-	                Board copyBoard = new Board(8, GameType.REVERSI);
-	                try {
-						copyBoard = (Board) newBoard.clone();
-	                	System.out.println("Board cloned");
-					} catch (CloneNotSupportedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+	                //int score = reversi.calculateValueDiff(player.id);
+	                int score = 0;
+	                for (int j = 0; j<b.getBoardSize(); j++) {
+	                	for (int n = 0; n<b.getBoardSize(); n++) {
+	                		if (backup[j][n] == player.id) {
+	                			score++;
+	                		} else if(backup[j][n] == opponentID){
+	                			score--;
+	                		}
+	                	}
+	                }
+	                System.out.println(score);
+
 	                Player nextPlayer;
 	                if (player.id == 1) {
 	                	nextPlayer = new Player(PlayerType.AI, 2);
@@ -205,14 +214,15 @@ public class AI {
 	                	nextPlayer = new Player(PlayerType.AI, 1);
 	                }
 	                
-	                minimax(copyBoard, nextPlayer, depth+1, max_depth, score, move);
-	                if (bestMove == 0) {
+	                minimax(b, nextPlayer, depth+1, max_depth, score, move);
+	                if (bestMove == -1) {
 	                	bestScore = score;
 	                    bestMove = move;
 	                }
 	                else {
 	                	if (depth%2 == 0) {
 		                	if (score > bestScore){
+		                		System.out.print("Best score is: "+score);
 			                    bestScore = score;
 			                    bestMove = move;
 			                }
@@ -229,6 +239,7 @@ public class AI {
 	            chosen_move = bestMove;
 	        }
 	    }
+	    b.setBoard(backup);
 	    return chosen_move;
 	}
 
