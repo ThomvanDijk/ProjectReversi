@@ -1,6 +1,7 @@
 package com.reversi.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -170,20 +171,20 @@ public class AI {
 	}
 	
 	public int minimax(Board b, Player player, int depth, int max_depth, int chosen_score, int chosen_move){
-		int[][] backup = b.getBoard();
+		//int[][] backup = b.getBoard().clone();
+		int[][] currentBoard = b.getBoard();
+		
+		int[][] backup = new int[8][8];
+		for (int i = 0; i < 8; i++) {
+		  backup[i] = Arrays.copyOf(currentBoard[i], currentBoard[i].length);
+		}
+		
 	    if (depth == max_depth) {
 	    	System.out.println("Reached end depth");
 	        return 0;
 	    }
 	    
 	    else {
-	    	 int opponentID = 0;
-	    	 if (player.id == 1) {
-	         	opponentID = 2;
-	         }
-	         else {
-	         	opponentID = 1;
-	         }
 	    	int bestScore = 100;
 	    	int bestMove = -1;
 	    	ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
@@ -191,20 +192,11 @@ public class AI {
 	            return 0;
 	        }
 	        else {
-	            for (int i = 0; i < (list.size()/2); i++) {	                
+	            for (int i = 0; i < (list.size()); i++) {	                
 	                int move = list.get(i).get(0) + (list.get(i).get(1)*8);
-	                //int score = reversi.calculateValueDiff(player.id);
+	                System.out.println("AI: I think I'm going to do this move: "+move);
 	                reversi.makeMove(player, move, b);
-	                int score = 0;
-	                for (int j = 0; j<b.getBoardSize(); j++) {
-	                	for (int n = 0; n<b.getBoardSize(); n++) {
-	                		if (backup[j][n] == player.id) {
-	                			score++;
-	                		} else if(backup[j][n] == opponentID){
-	                			score--;
-	                		}
-	                	}
-	                }
+	                int score = reversi.calculateValueDiff(player.id);
 	                System.out.println("Score van "+player.id +": "+score);
 
 	                Player nextPlayer;
@@ -212,10 +204,13 @@ public class AI {
 	                	nextPlayer = new Player(PlayerType.AI, 2);
 	                }
 	                else {
-	                	nextPlayer = new Player(PlayerType.AI, 1);
+	                	nextPlayer = new Player(PlayerType.AI, 1);	           
 	                }
+	                nextPlayer.setTurn(true);
+	                player.setTurn(false);
 	                
 	                minimax(b, nextPlayer, depth+1, max_depth, score, move);
+	                
 	                if (bestMove == -1) {
 	                	bestScore = score;
 	                    bestMove = move;
@@ -236,13 +231,12 @@ public class AI {
 		                }
 	                }		        	                
 	            }
+	            b.setBoard(backup);
 	            chosen_score = bestScore;
 	            chosen_move = bestMove;
 	        }
-	    }
-	    b.setBoard(backup);
+	    }	    
+
 	    return chosen_move;
 	}
-
-
 }
