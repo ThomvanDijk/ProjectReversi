@@ -100,20 +100,13 @@ public class Reversi extends Game {
 					}
 
 					if (tempList.isEmpty() == false) {
-						boolean add = false;
-
-						for (int i = 0; i < validMoves.size(); i++) {
-							if (validMoves.get(i).equals(tempList)) {
-								add = false;
-								break;
-							} else {
-								add = true;
+						for (int i = 2; i < tempList.size(); i = i+2) {
+							if ((tempList.get(0) == tempList.get(i)) && (tempList.get(1) == tempList.get(i+1))){
+								tempList.remove(i);
+								tempList.remove(i+1);
 							}
 						}
-
-						if (add || validMoves.isEmpty()) {
-							validMoves.add(tempList);
-						}
+						validMoves.add(tempList);
 					}
 				}
 			}
