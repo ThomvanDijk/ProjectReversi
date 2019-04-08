@@ -2,7 +2,7 @@ package com.reversi.model;
 
 import com.reversi.model.Game.GameType;
 
-public class Board {
+public class Board implements Cloneable{
 
 	private final int boardSize;
 	private int[][] board;
@@ -26,12 +26,12 @@ public class Board {
 
 	public void setPiece(int row, int col, int piece) throws Exception {
 		if (placesOccupied >= boardSize * boardSize) {
-			throw new Exception("All places are occupied!");
+			//throw new Exception("All places are occupied!");
+			board[row][col] = piece;
+			placesOccupied++;
 		} else {
 			board[row][col] = piece;
-			if(getPiece(row, col) == 0) {
-				placesOccupied++;
-			}			
+			placesOccupied++;
 		}
 	}
 
@@ -69,6 +69,12 @@ public class Board {
 			}
 			System.out.println();
 		}
+	}
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+
+	    return super.clone();
 	}
 
 }
