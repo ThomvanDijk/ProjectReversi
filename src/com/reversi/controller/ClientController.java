@@ -11,7 +11,7 @@ public class ClientController extends Controller {
 	}
 
 	@Override
-	public void notifyModel(int notification_id, String argument) {
+	public void notifyModel(int notification_id, String[] argument) {
 		GameModel gameModel = (GameModel) model; // cast
 		
 		switch (notification_id) {
@@ -31,7 +31,7 @@ public class ClientController extends Controller {
 			break;
 		case SET_MOVE_TICTACTOE:
 			// Argument has to be a valid number
-			gameModel.setMove(GameType.TICTACTOE, argument);
+			gameModel.setMove(GameType.TICTACTOE, argument[0]);
 			break;
 		default:
 			throw new IllegalStateException();

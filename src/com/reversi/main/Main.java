@@ -18,7 +18,7 @@ public class Main {
 		UserController userController = new UserController(model);
 		
 		// Make a client that connects to the server
-		Client client = new Client(clientController);
+		//Client client = new Client(clientController);
 		
 		// Make view and add a reference to controller 
 		// also pass args for javaFX
