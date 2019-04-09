@@ -7,12 +7,13 @@ public abstract class Model implements Runnable {
 	
 	protected GameView gameView;
 	protected Client client;
+
 	
 	public void setView(GameView view) {
-		if (this.gameView!=null) {
+		if (this.mainView!=null) {
 			throw new IllegalStateException("View already set.");
 		}
-		this.gameView = view;
+		this.mainView = view;
 	}
 	
 	public void setClient(Client client) {

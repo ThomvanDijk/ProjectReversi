@@ -1,12 +1,18 @@
 package com.reversi.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.reversi.controller.*;
 import com.reversi.model.Game.GameMode;
-import com.reversi.model.Game.GameType;
+import com.reversi.view.*;
 
 public class GameModel extends Model {
 
+	private boolean running;
 	private TicTacToe ticTacToe;
 	private Reversi reversi;
+
 	private GameType currentGameType;
 	private GameMode currentGameMode;
 
@@ -81,6 +87,7 @@ public class GameModel extends Model {
 		client.login(arguments);
 	}
 
+
 	public int[][] getBoard() {
 		switch (currentGameType) {
 		case REVERSI:
@@ -110,6 +117,7 @@ public class GameModel extends Model {
 
 	@Override
 	public void run() {
+
 //		login(new String[] {"Naam", "localhost"});
 //		
 //		while (true) {

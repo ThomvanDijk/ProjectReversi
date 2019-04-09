@@ -1,6 +1,5 @@
 package com.reversi.model;
 
-import java.util.List;
 import java.util.Scanner;
 
 import com.reversi.main.*;
@@ -24,22 +23,10 @@ public class TicTacToe extends Game {
 		}
 		
 		if(gameMode.equals(GameMode.SINGLEPLAYER)) {
-			//consoleInput();
+			consoleInput();
 		} else {
 			
 		}
-	}
-	
-	public Player getHumanPlayer() throws Exception {
-		if(player1.type.equals(PlayerType.HUMAN)) {
-			return player1;
-		} else {
-			throw new Exception("No human players in this game!");
-		}
-	}
-	
-	public int[][] getBoard() {
-		return board.getBoard();
 	}
 
 	// Check if the move is valid
