@@ -80,6 +80,22 @@ public class GameModel extends Model {
 			return null;
 		}
 	}
+	
+	public Player[] getPlayer() {
+		Player[] players = new Player[2];
+		switch (currentGame) {
+		case REVERSI:
+			players[0] = reversi.player1;
+			players[1] = reversi.player2;
+			return players;
+		case TICTACTOE:
+			players[0] = ticTacToe.player1;
+			players[1] = ticTacToe.player2;
+			return players;
+		default:
+			return null;
+		}
+	}
 
 	@Override
 	public void run() {
