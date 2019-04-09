@@ -19,11 +19,11 @@ public class GameModel extends Model {
 			currentGame = gameType;
 			if (gameMode.equals(GameMode.SINGLEPLAYER)) {
 				ticTacToe = new TicTacToe(GameMode.SINGLEPLAYER);
-				gameView.updateBoard(ticTacToe.getBoard());
+				notifyView();
 				break;
 			} else {
 				ticTacToe = new TicTacToe(GameMode.ONLINE);
-				gameView.updateBoard(ticTacToe.getBoard());
+				notifyView();
 				break;
 			}
 		case TICTACTOE:
@@ -70,8 +70,31 @@ public class GameModel extends Model {
 		// TODO implement
 	}
 
-	public void boardConverter() {
-
+	public int[][] getBoard() {
+		switch (currentGame) {
+		case REVERSI:
+			return reversi.board.getBoard();
+		case TICTACTOE:
+			return ticTacToe.board.getBoard();
+		default:
+			return null;
+		}
+	}
+	
+	public Player[] getPlayer() {
+		Player[] players = new Player[2];
+		switch (currentGame) {
+		case REVERSI:
+			players[0] = reversi.player1;
+			players[1] = reversi.player2;
+			return players;
+		case TICTACTOE:
+			players[0] = ticTacToe.player1;
+			players[1] = ticTacToe.player2;
+			return players;
+		default:
+			return null;
+		}
 	}
 
 	@Override

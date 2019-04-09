@@ -9,6 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 
@@ -37,28 +39,39 @@ public class boterKaas {
 
         int[][] boardBoterKaas = new int[3][3];
 
-
         char ch = '1';
         for (int i = 0; i < 3; i++){
             for (int j = 0; j < 3; j++) {
 
+
                 boardBoterKaas[i][j] = ch++;
                 StackPane square = new StackPane();
-                String color ;
-                color = "black";
-                square.setStyle("-fx-border-color: "+color+";");
-                gridPane.add(square, i, j);
+
+                square.setStyle("-fx-border-color: black");
+                square.setStyle("-fx-background-color: green");
+
+
+                int x = 2;
+                boardBoterKaas[1][2] = x;
 
 
                 if(boardBoterKaas[i][j] == 1){
+                    //x
                  square.setStyle("-fx-background-color: black");
                 }
+
                 else if (boardBoterKaas[i][j] == 2){
-                    square.setStyle("-fx-background-color: black");
+
+                    Circle circle1 = new Circle();
+                    circle1.setRadius(50);
+                    circle1.setFill(Color.BLACK);
+                    square.getChildren().add(circle1);
                 }
                 else {
-
+                    //leeg laten
                  }
+
+                gridPane.add(square, i, j);
 
             }
         }

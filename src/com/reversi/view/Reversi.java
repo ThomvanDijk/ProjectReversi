@@ -37,12 +37,25 @@ public class Reversi {
         char ch = '1';
         for (int i = 0; i < 8; i++){
             for (int j = 0; j < 8; j++) {
+
                 boardReversi[i][j] = ch++;
                 StackPane square = new StackPane();
-                String color ;
-                color = "black";
-                square.setStyle("-fx-border-color: "+color+";");
+
+                square.setStyle("-fx-border-color: black");
+                square.setStyle("-fx-background-color: green");
+
+
+                if(boardReversi[i][j] == 1){
+                    square.setStyle("-fx-background-color: black");
+                }
+                else if (boardReversi[i][j] == 2){
+                    square.setStyle("-fx-background-color: white");
+                }
+                else {
+                    //leeg laten
+                }
                 gridPane.add(square, i, j);
+
             }
         }
 
