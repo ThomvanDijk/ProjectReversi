@@ -10,13 +10,6 @@ import com.reversi.model.Player.PlayerType;
 
 public class AI {
 	
-	public static int maxLevel = 10; // negative to remove limit
-	public static long maxTime = 8000; // milliseconds. stops tree expansion. takes some additional time to finalize calculations
-	public static long startTime = 0;
-	public static boolean cutOff = false;
-
-	
-	
 	private TicTacToe ticTacToe;
 	private static Reversi reversi;
 
@@ -172,10 +165,11 @@ public class AI {
 	
 	public int minimax(Board b, Player player, int depth, int max_depth, int chosen_score, int chosen_move){
 		//int[][] backup = b.getBoard().clone();
+		int boardSize = b.getBoardSize();
 		int[][] currentBoard = b.getBoard();
 		
-		int[][] backup = new int[8][8];
-		for (int i = 0; i < 8; i++) {
+		int[][] backup = new int[boardSize][boardSize];
+		for (int i = 0; i < boardSize; i++) {
 		  backup[i] = Arrays.copyOf(currentBoard[i], currentBoard[i].length);
 		}
 		
@@ -210,6 +204,11 @@ public class AI {
 	                player.setTurn(false);
 	                
 	                minimax(b, nextPlayer, depth+1, max_depth, score, move);
+	                int[][] restore = new int[boardSize][boardSize];
+	        		for (int j = 0; j < boardSize; j++) {
+	        		  restore[j] = Arrays.copyOf(backup[j], backup[j].length);
+	        		}
+	                b.setBoard(restore);
 	                
 	                if (bestMove == -1) {
 	                	bestScore = score;
@@ -218,7 +217,7 @@ public class AI {
 	                else {
 	                	if (depth%2 == 0) {
 		                	if (score > bestScore){
-		                		System.out.print("Best score is: "+score);
+		                		System.out.println("Best score is: "+score);
 			                    bestScore = score;
 			                    bestMove = move;
 			                }
@@ -231,12 +230,88 @@ public class AI {
 		                }
 	                }		        	                
 	            }
-	            b.setBoard(backup);
+	            
 	            chosen_score = bestScore;
 	            chosen_move = bestMove;
 	        }
 	    }	    
+	    System.out.println(chosen_move);
+	    return chosen_move;
+	}
+	
+	public int minimaxAvailableMoves(Board b, Player player, int depth, int max_depth, int chosen_score, int chosen_move){
+		//int[][] backup = b.getBoard().clone();
+		int boardSize = b.getBoardSize();
+		int[][] currentBoard = b.getBoard();
+		
+		int[][] backup = new int[boardSize][boardSize];
+		for (int i = 0; i < boardSize; i++) {
+		  backup[i] = Arrays.copyOf(currentBoard[i], currentBoard[i].length);
+		}
+		
+	    if (depth == max_depth) {
+	    	System.out.println("Reached end depth");
+	        return 0;
+	    }
+	    
+	    else {
+	    	int bestScore = 100;
+	    	int bestMove = -1;
+	    	ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
+	        if (list.size() == 0) {
+	            return 0;
+	        }
+	        else {
+	            for (int i = 0; i < (list.size()); i++) {	                
+	                int move = list.get(i).get(0) + (list.get(i).get(1)*8);
+	                System.out.println("AI: I think I'm going to do this move: "+move);
+	                reversi.makeMove(player, move, b);
+	                int score = reversi.calculateValueDiff(player.id);
+	                System.out.println("Score van "+player.id +": "+score);
 
+	                Player nextPlayer;
+	                if (player.id == 1) {
+	                	nextPlayer = new Player(PlayerType.AI, 2);
+	                }
+	                else {
+	                	nextPlayer = new Player(PlayerType.AI, 1);	           
+	                }
+	                nextPlayer.setTurn(true);
+	                player.setTurn(false);
+	                
+	                minimax(b, nextPlayer, depth+1, max_depth, score, move);
+	                int[][] restore = new int[boardSize][boardSize];
+	        		for (int j = 0; j < boardSize; j++) {
+	        		  restore[j] = Arrays.copyOf(backup[j], backup[j].length);
+	        		}
+	                b.setBoard(restore);
+	                
+	                if (bestMove == -1) {
+	                	bestScore = score;
+	                    bestMove = move;
+	                }
+	                else {
+	                	if (depth%2 == 0) {
+		                	if (score > bestScore){
+		                		System.out.println("Best score is: "+score);
+			                    bestScore = score;
+			                    bestMove = move;
+			                }
+		                }
+		                else {
+		                	if (score < bestScore){
+			                    bestScore = score;
+			                    bestMove = move;
+			                }
+		                }
+	                }		        	                
+	            }
+	            
+	            chosen_score = bestScore;
+	            chosen_move = bestMove;
+	        }
+	    }	    
+	    System.out.println(chosen_move);
 	    return chosen_move;
 	}
 }

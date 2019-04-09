@@ -216,7 +216,7 @@ public class Reversi extends Game {
 					}
 
 					// score update
-					if (playerID == 1) { // if player == 1 or black
+					/*if (playerID == 1) { // if player == 1 or black
 						if (check2 != 0) {
 							player1.decrementScore();
 						}
@@ -226,22 +226,35 @@ public class Reversi extends Game {
 							player2.decrementScore();
 						}
 						player1.incrementScore();
-					}
+					}*/
 				}
 			}
+			//new score update
+			int scoreWhite = 0;
+			int scoreBlack = 0;
+			int[][] scoreCheck = b.getBoard();
+		    for(int i = 0; i < boardSize; i++)
+		    {
+		        for(int j = 0; j < boardSize; j++)
+		        {
+		            if(scoreCheck[i][j] == 2)
+		            {
+		                scoreWhite++;
+		            }
+		            else if (scoreCheck[i][j] == 1){
+		            	scoreBlack++;
+		            }
+		        }
+		    }
+		    player1.setScore(scoreWhite);
+		    player2.setScore(scoreBlack);
 		}
+		
 
 		if (!validMove) {
 			System.out.println("Not a valid move!");
 			
 			
-			//mag weg
-			try {
-				TimeUnit.SECONDS.sleep(1);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			
 			
 			return false;
@@ -256,7 +269,7 @@ public class Reversi extends Game {
 		return true;
 	}
 	
-	
+
 	public Board makeMove(Player player, int move, Board b) {
 		int input = 0;
 		boolean validMove = false;
@@ -277,13 +290,6 @@ public class Reversi extends Game {
 		// Get all the valid moves if there are any
 		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(b, player.id);
 		
-		//mag weg
-		try {
-			TimeUnit.SECONDS.sleep(1);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		
 		//As long as the input isn't correct, this will loop
@@ -357,18 +363,11 @@ public class Reversi extends Game {
 					input = scanInput.nextInt();
 				}
 				else {
-					input = player.ai.minimax(b, player, 0,2,0,0);
+					input = player.ai.minimax(b, player, 0,3,0,0);
 					//input = player.ai.boardWeighting(b, player);
 					System.out.println("Computer is doing the following move: "+input);
 					
 					
-					//dit mag weg
-					try {
-						TimeUnit.SECONDS.sleep(1);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 					
 				}
 				validMove = setMove(input, validMoves, player.id, b);
