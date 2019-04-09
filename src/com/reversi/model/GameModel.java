@@ -1,5 +1,6 @@
 package com.reversi.model;
 
+import com.reversi.client.Client;
 import com.reversi.model.Game.GameMode;
 import com.reversi.model.Game.GameType;
 
@@ -8,6 +9,8 @@ public class GameModel extends Model {
 	private TicTacToe ticTacToe;
 	private Reversi reversi;
 	private GameType currentGame;
+	protected Client client;
+
 
 	public GameModel() {
 		// reversi = new Reversi(GameMode.SINGLEPLAYER);

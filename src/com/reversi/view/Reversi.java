@@ -80,8 +80,8 @@ public class Reversi {
             @Override
             public void handle(ActionEvent actionEvent) {
 
-                Login login = new Login();
-                login.start(reversiStage);
+//                Login login = new Login();
+//                login.start(reversiStage);
             }
         });
 

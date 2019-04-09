@@ -36,4 +36,8 @@ public abstract class View implements Runnable {
 	 */
 	protected abstract void update(Model model);
 
+	public UserController getUserController() {
+		return userController;
+	}
+
 }

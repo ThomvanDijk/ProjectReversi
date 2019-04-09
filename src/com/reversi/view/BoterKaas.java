@@ -92,8 +92,8 @@ public class BoterKaas {
             @Override
             public void handle(ActionEvent actionEvent) {
 
-                Login login = new Login();
-                login.start(boterKaasStage);
+//                Login login = new Login();
+//                login.start(boterKaasStage);
             }
         });
 
