@@ -1,6 +1,8 @@
 package com.reversi.view;
 
 import com.reversi.controller.UserController;
+import com.reversi.model.Board;
+import com.reversi.model.Player;
 
 public class GameView extends View {
 
