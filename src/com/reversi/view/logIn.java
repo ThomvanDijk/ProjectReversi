@@ -2,6 +2,7 @@ package com.reversi.view;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,6 +18,7 @@ public class logIn {
         /** daag uit en join lobby knoppen voor reversi */
 
         Button buttonLogIN = new Button("log in");
+        buttonLogIN.setStyle("-fx-padding: 10 20 10 20");
 
 
         buttonLogIN.setOnAction(new EventHandler<ActionEvent>() {
@@ -29,6 +31,9 @@ public class logIn {
         });
 
         Button buttonBoterKaas = new Button("Boter Kaas en eieren");
+        buttonBoterKaas.setStyle("-fx-padding: 10 20 10 20");
+
+
 
         buttonBoterKaas.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -41,6 +46,8 @@ public class logIn {
 
 
         Button buttonReversie = new Button("Reversi");
+        buttonReversie.setStyle("-fx-padding: 10 20 10 20");
+
 
         buttonReversie.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -53,33 +60,33 @@ public class logIn {
 
 
         //label
-        Label login = new Label("Vul je ip in om in te logggen");
-
+        Label login = new Label("Vul je ip in om in te loggen");
         Label speeloffline = new Label("speel offline");
-
 
         //textfield
         TextField text = new TextField("IP adres");
 
-
-
         //create gridpane
         GridPane gridPane = new GridPane();
+        gridPane.setPadding(new Insets(60));
         gridPane.setVgap(5);
         gridPane.setHgap(5);
-        gridPane.add(buttonLogIN, 1, 3);
-        gridPane.add(text, 1, 2 );
-        gridPane.add(login, 1,1);
-        gridPane.add(speeloffline, 1, 15);
-        gridPane.add(buttonBoterKaas, 1, 18);
-        gridPane.add(buttonReversie, 3, 18);
+        gridPane.add(buttonLogIN, 0, 2);
+        gridPane.add(text, 0, 1 );
+        gridPane.add(login, 0,0);
+        gridPane.add(speeloffline, 0, 11);
+        gridPane.add(buttonBoterKaas, 0, 12);
+        gridPane.add(buttonReversie, 2, 12);
+
+
+
 
         //Create scene
-        Scene scene = new Scene(gridPane, 400, 300);
+        Scene scene = new Scene(gridPane, 500, 350);
 
 
         //Setting title to the Stage
-        logIN.setTitle("log in met je ip");
+        logIN.setTitle("G1");
         logIN.setScene(scene);
 
         //Displaying the contents of the stage

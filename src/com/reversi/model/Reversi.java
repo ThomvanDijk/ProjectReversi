@@ -189,12 +189,6 @@ public class Reversi extends Game {
 			col = 0;
 		}
 
-		for (int i = 0; i < validMoves.size(); i++) {
-			if (validMoves.get(i).get(0).equals(col) && validMoves.get(i).get(1).equals(row)) {
-
-			}
-		}
-
 		// Check if the new move is valid
 		boolean validMove = false;
 		for (int check = 0; check < validMoves.size(); check++) {
@@ -468,8 +462,7 @@ public class Reversi extends Game {
 			parts.add(new ArrayList<T>(list.subList(i, Math.min(N, i + L))));
 		}
 		return parts;
-	}
-	
+	}	
 	public int calculateValueDiff(int playerID) {
 		if (playerID == 1) {
 			return (player1.getScore()-player2.getScore());
@@ -479,3 +472,4 @@ public class Reversi extends Game {
 		}
 	}
 }
+

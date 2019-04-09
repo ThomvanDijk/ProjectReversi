@@ -5,7 +5,7 @@ import com.reversi.model.Player.PlayerType;
 public abstract class Game {
 
 	public enum GameType {
-		REVERSI, TICTACTOE;
+		NOGAME, REVERSI, TICTACTOE;
 	}
 
 	public enum GameMode {
