@@ -12,12 +12,19 @@ public class Player {
 	protected final int id;
 	private int score;
 	private boolean hasTurn;
+	protected int opponent;
 	protected AI ai = null;
 
 	public Player(PlayerType type, int id) {
 		this.type = type;
 		this.id = id;
 		
+		if (id == 1){
+			opponent = 2;
+		}
+		else {
+			opponent = 1;
+		}
 		score = 0;
 		hasTurn = false;	
 		

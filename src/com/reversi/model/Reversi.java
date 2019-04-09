@@ -357,7 +357,7 @@ public class Reversi extends Game {
 					input = scanInput.nextInt();
 				}
 				else {
-					input = player.ai.minimax(b, player, 0,3,0,0);
+					input = player.ai.minimaxAvailableMoves(b, player, 0,5,0,0);
 					//input = player.ai.boardWeighting(b, player);
 					System.out.println("Computer is doing the following move: "+input);
 					

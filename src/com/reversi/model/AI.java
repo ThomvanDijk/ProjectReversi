@@ -163,7 +163,7 @@ public class AI {
 		return bestMove;
 	}
 	
-	public int minimax(Board b, Player player, int depth, int max_depth, int chosen_score, int chosen_move){
+	public int minimaxAvailableMoves(Board b, Player player, int depth, int max_depth, int chosen_score, int chosen_move){
 		//int[][] backup = b.getBoard().clone();
 		int boardSize = b.getBoardSize();
 		int[][] currentBoard = b.getBoard();
@@ -190,7 +190,7 @@ public class AI {
 	                int move = list.get(i).get(0) + (list.get(i).get(1)*8);
 	                System.out.println("AI: I think I'm going to do this move: "+move);
 	                reversi.makeMove(player, move, b);
-	                int score = reversi.calculateValueDiff(player.id);
+	                int score = reversi.getValidMoves(b, player.opponent).size();
 	                System.out.println("Score van "+player.id +": "+score);
 
 	                Player nextPlayer;
@@ -216,7 +216,7 @@ public class AI {
 	                }
 	                else {
 	                	if (depth%2 == 0) {
-		                	if (score > bestScore){
+		                	if (score < bestScore){
 		                		System.out.println("Best score is: "+score);
 			                    bestScore = score;
 			                    bestMove = move;
@@ -239,7 +239,7 @@ public class AI {
 	    return chosen_move;
 	}
 	
-	public int minimaxAvailableMoves(Board b, Player player, int depth, int max_depth, int chosen_score, int chosen_move){
+	public int minimax(Board b, Player player, int depth, int max_depth, int chosen_score, int chosen_move){
 		//int[][] backup = b.getBoard().clone();
 		int boardSize = b.getBoardSize();
 		int[][] currentBoard = b.getBoard();
