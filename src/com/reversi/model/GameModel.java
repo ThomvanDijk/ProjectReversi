@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.reversi.controller.*;
 import com.reversi.model.Game.GameMode;
+import com.reversi.model.Game.GameType;
 import com.reversi.view.*;
 
 public class GameModel extends Model {
@@ -64,7 +65,7 @@ public class GameModel extends Model {
 		case REVERSI:
 			try {
 				int boardsize = reversi.board.getBoardSize();
-				reversi.setMove(intMove, reversi.getValidMoves(boardsize, playerID), playerID);
+				reversi.setMove(intMove, reversi.getValidMoves(reversi.board, playerID), playerID, reversi.board);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
