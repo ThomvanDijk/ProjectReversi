@@ -7,12 +7,14 @@ public class GameModel extends Model {
 
 	private TicTacToe ticTacToe;
 	private Reversi reversi;
-	private GameType currentGame;
+	private GameType currentGameType;
+	private GameMode currentGameMode;
 
 	public GameModel() {
 		// reversi = new Reversi(GameMode.SINGLEPLAYER);
+		currentGameType = GameType.NOGAME;
 	}
-	
+
 	// Send a notify to do something here
 	public void setState() {
 
@@ -23,65 +25,64 @@ public class GameModel extends Model {
 	}
 
 	public void startGame(GameMode gameMode, GameType gameType) {
+		currentGameMode = gameMode;
+		currentGameType = gameType;
+
 		switch (gameType) {
 		case REVERSI:
-			currentGame = gameType;
 			if (gameMode.equals(GameMode.SINGLEPLAYER)) {
-				ticTacToe = new TicTacToe(GameMode.SINGLEPLAYER);
-				notifyView();
+				reversi = new Reversi(GameMode.SINGLEPLAYER);
 				break;
 			} else {
-				ticTacToe = new TicTacToe(GameMode.ONLINE);
-				notifyView();
+				reversi = new Reversi(GameMode.ONLINE);
 				break;
 			}
 		case TICTACTOE:
-			currentGame = gameType;
 			if (gameMode.equals(GameMode.SINGLEPLAYER)) {
-				///
-				notifyView();
+				ticTacToe = new TicTacToe(GameMode.SINGLEPLAYER);
 				break;
 			} else {
-				///
-				notifyView();
+				ticTacToe = new TicTacToe(GameMode.ONLINE);
 				break;
 			}
 		default:
 			throw new IllegalStateException();
 		}
+
+		notifyView();
 	}
 
-	public void setMove(GameType gameType, String argument) {
-		// Check if the move is for the current game
-		if (gameType.equals(currentGame)) {
-			switch (gameType) {
-			case REVERSI:
-				//reversi.setMove(input, validMoves, playerID);
-				notifyView();
-				break;
-			case TICTACTOE:
-				int move = Integer.getInteger(argument);
-				try {
-					ticTacToe.setMove(move, ticTacToe.getHumanPlayer().id);
-					notifyView();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				break;
-			default:
-				throw new IllegalStateException();
+	public void setMove(String move, int playerID) {
+		int intMove = Integer.valueOf(move);
+		switch (currentGameType) {
+		case REVERSI:
+			try {
+				int boardsize = reversi.board.getBoardSize();
+				reversi.setMove(intMove, reversi.getValidMoves(boardsize, playerID), playerID);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} else {
-			throw new IllegalArgumentException("Game: " + gameType + " is not being played!");
+			break;
+		case TICTACTOE:
+			try {
+				ticTacToe.setMove(intMove, playerID);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		default:
+			throw new IllegalStateException();
 		}
+
+		notifyView();
 	}
-	
+
 	public void login(String[] arguments) {
 		client.login(arguments);
 	}
 
 	public int[][] getBoard() {
-		switch (currentGame) {
+		switch (currentGameType) {
 		case REVERSI:
 			return reversi.board.getBoard();
 		case TICTACTOE:
@@ -90,10 +91,10 @@ public class GameModel extends Model {
 			return null;
 		}
 	}
-	
+
 	public Player[] getPlayer() {
 		Player[] players = new Player[2];
-		switch (currentGame) {
+		switch (currentGameType) {
 		case REVERSI:
 			players[0] = reversi.player1;
 			players[1] = reversi.player2;
