@@ -3,14 +3,11 @@ package com.reversi.client;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 import com.reversi.client.Parser.ArgumentKey;
 import com.reversi.client.Parser.ServerCommand;
 import com.reversi.controller.ClientController;
-import com.reversi.model.Model;
 
 public class Client {
 
@@ -24,18 +21,17 @@ public class Client {
 		this.clientController = clientController;
 		
 		parser = new Parser();
-
 		scanInput = new Scanner(System.in);
 
-		System.out.println("Client started and connecting... \n");
+//		System.out.println("Client started and connecting... \n");
 
-		listener = new Listener(this, "localhost");
-		Thread listenerThread = new Thread(listener);
+//		listener = new Listener(this, "localhost");
+//		Thread listenerThread = new Thread(listener);
+//
+//		listenerThread.setDaemon(true);
+//		listenerThread.start();
 
-		listenerThread.setDaemon(true);
-		listenerThread.start();
-
-		consoleInput();
+//		consoleInput();
 	}
 	
 	public void login(String[] arguments) {

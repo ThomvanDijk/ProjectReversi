@@ -1,12 +1,7 @@
 package com.reversi.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.reversi.controller.*;
 import com.reversi.model.Game.GameMode;
 import com.reversi.model.Game.GameType;
-import com.reversi.view.*;
 
 public class GameModel extends Model {
 
@@ -114,16 +109,6 @@ public class GameModel extends Model {
 		default:
 			return null;
 		}
-	}
-
-	@Override
-	public void run() {
-
-//		login(new String[] {"Naam", "localhost"});
-//		
-//		while (true) {
-//			
-//		}
 	}
 
 }

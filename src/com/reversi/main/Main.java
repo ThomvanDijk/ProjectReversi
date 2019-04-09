@@ -28,10 +28,8 @@ public class Main {
 		model.setView(view);
 		model.setClient(client);
 		
-		Thread modelThread = new Thread(model);
 		Thread viewThread = new Thread(view);
 		
-		modelThread.start();
 		viewThread.start();
 	}
 

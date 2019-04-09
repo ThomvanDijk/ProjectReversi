@@ -8,14 +8,20 @@
 
 package com.reversi.view;
 
+import java.util.Scanner;
+
 import com.reversi.controller.*;
 import com.reversi.model.GameModel;
 import com.reversi.model.Model;
 
 public class GameView extends View {
+	
+	private Scanner scanInput;
 
 	public GameView(UserController userController, String[] args) {
 		super(userController);
+	
+		scanInput = new Scanner(System.in);
 		
 		// Below are all the current notification id's you can use as argument in the function
 		// userController.notifyModel(notification_id, argument) The argument is used in case
@@ -40,8 +46,8 @@ public class GameView extends View {
 		// Example
 		//userController.notifyModel(Controller.LOG_IN, new String[] {"Naam", "localhost"});
 
-		Window window = new Window();
-		window.rmain(args);
+		//Window window = new Window();
+		//window.rmain(args);
 	}
 	
 	/**
@@ -69,4 +75,26 @@ public class GameView extends View {
 		
 	}
 	
+	// Use console as input and alternative ui
+	public void consoleInput() {
+		String textToSend;
+
+		while (scanInput.hasNextLine() && !Thread.currentThread().isInterrupted()) {
+
+			textToSend = scanInput.nextLine();
+
+			// Send the text to the server
+			// listener.sendMessage(textToSend);
+
+			// Display text to the text area
+			System.out.println("Client: " + textToSend + "\n");
+
+			if (textToSend.equals("exit")) {
+				break;
+			}
+		}
+
+		scanInput.close();
+	}
+
 }
