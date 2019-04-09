@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-public class endGame {
+public class EndGame {
 
     public void start (Stage endGameStage){
 

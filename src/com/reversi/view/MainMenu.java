@@ -55,7 +55,7 @@ public class MainMenu {
             @Override
             public void handle(ActionEvent actionEvent) {
 
-                boterKaas boterkaas = new boterKaas();
+                BoterKaas boterkaas = new BoterKaas();
                 boterkaas.start(mainMenu);
             }
         });
@@ -70,7 +70,7 @@ public class MainMenu {
             @Override
             public void handle(ActionEvent actionEvent) {
 
-                boterKaas boterkaas = new boterKaas();
+                BoterKaas boterkaas = new BoterKaas();
                 boterkaas.start(mainMenu);
             }
         });

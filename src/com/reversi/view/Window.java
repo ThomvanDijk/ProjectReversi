@@ -11,7 +11,7 @@ public class Window extends Application {
 
     public void start(Stage primaryStage){
 
-        logIn login = new logIn();
+        Login login = new Login();
         login.start(primaryStage);
     }
 

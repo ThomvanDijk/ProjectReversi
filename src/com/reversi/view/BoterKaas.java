@@ -14,7 +14,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 
-public class boterKaas {
+public class BoterKaas {
 
 
     public void start(Stage boterKaasStage){
@@ -92,7 +92,7 @@ public class boterKaas {
             @Override
             public void handle(ActionEvent actionEvent) {
 
-                logIn login = new logIn();
+                Login login = new Login();
                 login.start(boterKaasStage);
             }
         });

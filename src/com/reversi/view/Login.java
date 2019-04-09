@@ -10,25 +10,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-public class logIn {
+public class Login {
 
-    public void start(Stage logIN) {
+    public void start(Stage logIn) {
 
 
         /** daag uit en join lobby knoppen voor reversi */
-
-        Button buttonLogIN = new Button("log in");
-        buttonLogIN.setStyle("-fx-padding: 10 20 10 20");
-
-
-        buttonLogIN.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-
-                MainMenu mainmenu = new MainMenu();
-                mainmenu.start(logIN);
-            }
-        });
 
         Button buttonBoterKaas = new Button("Boter Kaas en eieren");
         buttonBoterKaas.setStyle("-fx-padding: 10 20 10 20");
@@ -39,8 +26,8 @@ public class logIn {
             @Override
             public void handle(ActionEvent actionEvent) {
 
-                boterKaas boterkaas = new boterKaas();
-                boterkaas.start(logIN);
+                BoterKaas boterkaas = new BoterKaas();
+                boterkaas.start(logIn);
             }
         });
 
@@ -54,17 +41,22 @@ public class logIn {
             public void handle(ActionEvent actionEvent) {
 
                 Reversi reversi = new Reversi();
-                reversi.start(logIN);
+                reversi.start(logIn);
             }
         });
 
+
+        
+        // buttons
+        Button buttonLogIN = new Button("Inloggen");
 
         //label
         Label login = new Label("Vul je ip in om in te loggen");
         Label speeloffline = new Label("speel offline");
 
         //textfield
-        TextField text = new TextField("IP adres");
+        TextField ia = new TextField("IP adres");
+        TextField gn = new TextField("Gebruikersnaam");
 
         //create gridpane
         GridPane gridPane = new GridPane();
@@ -72,7 +64,8 @@ public class logIn {
         gridPane.setVgap(5);
         gridPane.setHgap(5);
         gridPane.add(buttonLogIN, 0, 2);
-        gridPane.add(text, 0, 1 );
+        gridPane.add(ia, 0, 1 );
+        gridPane.add(gn, 1, 1 );
         gridPane.add(login, 0,0);
         gridPane.add(speeloffline, 0, 11);
         gridPane.add(buttonBoterKaas, 0, 12);
@@ -86,11 +79,22 @@ public class logIn {
 
 
         //Setting title to the Stage
-        logIN.setTitle("G1");
-        logIN.setScene(scene);
+        logIn.setTitle("Welcome");
+        logIn.setScene(scene);
 
         //Displaying the contents of the stage
-        logIN.show();
+        logIn.show();
+        
+        // Styling      
+        buttonLogIN.setStyle("-fx-padding: 5 10 5 10");
+        buttonLogIN.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+                MainMenu mainmenu = new MainMenu();
+                mainmenu.start(logIn);
+            }
+        });
 
 
 

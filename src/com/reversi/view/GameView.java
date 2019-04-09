@@ -9,13 +9,8 @@
 package com.reversi.view;
 
 import com.reversi.controller.UserController;
-<<<<<<< HEAD
-import com.reversi.model.Board;
-import com.reversi.model.Player;
-=======
 import com.reversi.model.GameModel;
 import com.reversi.model.Model;
->>>>>>> master
 
 public class GameView extends View {
 
@@ -70,3 +65,4 @@ public class GameView extends View {
 	}
 
 }
+

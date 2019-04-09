@@ -80,7 +80,7 @@ public class Reversi {
             @Override
             public void handle(ActionEvent actionEvent) {
 
-                logIn login = new logIn();
+                Login login = new Login();
                 login.start(reversiStage);
             }
         });
