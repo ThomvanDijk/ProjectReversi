@@ -29,13 +29,13 @@ public class Client {
 
 		System.out.println("Client started and connecting... \n");
 
-//		listener = new Listener(this);
-//		Thread listenerThread = new Thread(listener);
-//
-//		listenerThread.setDaemon(true);
-//		listenerThread.start();
+		listener = new Listener(this, "localhost");
+		Thread listenerThread = new Thread(listener);
 
-		//consoleInput();
+		listenerThread.setDaemon(true);
+		listenerThread.start();
+
+		consoleInput();
 	}
 	
 	public void login(String[] arguments) {
