@@ -70,8 +70,15 @@ public class GameModel extends Model {
 		// TODO implement
 	}
 
-	public void boardConverter() {
-
+	public int[][] getBoard() {
+		switch (currentGame) {
+		case REVERSI:
+			return reversi.board.getBoard();
+		case TICTACTOE:
+			return ticTacToe.board.getBoard();
+		default:
+			return null;
+		}
 	}
 
 	@Override

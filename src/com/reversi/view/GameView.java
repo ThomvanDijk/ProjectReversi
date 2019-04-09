@@ -60,6 +60,8 @@ public class GameView extends View {
 	@Override
 	protected void update(Model model) {
 		GameModel gameModel = (GameModel) model; // cast
+		
+		//gameModel.getBoard();
 	}
 
 }
