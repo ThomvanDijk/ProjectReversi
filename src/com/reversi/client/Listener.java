@@ -17,11 +17,11 @@ public class Listener implements Runnable {
 
 	private Socket socket;
 
-	public Listener(Client client) {
+	public Listener(Client client, String address) {
 		this.client = client;
 
 		try {
-			Socket socket = new Socket("localhost", 7789);
+			Socket socket = new Socket(address, 7789);
 
 			toServer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));

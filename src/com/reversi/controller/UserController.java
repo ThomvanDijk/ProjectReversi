@@ -12,7 +12,7 @@ public class UserController extends Controller {
 
 	// From GameView use this notify function to send a notification to model. Arguments can be null...
 	@Override
-	public void notifyModel(int notification_id, String[] argument) {
+	public void notifyModel(int notification_id, String[] arguments) {
 		GameModel gameModel = (GameModel) model; // cast
 		
 		switch (notification_id) {
@@ -37,16 +37,16 @@ public class UserController extends Controller {
 		case END_TICTACTOE_MULTIPLAYER:
 			break;
 		case LOG_IN:
+			// Argument represents a name
+			gameModel.login(arguments);
 			break;
 		case LOG_OUT:
 			break;
 		case CHALLENGE_PLAYER:
 			break;
-		case SET_MOVE_REVERSI:
-			break;
-		case SET_MOVE_TICTACTOE:
-			// Argument should be a valid number
-			gameModel.setMove(GameType.TICTACTOE, argument[0]);
+		case SET_MOVE:
+			// Argument should be a valid number from 0 to boardsize^2
+			gameModel.setMove(arguments[0], 1);
 			break;
 		default:
 			throw new IllegalStateException();

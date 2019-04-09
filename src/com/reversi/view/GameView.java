@@ -8,7 +8,7 @@
 
 package com.reversi.view;
 
-import com.reversi.controller.UserController;
+import com.reversi.controller.*;
 import com.reversi.model.GameModel;
 import com.reversi.model.Model;
 
@@ -35,14 +35,17 @@ public class GameView extends View {
 		// SET_MOVE_REVERSI             // args { "Value between 0 and board^2" }                       
 		// SET_MOVE_TICTACTOE           // args { "Value between 0 and board^2" }                       
 
-		//userController.notifyModel(notification_id, argument);
+		//userController.notifyModel(notification_id, arguments); // Argument is a String array
+		
+		// Example
+		//userController.notifyModel(Controller.LOG_IN, new String[] {"Naam", "localhost"});
 
 		Window window = new Window();
 		window.rmain(args);
 	}
 	
 	/**
-	 * This run function is used to refresh pages e.d.
+	 * This run function is used to refresh pages
 	 *
 	 * @param model Model
 	 */
@@ -62,6 +65,8 @@ public class GameView extends View {
 		GameModel gameModel = (GameModel) model; // cast
 		
 		//gameModel.getBoard();
+		//gameModel.getPlayer(); returns a player array
+		
 	}
-
+	
 }

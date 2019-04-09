@@ -1,64 +1,25 @@
 package com.reversi.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.reversi.controller.*;
 import com.reversi.model.Game.GameMode;
 import com.reversi.model.Game.GameType;
+import com.reversi.view.*;
 
 public class GameModel extends Model {
 
+	private boolean running;
 	private TicTacToe ticTacToe;
 	private Reversi reversi;
-	private GameType currentGame;
+
+	private GameType currentGameType;
+	private GameMode currentGameMode;
 
 	public GameModel() {
 		// reversi = new Reversi(GameMode.SINGLEPLAYER);
-	}
-
-	public void startGame(GameMode gameMode, GameType gameType) {
-		switch (gameType) {
-		case REVERSI:
-			currentGame = gameType;
-			if (gameMode.equals(GameMode.SINGLEPLAYER)) {
-				ticTacToe = new TicTacToe(GameMode.SINGLEPLAYER);
-				notifyView();
-				break;
-			} else {
-				ticTacToe = new TicTacToe(GameMode.ONLINE);
-				notifyView();
-				break;
-			}
-		case TICTACTOE:
-			currentGame = gameType;
-			if (gameMode.equals(GameMode.SINGLEPLAYER)) {
-				break;
-			} else {
-				break;
-			}
-		default:
-			throw new IllegalStateException();
-		}
-	}
-
-	public void setMove(GameType gameType, String argument) {
-		// Check if the move is for the current game
-		if (gameType.equals(currentGame)) {
-			switch (gameType) {
-			case REVERSI:
-				//reversi.setMove(input, validMoves, playerID);
-				break;
-			case TICTACTOE:
-				int move = Integer.getInteger(argument);
-				try {
-					ticTacToe.setMove(move, ticTacToe.getHumanPlayer().id);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				break;
-			default:
-				throw new IllegalStateException();
-			}
-		} else {
-			throw new IllegalArgumentException("Game: " + gameType + " is not being played!");
-		}
+		currentGameType = GameType.NOGAME;
 	}
 
 	// Send a notify to do something here
@@ -70,8 +31,66 @@ public class GameModel extends Model {
 		// TODO implement
 	}
 
+	public void startGame(GameMode gameMode, GameType gameType) {
+		currentGameMode = gameMode;
+		currentGameType = gameType;
+
+		switch (gameType) {
+		case REVERSI:
+			if (gameMode.equals(GameMode.SINGLEPLAYER)) {
+				reversi = new Reversi(GameMode.SINGLEPLAYER);
+				break;
+			} else {
+				reversi = new Reversi(GameMode.ONLINE);
+				break;
+			}
+		case TICTACTOE:
+			if (gameMode.equals(GameMode.SINGLEPLAYER)) {
+				ticTacToe = new TicTacToe(GameMode.SINGLEPLAYER);
+				break;
+			} else {
+				ticTacToe = new TicTacToe(GameMode.ONLINE);
+				break;
+			}
+		default:
+			throw new IllegalStateException();
+		}
+
+		notifyView();
+	}
+
+	public void setMove(String move, int playerID) {
+		int intMove = Integer.valueOf(move);
+		switch (currentGameType) {
+		case REVERSI:
+			try {
+				int boardsize = reversi.board.getBoardSize();
+				reversi.setMove(intMove, reversi.getValidMoves(reversi.board, playerID), playerID, reversi.board);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		case TICTACTOE:
+			try {
+				ticTacToe.setMove(intMove, playerID);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		default:
+			throw new IllegalStateException();
+		}
+
+		notifyView();
+	}
+
+	public void login(String[] arguments) {
+		client.login(arguments);
+	}
+
+
 	public int[][] getBoard() {
-		switch (currentGame) {
+		switch (currentGameType) {
 		case REVERSI:
 			return reversi.board.getBoard();
 		case TICTACTOE:
@@ -80,10 +99,10 @@ public class GameModel extends Model {
 			return null;
 		}
 	}
-	
+
 	public Player[] getPlayer() {
 		Player[] players = new Player[2];
-		switch (currentGame) {
+		switch (currentGameType) {
 		case REVERSI:
 			players[0] = reversi.player1;
 			players[1] = reversi.player2;
@@ -100,6 +119,11 @@ public class GameModel extends Model {
 	@Override
 	public void run() {
 
+//		login(new String[] {"Naam", "localhost"});
+//		
+//		while (true) {
+//			
+//		}
 	}
 
 }
