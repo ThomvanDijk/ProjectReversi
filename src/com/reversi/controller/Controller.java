@@ -35,6 +35,6 @@ public abstract class Controller {
 	 * @param notification_id
 	 * @param argument The argument can be null but for is needed for some notifications
 	 */
-	public abstract void notifyModel(int notification_id, String[] argument);
+	public abstract void notifyModel(int notification_id, String[] arguments);
 	
 }

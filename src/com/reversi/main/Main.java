@@ -18,7 +18,7 @@ public class Main {
 		UserController userController = new UserController(model);
 		
 		// Make a client that connects to the server
-		//Client client = new Client(clientController);
+		Client client = new Client(clientController);
 		
 		// Make view and add a reference to controller 
 		// also pass args for javaFX
@@ -26,6 +26,7 @@ public class Main {
 		
 		// Add the view references to the model
 		model.setView(view);
+		model.setClient(client);
 		
 		Thread modelThread = new Thread(model);
 		Thread viewThread = new Thread(view);

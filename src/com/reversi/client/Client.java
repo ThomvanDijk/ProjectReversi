@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 import com.reversi.client.Parser.ArgumentKey;
 import com.reversi.client.Parser.ServerCommand;
 import com.reversi.controller.ClientController;
+import com.reversi.model.Model;
 
 public class Client {
 
@@ -28,13 +29,50 @@ public class Client {
 
 		System.out.println("Client started and connecting... \n");
 
-		listener = new Listener(this);
+//		listener = new Listener(this);
+//		Thread listenerThread = new Thread(listener);
+//
+//		listenerThread.setDaemon(true);
+//		listenerThread.start();
+
+		//consoleInput();
+	}
+	
+	public void login(String[] arguments) {
+		arguments[0] = "login " + arguments[0];
+		
+		listener = new Listener(this, arguments[1]);
 		Thread listenerThread = new Thread(listener);
 
 		listenerThread.setDaemon(true);
 		listenerThread.start();
+		
+		try {
+			// Send command to the server
+			listener.sendMessage(arguments[0]);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-		consoleInput();
+		// Display text to the text area
+		System.out.println("Client: " + arguments[1] + " " + arguments[0] + "\n");
+	}
+	
+	/**
+	 * Update is called from model (GameModel) every time something is updated...
+	 * 
+	 * @param command Command to send to the server
+	 */
+	public void sendNewMessage(String[] arguments) {
+		try {
+			// Send command to the server
+			listener.sendMessage(arguments[0]);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// Display text to the text area
+		System.out.println("Client: " + arguments[0] + "\n");
 	}
 
 	// Send commands to model via serverController
@@ -97,7 +135,7 @@ public class Client {
 				listener.sendMessage(textToSend);
 
 				// Display text to the text area
-				System.out.println("You: " + textToSend + "\n");
+				System.out.println("Client: " + textToSend + "\n");
 
 				if (textToSend.equals("exit")) {
 					break;

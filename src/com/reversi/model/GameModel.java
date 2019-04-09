@@ -12,6 +12,15 @@ public class GameModel extends Model {
 	public GameModel() {
 		// reversi = new Reversi(GameMode.SINGLEPLAYER);
 	}
+	
+	// Send a notify to do something here
+	public void setState() {
+
+	}
+
+	public void update(int serverMove, int enemyScore, int playerScore) {
+		// TODO implement
+	}
 
 	public void startGame(GameMode gameMode, GameType gameType) {
 		switch (gameType) {
@@ -29,8 +38,12 @@ public class GameModel extends Model {
 		case TICTACTOE:
 			currentGame = gameType;
 			if (gameMode.equals(GameMode.SINGLEPLAYER)) {
+				///
+				notifyView();
 				break;
 			} else {
+				///
+				notifyView();
 				break;
 			}
 		default:
@@ -44,11 +57,13 @@ public class GameModel extends Model {
 			switch (gameType) {
 			case REVERSI:
 				//reversi.setMove(input, validMoves, playerID);
+				notifyView();
 				break;
 			case TICTACTOE:
 				int move = Integer.getInteger(argument);
 				try {
 					ticTacToe.setMove(move, ticTacToe.getHumanPlayer().id);
+					notifyView();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -60,14 +75,9 @@ public class GameModel extends Model {
 			throw new IllegalArgumentException("Game: " + gameType + " is not being played!");
 		}
 	}
-
-	// Send a notify to do something here
-	public void setState() {
-
-	}
-
-	public void update(int serverMove, int enemyScore, int playerScore) {
-		// TODO implement
+	
+	public void login(String[] arguments) {
+		client.login(arguments);
 	}
 
 	public int[][] getBoard() {
@@ -99,7 +109,11 @@ public class GameModel extends Model {
 
 	@Override
 	public void run() {
-
+//		login(new String[] {"Naam", "localhost"});
+//		
+//		while (true) {
+//			
+//		}
 	}
 
 }
