@@ -13,8 +13,8 @@ public class GameModel extends Model {
 	private GameMode currentGameMode;
 
 	public GameModel() {
-		// reversi = new Reversi(GameMode.SINGLEPLAYER);
-		currentGameType = GameType.NOGAME;
+		//reversi = new Reversi(GameMode.SINGLEPLAYER);
+		// currentGameType = GameType.NOGAME;
 	}
 
 	// Send a notify to do something here

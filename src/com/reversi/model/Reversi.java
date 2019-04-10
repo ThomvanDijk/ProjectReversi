@@ -28,6 +28,9 @@ public class Reversi extends Game {
 		// Set the scores
 		player1.setScore(2); // black
 		player2.setScore(2); // white
+		
+		// Set turn
+		turn = 0;
 
 		// Set the first pieces
 		try {
@@ -41,7 +44,7 @@ public class Reversi extends Game {
 		}
 
 		if (gameMode.equals(GameMode.SINGLEPLAYER)) {
-			consoleInput(board);
+			consoleInput();
 		} else {
 
 		}
@@ -103,12 +106,12 @@ public class Reversi extends Game {
 					}
 
 					if (tempList.isEmpty() == false) {
-						for (int i = 2; i < tempList.size(); i = i+2) {
+						/*for (int i = 2; i < tempList.size(); i = i+2) {
 							if ((tempList.get(0) == tempList.get(i)) && (tempList.get(1) == tempList.get(i+1))){
 								tempList.remove(i);
 								tempList.remove(i+1);
 							}
-						}
+						}*/
 						validMoves.add(tempList);
 					}
 				}
@@ -198,7 +201,7 @@ public class Reversi extends Game {
 			if (validMoves.get(check).get(0).equals(col) && validMoves.get(check).get(1).equals(row)) {
 				validMove = true;
 
-				System.out.println("Places to change: " + chopped(validMoves.get(check), 2));
+				//System.out.println("Places to change: " + chopped(validMoves.get(check), 2));
 
 				for (int check2 = 0; check2 * 2 < validMoves.get(check).size(); check2++) {
 					int colChange = validMoves.get(check).get(check2 * 2);
@@ -261,13 +264,7 @@ public class Reversi extends Game {
 			
 			return false;
 		} 
-		else {
-			if (playerID == 1) {
-				debugMove(player2.id, b);
-			} else {
-				debugMove(player1.id, b);
-			}
-		}
+		
 		return true;
 	}
 	
@@ -372,7 +369,15 @@ public class Reversi extends Game {
 					input = scanInput.nextInt();
 				}
 				else {
-					input = player.ai.minimax(b, player, 0,3,0,0);
+					if(turn < 10) {
+						input = player.ai.boardWeighting(b, player);
+					}
+					else if (turn < 50) {
+						input = player.ai.minimaxAvailableMoves(b, player, 0,5,0,0);
+					}
+					else {
+						input = player.ai.minimax(b, player, 0,14,0,0);
+					}
 					//input = player.ai.boardWeighting(b, player);
 					System.out.println("Computer is doing the following move: "+input);
 					
@@ -380,6 +385,15 @@ public class Reversi extends Game {
 					
 				}
 				validMove = setMove(input, validMoves, player.id, b);
+				if (validMove == true) {
+					turn++;
+					if (player.id == 1) {
+						debugMove(player2.id, b);
+					} else {
+						debugMove(player1.id, b);
+					}
+					
+				}
 				// Reset noWinnerCount
 				noWinnerCount = 0;
 			} else {
@@ -419,16 +433,16 @@ public class Reversi extends Game {
 	}
 
 	// This input needs to come from the GUI
-	public void consoleInput(Board b) {
+	public void consoleInput() {
 		System.out.println("Player: 1 is black");
 		System.out.println("Player: 2 is white");
-		debugMove(player1.id, b);
+		debugMove(player1.id, board);
 
 		while (scanInput.hasNextLine() && noWinner) {
 			if (player1.hasTurn() && player1.type.equals(PlayerType.HUMAN)) {
-				makeMove(player1, b);
+				makeMove(player1, board);
 			} else {
-				makeMove(player2, b);
+				makeMove(player2, board);
 			}
 		}
 

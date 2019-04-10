@@ -19,6 +19,7 @@ public abstract class Game {
 	protected int noWinnerCount;
 	protected Player player1;
 	protected Player player2;
+	protected int turn;
 
 	public Game(GameType gameType, GameMode gameMode) {
 		this.gameType = gameType;
