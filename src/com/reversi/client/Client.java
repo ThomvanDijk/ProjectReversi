@@ -108,7 +108,7 @@ public class Client {
 					
 					// Only notifyModel if it is not our own move!
 					if(!keyValueMap.get(ArgumentKey.PLAYER).equals(currentPlayer)) {
-						clientController.notifyModel(Controller.OTHER_DID_MOVE, moveArguments);
+						clientController.notifyModel(Controller.SERVER_DID_MOVE, moveArguments);
 					}
 					break;
 				case SVR_GAME_CHALLENGE:

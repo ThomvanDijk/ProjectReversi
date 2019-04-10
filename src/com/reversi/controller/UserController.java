@@ -28,10 +28,10 @@ public class UserController extends Controller {
 			break;
 		case START_ONLINE_GAME: // subscribe <gametype>
 			if(arguments[0].equals("reversi")) {
-				gameModel.startGame(GameMode.ONLINE, GameType.REVERSI);
+				gameModel.subscribeToGame(GameType.REVERSI);
 			} 
 			if(arguments[0].equals("tictactoe")) {
-				gameModel.startGame(GameMode.ONLINE, GameType.TICTACTOE);
+				gameModel.subscribeToGame(GameType.TICTACTOE);
 			}
 			break;
 		case END_ONLINE_GAME:
@@ -46,7 +46,7 @@ public class UserController extends Controller {
 		case CHALLENGE_PLAYER: // challenge <player name> followed by tictactoe or reversi
 			gameModel.challengePlayer(arguments);
 			break;
-		case OTHER_DID_MOVE:
+		case SERVER_DID_MOVE:
 			// Argument should be a valid number from 0 to boardsize^2
 			gameModel.setMove(arguments[0]);
 			break;

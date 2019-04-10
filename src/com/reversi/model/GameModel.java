@@ -37,6 +37,19 @@ public class GameModel extends Model {
 
 		challenges = new LinkedList<>();
 	}
+	
+	public void subscribeToGame(GameType gameType) {
+		switch (gameType) {
+		case REVERSI:
+			client.sendCommand("subscribe Reversi");
+			break;
+		case TICTACTOE:
+			client.sendCommand("subscribe Tic-tac-toe");
+			break;
+		default:
+			throw new IllegalStateException();
+		}
+	}
 
 	public void startGame(GameMode gameMode, GameType gameType) {
 		currentGameMode = gameMode;
@@ -48,8 +61,7 @@ public class GameModel extends Model {
 				// reversi = new Reversi(GameMode.SINGLEPLAYER);
 				break;
 			} else {
-				// reversi = new Reversi(GameMode.ONLINE);
-				client.sendCommand("subscribe Reversi");
+				// reversi = new Reversi(GameMode.ONLINE);				
 				break;
 			}
 		case TICTACTOE:
