@@ -39,8 +39,8 @@ public class GameView extends View {
 		
 		// Example
 		//userController.notifyModel(Controller.LOG_IN, new String[] {"Naam", "localhost"});
-		
-		Window window = new Window(this);
+
+		Window window = new Window();
 		window.rmain(args);
 	}
 	
@@ -70,4 +70,3 @@ public class GameView extends View {
 	}
 	
 }
-

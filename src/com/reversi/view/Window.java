@@ -17,7 +17,7 @@ public class Window extends Application {
 
 //      this.stage = primaryStage;
 
-        Scene scene = new Scene(new LogIn().getView(), 400, 400);
+        Scene scene = new Scene(new Login().getView(), 400, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
 

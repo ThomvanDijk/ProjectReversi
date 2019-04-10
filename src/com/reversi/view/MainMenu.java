@@ -62,7 +62,7 @@ public class MainMenu {
         buttonJoinLobbyKaas.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                Parent view = new boterKaas().getView();
+                Parent view = new BoterKaas().getView();
                 Scene scenemenu = new Scene(view, 400, 400);
                 Stage stage1 = new Stage();
                 stage1.setTitle("Tic tac toe");
