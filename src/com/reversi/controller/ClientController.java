@@ -24,6 +24,7 @@ public class ClientController extends Controller {
 			}
 			break;
 		case END_ONLINE_GAME:
+			gameModel.endGame();
 			break;
 		case LOG_OUT:
 			break;

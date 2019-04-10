@@ -123,6 +123,9 @@ public class Client {
 					break;
 				case SVR_GAME_CHALLENGE:
 					break;
+				case SVR_GAME_WIN:
+					clientController.notifyModel(Controller.END_ONLINE_GAME, null);
+					break;
 				case SVR_GAME:
 					break;
 				default:

@@ -33,7 +33,8 @@ public class Parser {
 		SVR_GAME,  			// De match is afgelopen, <speler resultaat> kan de waarde 'WIN', 'LOSS' of
 							// 'DRAW' bevatten.
 		SVR_GAMELIST,		// Lijst met spellen ontvangen.
-		SVR_PLAYERLIST	 	// List of online players
+		SVR_PLAYERLIST,	 	// List of online players
+		SVR_GAME_WIN
 	}
 	
 	public enum ArgumentKey {

@@ -58,6 +58,14 @@ public class GameModel extends Model {
 
 		notifyView();
 	}
+	
+	public void endGame() {
+		currentGameMode = null;
+		currentGameType = null;
+		
+		reversi = null;
+		ticTacToe = null;
+	}
 
 	// A move set by the player or server...
 	public void setMove(String move) {
