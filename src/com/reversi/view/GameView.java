@@ -79,7 +79,6 @@ public class GameView extends View {
 		
 		//gameModel.getBoard();
 		//gameModel.getPlayer(); returns a player array
-		
 	}
 	
 	// Use console as input and alternative ui
@@ -113,6 +112,14 @@ public class GameView extends View {
 			if(commands[0].equals("chal")) { // chal <player name> followed by tictactoe or reversi
 				if(commands[1] != null && commands[2] != null) {
 					userController.notifyModel(Controller.CHALLENGE_PLAYER, new String[] {commands[1], commands[2]});
+				} else {
+					System.out.println("Wrong command! Try: chal <player name> followed by tictactoe or reversi");
+				}
+			}
+			
+			if(commands[0].equals("accept")) { // accept <chal no>
+				if(commands[1] != null) {
+					userController.notifyModel(Controller.ACCEPT_CHALLENGE, new String[] {commands[1]});
 				} else {
 					System.out.println("Wrong command! Try: chal <player name> followed by tictactoe or reversi");
 				}

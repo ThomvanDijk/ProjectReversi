@@ -1,5 +1,11 @@
 package com.reversi.model;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
+
+import com.reversi.client.Parser.ArgumentKey;
+import com.reversi.client.Parser.ServerCommand;
 import com.reversi.model.Game.GameMode;
 import com.reversi.model.Game.GameType;
 import com.reversi.model.Player.PlayerType;
@@ -12,21 +18,17 @@ public class GameModel extends Model {
 
 	private GameType currentGameType;
 	private GameMode currentGameMode;
+	
+	private Queue<HashMap<ArgumentKey, String>> challenges;
 
 	public GameModel() {
-		// reversi = new Reversi(GameMode.SINGLEPLAYER);
-		// currentGameType = GameType.NOGAME;
 		ticTacToe = null;
 		reversi = null;
-	}
+		
+		currentGameMode = null;
+		currentGameType = null;
 
-	// Send a notify to do something here
-	public void setState() {
-
-	}
-
-	public void update(int serverMove, int enemyScore, int playerScore) {
-		// TODO implement
+		challenges = new LinkedList<>();
 	}
 
 	public void startGame(GameMode gameMode, GameType gameType) {
@@ -65,6 +67,8 @@ public class GameModel extends Model {
 		
 		reversi = null;
 		ticTacToe = null;
+		
+		notifyView();
 	}
 
 	// A move set by the player or server...
@@ -155,10 +159,72 @@ public class GameModel extends Model {
 		client.login(arguments);
 	}
 	
+	// Challenge other player
 	public void challengePlayer(String[] arguments) {
 		// Make the first letter upper case so we don't have to type that
 		String cap = arguments[1].substring(0, 1).toUpperCase() + arguments[1].substring(1);
 		client.sendCommand("challenge \"" + arguments[0] + "\" \"" + cap + "\"");
+	}
+	
+	// Accept a challenge and remove it
+	public void acceptChallenge(int challengeNumber) {
+		System.out.println("Number of challenges before: " + challenges.size());
+		
+		for(HashMap<ArgumentKey, String> chal: challenges) {
+			if(Integer.parseInt(chal.get(ArgumentKey.CHALLENGENUMBER)) == challengeNumber) {
+				client.sendCommand("challenge accept " + challengeNumber);
+				challenges.remove(chal);
+			}
+		}
+		
+		System.out.println("Number of challenges after: " + challenges.size());
+		
+		notifyView();
+	}
+	
+	// Remove a challenge because challenge is cancelled
+	public void removeChallenge(int challengeNumber) {
+		System.out.println("Number of challenges before: " + challenges.size());
+		
+		for(HashMap<ArgumentKey, String> chal: challenges) {
+			if(Integer.parseInt(chal.get(ArgumentKey.CHALLENGENUMBER)) == challengeNumber) {
+				challenges.remove(chal);
+			}
+		}
+		
+		System.out.println("Number of challenges after: " + challenges.size());
+		
+		notifyView();
+	}
+	
+	// Add new challenge to a queue of challenges
+	public void addNewServerChallenge(String[] arguments) {
+		HashMap<ArgumentKey, String> map = new HashMap<>();
+
+		map.put(ArgumentKey.CHALLENGER, arguments[0]);
+		map.put(ArgumentKey.CHALLENGENUMBER, arguments[1]);
+		map.put(ArgumentKey.GAMETYPE, arguments[2]);
+		
+		challenges.add(map);
+		notifyView();
+	}
+	
+	// TODO a better way to get challenges from model
+	// Return the top of the queue and remove it from the queue
+	public HashMap<ArgumentKey, String> getChallenge() {
+		if(!challenges.isEmpty()) {
+			//return challenges.remove();
+			return null;
+		}	
+		return null;
+	}
+	
+	// Returns true if model has a challenge
+	public boolean hasChallenge() {
+		if(!challenges.isEmpty()) {
+			return true;
+		}
+		return false;
 	}
 
 	public int[][] getBoard() {
@@ -176,8 +242,7 @@ public class GameModel extends Model {
 		Player[] players = new Player[2];
 		switch (currentGameType) {
 		case REVERSI:
-			players[0] = reversi.player1;
-			players[1] = reversi.player2;
+			players = reversi.getPlayers();
 			return players;
 		case TICTACTOE:
 			players[0] = ticTacToe.player1;

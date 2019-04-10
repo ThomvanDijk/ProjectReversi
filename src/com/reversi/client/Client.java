@@ -90,8 +90,8 @@ public class Client {
 				
 			} else { // Parse to a map
 				HashMap.Entry<ServerCommand, String> entry = commandMap.entrySet().iterator().next();
-//				ServerCommand key = entry.getKey();
-//				String value = entry.getValue();
+				//ServerCommand key = entry.getKey();
+				//String value = entry.getValue();
 				 
 				HashMap<ArgumentKey, String> keyValueMap = parser.stringToMap(commandMap.get(entry.getKey()));
 				//System.out.println("Map key: " + entry.getKey()); 
@@ -116,6 +116,13 @@ public class Client {
 					
 					break;
 				case SVR_GAME_CHALLENGE:
+					// Make new string array to use as argument
+					String[] chalArguments = new String[3];
+					chalArguments[0] = keyValueMap.get(ArgumentKey.CHALLENGER);
+					chalArguments[1] = keyValueMap.get(ArgumentKey.CHALLENGENUMBER);
+					chalArguments[2] = keyValueMap.get(ArgumentKey.GAMETYPE);
+					
+					clientController.notifyModel(Controller.PROCESS_NEW_CHALLENGE, chalArguments);
 					break;
 				case SVR_GAME_WIN:
 					clientController.notifyModel(Controller.END_ONLINE_GAME, null);

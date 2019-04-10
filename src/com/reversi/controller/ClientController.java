@@ -1,5 +1,6 @@
 package com.reversi.controller;
 
+import com.reversi.client.Parser.ArgumentKey;
 import com.reversi.model.GameModel;
 import com.reversi.model.Game.GameMode;
 import com.reversi.model.Game.GameType;
@@ -34,6 +35,9 @@ public class ClientController extends Controller {
 			break;
 		case REQUEST_MOVE:
 			gameModel.getMove();
+			break;
+		case PROCESS_NEW_CHALLENGE:
+			gameModel.addNewServerChallenge(arguments);
 			break;
 		default:
 			throw new IllegalStateException();
