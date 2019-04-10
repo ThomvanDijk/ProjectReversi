@@ -46,7 +46,7 @@ public class UserController extends Controller {
 			break;
 		case OTHER_DID_MOVE:
 			// Argument should be a valid number from 0 to boardsize^2
-			gameModel.setMove(arguments[0], 1);
+			gameModel.setMove(arguments[0]);
 			break;
 		default:
 			throw new IllegalStateException();

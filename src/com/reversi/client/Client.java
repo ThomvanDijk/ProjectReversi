@@ -15,8 +15,9 @@ public class Client {
 	private ClientController clientController;
 	private Listener listener;
 	private Parser parser;
-
+	
 	private Scanner scanInput;
+	private String currentPlayer;
 
 	public Client(ClientController clientController) {
 		this.clientController = clientController;
@@ -36,6 +37,7 @@ public class Client {
 	}
 	
 	public void login(String[] arguments) {
+		currentPlayer = arguments[0];
 		arguments[0] = "login " + arguments[0];
 		
 		listener = new Listener(this, arguments[1]);
@@ -110,10 +112,14 @@ public class Client {
 					break;
 				case SVR_GAME_MOVE: // Other player did a move
 					// Make new string array to use as argument
-					String[] arguments = new String[1];
+					String[] arguments = new String[2];
 					arguments[0] = keyValueMap.get(ArgumentKey.MOVE);
 					
-					clientController.notifyModel(Controller.OTHER_DID_MOVE, arguments);
+					// Only notifyModel if it is not our own move!
+					if(!keyValueMap.get(ArgumentKey.PLAYER).equals(currentPlayer)) {
+						clientController.notifyModel(Controller.OTHER_DID_MOVE, arguments);
+					}
+					
 					break;
 				case SVR_GAME_CHALLENGE:
 					break;

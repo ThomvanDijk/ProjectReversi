@@ -58,7 +58,7 @@ public class Board implements Cloneable{
 					System.out.print(". ");
 				} else if (board[row][col] == 1) {
 					if (gameType.equals(GameType.REVERSI)) {
-						System.out.print("b ");
+						System.out.print("b "); // black
 					} else {
 						System.out.print("x ");
 					}

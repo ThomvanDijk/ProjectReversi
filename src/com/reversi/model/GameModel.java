@@ -2,6 +2,7 @@ package com.reversi.model;
 
 import com.reversi.model.Game.GameMode;
 import com.reversi.model.Game.GameType;
+import com.reversi.model.Player.PlayerType;
 
 public class GameModel extends Model {
 
@@ -13,8 +14,10 @@ public class GameModel extends Model {
 	private GameMode currentGameMode;
 
 	public GameModel() {
-		//reversi = new Reversi(GameMode.SINGLEPLAYER);
+		// reversi = new Reversi(GameMode.SINGLEPLAYER);
 		// currentGameType = GameType.NOGAME;
+		ticTacToe = null;
+		reversi = null;
 	}
 
 	// Send a notify to do something here
@@ -33,10 +36,10 @@ public class GameModel extends Model {
 		switch (gameType) {
 		case REVERSI:
 			if (gameMode.equals(GameMode.SINGLEPLAYER)) {
-				reversi = new Reversi(GameMode.SINGLEPLAYER);
+				// reversi = new Reversi(GameMode.SINGLEPLAYER);
 				break;
 			} else {
-				reversi = new Reversi(GameMode.ONLINE);
+				// reversi = new Reversi(GameMode.ONLINE);
 				client.sendCommand("subscribe Reversi");
 				break;
 			}
@@ -56,23 +59,40 @@ public class GameModel extends Model {
 		notifyView();
 	}
 
-	public void setMove(String move, int playerID) {
+	// A move set by the player or server...
+	public void setMove(String move) {
 		int intMove = Integer.valueOf(move);
 		switch (currentGameType) {
 		case REVERSI:
-			try {
-				int boardsize = reversi.board.getBoardSize();
-				//reversi.setMove(intMove, reversi.getValidMoves(reversi.board, playerID), playerID, reversi.board);
-				reversi.makeMove(playerID, intMove, reversi.board);
-			} catch (Exception e) {
-				e.printStackTrace();
+			if (currentGameMode.equals(GameMode.ONLINE)) {
+				if (reversi == null) {
+					// If the set move function is called and there is no game then it is always the
+					// server who starts from here
+					reversi = new Reversi(GameMode.ONLINE, PlayerType.SERVER);
+				}
+				try {
+					Player[] players = reversi.getPlayers();
+					if(players[0].hasTurn()) {
+						reversi.makeSimpleMove(players[0], intMove);
+					} else {
+						reversi.makeSimpleMove(players[1], intMove);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+			} else { // Offline
+
 			}
-			break;
 		case TICTACTOE:
-			try {
-				ticTacToe.setMove(intMove, playerID);
-			} catch (Exception e) {
-				e.printStackTrace();
+			if (currentGameMode.equals(GameMode.ONLINE)) {
+				try {
+					//ticTacToe.setMove(intMove, playerID);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {// Offline
+
 			}
 			break;
 		default:
@@ -81,15 +101,51 @@ public class GameModel extends Model {
 
 		notifyView();
 	}
-	
-	public void requestMove() {
-		
+
+	public void getMove() {
+		switch (currentGameType) {
+		case REVERSI:
+			if (currentGameMode.equals(GameMode.ONLINE)) {
+				if (reversi == null) {
+					// If the set move function is called and there is no game then it is always the
+					// AI who starts from here
+					reversi = new Reversi(GameMode.ONLINE, PlayerType.AI);
+				}
+				try {
+					Player[] players = reversi.getPlayers();
+					if(players[0].hasTurn()) {
+						client.sendCommand("move " + reversi.makeMove(players[0], reversi.board));
+					} else {
+						client.sendCommand("move " + reversi.makeMove(players[1], reversi.board));
+					}	
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+			} else { // Offline
+
+			}
+		case TICTACTOE:
+			if (currentGameMode.equals(GameMode.ONLINE)) {
+				try {
+					//ticTacToe.setMove(intMove, playerID);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {// Offline
+
+			}
+			break;
+		default:
+			throw new IllegalStateException();
+		}
+
+		notifyView();
 	}
 
 	public void login(String[] arguments) {
 		client.login(arguments);
 	}
-
 
 	public int[][] getBoard() {
 		switch (currentGameType) {

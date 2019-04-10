@@ -187,7 +187,7 @@ public class AI {
 	        else {
 	            for (int i = 0; i < (list.size()); i++) {	                
 	                int move = list.get(i).get(0) + (list.get(i).get(1)*8);
-	                reversi.makeMove(player.id, move, b);
+	                reversi.makeAIMove(player, move, b);
 	                int score = reversi.getValidMoves(b, player.opponent).size();
 
 	                Player nextPlayer;
@@ -258,7 +258,7 @@ public class AI {
 	        else {
 	            for (int i = 0; i < (list.size()); i++) {	                
 	                int move = list.get(i).get(0) + (list.get(i).get(1)*8);
-	                reversi.makeMove(player.id, move, b);
+	                reversi.makeAIMove(player, move, b);
 	                int score = reversi.calculateValueDiff(player.id);
 
 	                Player nextPlayer;
