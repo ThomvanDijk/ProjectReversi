@@ -132,7 +132,7 @@ public class Client {
 					// Make new string array to use as argument
 					String[] loseArguments = new String[2];
 					loseArguments[0] = keyValueMap.get(ArgumentKey.PLAYERONESCORE);
-					loseArguments[0] = keyValueMap.get(ArgumentKey.PLAYERTWOSCORE);
+					loseArguments[1] = keyValueMap.get(ArgumentKey.PLAYERTWOSCORE);
 					
 					clientController.notifyModel(Controller.END_ONLINE_GAME, loseArguments);
 					break;
