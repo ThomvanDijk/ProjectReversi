@@ -86,7 +86,7 @@ public class GameView extends View {
 	public void consoleInput() {
 		String textToSend;
 		
-		System.out.println("Application started use 'login + name' to login!");
+		System.out.println("Application started waiting for login...");
 
 		while (scanInput.hasNextLine() && !Thread.currentThread().isInterrupted()) {
 
@@ -94,14 +94,28 @@ public class GameView extends View {
 			
 			String commands[] = textToSend.split(" ");
 
-			if(commands[0].equals("login")) {
-				System.out.println(commands[1]);
-				userController.notifyModel(Controller.LOG_IN, new String[] {commands[1], "localhost"});
+			if(commands[0].equals("login")) { // login <player name>
+				if(commands[1] != null) {
+					userController.notifyModel(Controller.LOG_IN, new String[] {commands[1], "localhost"});
+				} else {
+					System.out.println("Wrong command! Try: login <name>");
+				}	
 			}
 			
-			if(commands[0].equals("sub")) { // subscribe "tictactoe" or "reversi"
-				System.out.println(commands[1]);
-				userController.notifyModel(Controller.START_ONLINE_GAME, new String[] {commands[1]});
+			if(commands[0].equals("sub")) { // sub tictactoe or reversi
+				if(commands[1] != null) {
+					userController.notifyModel(Controller.START_ONLINE_GAME, new String[] {commands[1]});
+				} else {
+					System.out.println("Wrong command! Try: sub tictactoe or reversi");
+				}
+			}
+			
+			if(commands[0].equals("chal")) { // chal <player name> followed by tictactoe or reversi
+				if(commands[1] != null && commands[2] != null) {
+					userController.notifyModel(Controller.CHALLENGE_PLAYER, new String[] {commands[1], commands[2]});
+				} else {
+					System.out.println("Wrong command! Try: chal <player name> followed by tictactoe or reversi");
+				}
 			}
 
 			// Display text to the text area

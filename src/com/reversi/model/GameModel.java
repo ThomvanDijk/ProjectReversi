@@ -154,6 +154,12 @@ public class GameModel extends Model {
 	public void login(String[] arguments) {
 		client.login(arguments);
 	}
+	
+	public void challengePlayer(String[] arguments) {
+		// Make the first letter upper case so we don't have to type that
+		String cap = arguments[1].substring(0, 1).toUpperCase() + arguments[1].substring(1);
+		client.sendCommand("challenge \"" + arguments[0] + "\" \"" + cap + "\"");
+	}
 
 	public int[][] getBoard() {
 		switch (currentGameType) {

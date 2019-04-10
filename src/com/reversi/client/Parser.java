@@ -34,7 +34,8 @@ public class Parser {
 							// 'DRAW' bevatten.
 		SVR_GAMELIST,		// Lijst met spellen ontvangen.
 		SVR_PLAYERLIST,	 	// List of online players
-		SVR_GAME_WIN
+		SVR_GAME_WIN,
+		SVR_GAME_LOSS
 	}
 	
 	public enum ArgumentKey {

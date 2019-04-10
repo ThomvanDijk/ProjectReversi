@@ -43,7 +43,8 @@ public class UserController extends Controller {
 			break;
 		case LOG_OUT:
 			break;
-		case CHALLENGE_PLAYER:
+		case CHALLENGE_PLAYER: // challenge <player name> followed by tictactoe or reversi
+			gameModel.challengePlayer(arguments);
 			break;
 		case OTHER_DID_MOVE:
 			// Argument should be a valid number from 0 to boardsize^2
