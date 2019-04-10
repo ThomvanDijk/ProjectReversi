@@ -8,6 +8,7 @@ import java.util.Scanner;
 import com.reversi.client.Parser.ArgumentKey;
 import com.reversi.client.Parser.ServerCommand;
 import com.reversi.controller.ClientController;
+import com.reversi.controller.Controller;
 
 public class Client {
 
@@ -104,9 +105,15 @@ public class Client {
 				switch(entry.getKey()) {
 				case SVR_GAME_MATCH:
 					break;
-				case SVR_GAME_YOURTURN:
+				case SVR_GAME_YOURTURN: // Request a move from the ai
+					clientController.notifyModel(Controller.REQUEST_MOVE, null);
 					break;
-				case SVR_GAME_MOVE:
+				case SVR_GAME_MOVE: // Other player did a move
+					// Make new string array to use as argument
+					String[] arguments = new String[1];
+					arguments[0] = keyValueMap.get(ArgumentKey.MOVE);
+					
+					clientController.notifyModel(Controller.OTHER_DID_MOVE, arguments);
 					break;
 				case SVR_GAME_CHALLENGE:
 					break;

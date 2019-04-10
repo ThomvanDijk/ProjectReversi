@@ -264,25 +264,25 @@ public class Reversi extends Game {
 	}
 	
 
-	public Board makeMove(Player player, int move, Board b) {
+	public Board makeMove(int playerID, int move, Board b) {
 		int input = 0;
 		boolean validMove = false;
 		// Check which player is playing
-		if (player.id == 1 && player.type.equals(PlayerType.HUMAN)) {
-			
-
-			player1.setTurn(false);
-			player2.setTurn(true);
-		} else {
-			// AI has to make a move
-			// input = player.ai.calculateMove(board, player);
-			
-
-			player1.setTurn(true);
-			player2.setTurn(false);
-		}
+//		if (player.id == 1 && player.type.equals(PlayerType.HUMAN)) {
+//			
+//
+//			player1.setTurn(false);
+//			player2.setTurn(true);
+//		} else {
+//			// AI has to make a move
+//			// input = player.ai.calculateMove(board, player);
+//			
+//
+//			player1.setTurn(true);
+//			player2.setTurn(false);
+//		}
 		// Get all the valid moves if there are any
-		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(b, player.id);
+		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(b, playerID);
 		
 		
 		
@@ -292,7 +292,7 @@ public class Reversi extends Game {
 			if(!validMoves.isEmpty()) {	
 				input = move;			
 				
-				validMove = setMove(input, validMoves, player.id, b);
+				validMove = setMove(input, validMoves, playerID, b);
 				// Reset noWinnerCount
 				noWinnerCount = 0;
 			} else {
@@ -316,7 +316,7 @@ public class Reversi extends Game {
 		// If one player can't make a move, switch who's turn it is
 		if(noWinnerCount == 1) {
 			System.out.println("Out of moves");
-			if (player.id == 1) {
+			if (playerID == 1) {
 				player1.setTurn(true);
 				player2.setTurn(false);
 				

@@ -189,7 +189,7 @@ public class AI {
 	            for (int i = 0; i < (list.size()); i++) {	                
 	                int move = list.get(i).get(0) + (list.get(i).get(1)*8);
 	                System.out.println("AI: I think I'm going to do this move: "+move);
-	                reversi.makeMove(player, move, b);
+	                reversi.makeMove(player.id, move, b);
 	                int score = reversi.calculateValueDiff(player.id);
 	                System.out.println("Score van "+player.id +": "+score);
 
@@ -265,7 +265,7 @@ public class AI {
 	            for (int i = 0; i < (list.size()); i++) {	                
 	                int move = list.get(i).get(0) + (list.get(i).get(1)*8);
 	                System.out.println("AI: I think I'm going to do this move: "+move);
-	                reversi.makeMove(player, move, b);
+	                reversi.makeMove(player.id, move, b);
 	                int score = reversi.calculateValueDiff(player.id);
 	                System.out.println("Score van "+player.id +": "+score);
 

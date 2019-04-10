@@ -62,7 +62,8 @@ public class GameModel extends Model {
 		case REVERSI:
 			try {
 				int boardsize = reversi.board.getBoardSize();
-				reversi.setMove(intMove, reversi.getValidMoves(reversi.board, playerID), playerID, reversi.board);
+				//reversi.setMove(intMove, reversi.getValidMoves(reversi.board, playerID), playerID, reversi.board);
+				reversi.makeMove(playerID, intMove, reversi.board);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -79,6 +80,10 @@ public class GameModel extends Model {
 		}
 
 		notifyView();
+	}
+	
+	public void requestMove() {
+		
 	}
 
 	public void login(String[] arguments) {

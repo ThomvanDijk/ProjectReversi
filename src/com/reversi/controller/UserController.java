@@ -34,9 +34,7 @@ public class UserController extends Controller {
 				gameModel.startGame(GameMode.ONLINE, GameType.TICTACTOE);
 			}
 			break;
-		case END_REVERSI_MULTIPLAYER:
-			break;
-		case END_TICTACTOE_MULTIPLAYER:
+		case END_ONLINE_GAME:
 			break;
 		case LOG_IN:
 			// Argument represents a name
@@ -46,7 +44,7 @@ public class UserController extends Controller {
 			break;
 		case CHALLENGE_PLAYER:
 			break;
-		case SET_MOVE:
+		case OTHER_DID_MOVE:
 			// Argument should be a valid number from 0 to boardsize^2
 			gameModel.setMove(arguments[0], 1);
 			break;

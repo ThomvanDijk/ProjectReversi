@@ -23,15 +23,16 @@ public class ClientController extends Controller {
 				gameModel.startGame(GameMode.ONLINE, GameType.TICTACTOE);
 			}
 			break;
-		case END_REVERSI_MULTIPLAYER:
-			break;
-		case END_TICTACTOE_MULTIPLAYER:
+		case END_ONLINE_GAME:
 			break;
 		case LOG_OUT:
 			break;
-		case SET_MOVE:
+		case OTHER_DID_MOVE: // Tell model that server did a move
 			// Argument has to be a valid number
 			gameModel.setMove(arguments[0], 2);
+			break;
+		case REQUEST_MOVE:
+			gameModel.requestMove();
 			break;
 		default:
 			throw new IllegalStateException();
