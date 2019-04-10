@@ -29,7 +29,7 @@ public class ClientController extends Controller {
 			break;
 		case OTHER_DID_MOVE: // Tell model that server did a move
 			// Argument has to be a valid number
-			gameModel.setMove(arguments[0], 2);
+			gameModel.setMove(arguments[0], 1);
 			break;
 		case REQUEST_MOVE:
 			gameModel.requestMove();

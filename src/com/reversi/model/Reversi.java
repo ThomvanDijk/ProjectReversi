@@ -35,6 +35,7 @@ public class Reversi extends Game {
 			board.setPiece(3, 4, 1);
 			board.setPiece(4, 3, 1);
 			board.setPiece(4, 4, 2);
+			board.debugBoard();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -246,7 +247,14 @@ public class Reversi extends Game {
 		
 
 		if (!validMove) {
-			System.out.println("Not a valid move!");
+			System.out.println(input + "Not a valid move!");
+			
+			
+			try {
+				TimeUnit.SECONDS.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			
 			
 			
@@ -325,6 +333,13 @@ public class Reversi extends Game {
 				player1.setTurn(false);
 				player2.setTurn(true);
 				
+			}
+			
+		}
+		
+		if(noWinnerCount == 0 && playerID == 1) {
+			if(player1.hasTurn()) {
+				makeMove(player1, b);
 			}
 			
 		}

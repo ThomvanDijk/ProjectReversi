@@ -30,8 +30,8 @@ public abstract class Game {
 			player1 = new Player(PlayerType.HUMAN, 1);
 			player2 = new Player(PlayerType.AI, 2);
 		} else {
-			player1 = new Player(PlayerType.AI, 1);
-			player2 = new Player(PlayerType.SERVER, 2);
+			player1 = new Player(PlayerType.AI, 2);
+			player2 = new Player(PlayerType.SERVER, 1);
 		}
 
 		player1.setTurn(true);
