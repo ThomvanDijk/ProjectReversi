@@ -17,11 +17,13 @@ import com.reversi.model.Model;
 public class GameView extends View {
 	
 	private Scanner scanInput;
+	private boolean running;
 
 	public GameView(UserController userController, String[] args) {
 		super(userController);
 	
 		scanInput = new Scanner(System.in);
+		running = true;
 		
 		// Below are all the current notification id's you can use as argument in the function
 		// userController.notifyModel(notification_id, argument) The argument is used in case
@@ -58,6 +60,11 @@ public class GameView extends View {
 	@Override
 	public void run() {
 		// If needed this function keeps running until the thread is terminated
+		
+		if(running) {
+			consoleInput();
+			running = false;
+		}
 	}
 	
 	/**
@@ -78,13 +85,24 @@ public class GameView extends View {
 	// Use console as input and alternative ui
 	public void consoleInput() {
 		String textToSend;
+		
+		System.out.println("Application started use 'login + name' to login!");
 
 		while (scanInput.hasNextLine() && !Thread.currentThread().isInterrupted()) {
 
 			textToSend = scanInput.nextLine();
+			
+			String commands[] = textToSend.split(" ");
 
-			// Send the text to the server
-			// listener.sendMessage(textToSend);
+			if(commands[0].equals("login")) {
+				System.out.println(commands[1]);
+				userController.notifyModel(Controller.LOG_IN, new String[] {commands[1], "localhost"});
+			}
+			
+			if(commands[0].equals("sub")) { // subscribe "tictactoe" or "reversi"
+				System.out.println(commands[1]);
+				userController.notifyModel(Controller.START_ONLINE_GAME, new String[] {commands[1]});
+			}
 
 			// Display text to the text area
 			System.out.println("Client: " + textToSend + "\n");

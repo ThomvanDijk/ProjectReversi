@@ -55,20 +55,20 @@ public class Client {
 	}
 	
 	/**
-	 * Update is called from model (GameModel) every time something is updated...
+	 * sendCommand is called from model (GameModel) every time there are new messages...
 	 * 
-	 * @param command Command to send to the server
+	 * @param arguments Command + arguments to send to the server.
 	 */
-	public void sendNewMessage(String[] arguments) {
+	public void sendCommand(String command) {
 		try {
 			// Send command to the server
-			listener.sendMessage(arguments[0]);
+			listener.sendMessage(command);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		// Display text to the text area
-		System.out.println("Client: " + arguments[0] + "\n");
+		System.out.println("Client: " + command + "\n");
 	}
 
 	// Send commands to model via serverController

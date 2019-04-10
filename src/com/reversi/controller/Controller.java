@@ -8,8 +8,8 @@ public abstract class Controller {
 	public static final int START_TICTACTOE_SINGLEPLAYER = 2;
 	public static final int END_REVERSI_SINGLEPLAYER     = 3;
 	public static final int END_TICTACTOE_SINGLEPLAYER   = 4;
-	public static final int START_REVERSI_MULTIPLAYER    = 5;
-	public static final int START_TICTACTOE_MULTIPLAYER  = 6;
+	public static final int START_ONLINE_GAME	    	 = 5; // args { "GameType" } "reversi" or "tictactoe"
+//	public static final int START_TICTACTOE_MULTIPLAYER  = 6;
 	public static final int END_REVERSI_MULTIPLAYER      = 7;
 	public static final int END_TICTACTOE_MULTIPLAYER    = 8;
 	public static final int LOG_IN                       = 9;  // args { "Name" }

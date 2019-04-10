@@ -26,11 +26,13 @@ public class UserController extends Controller {
 			break;
 		case END_TICTACTOE_SINGLEPLAYER:
 			break;
-		case START_REVERSI_MULTIPLAYER:
-			gameModel.startGame(GameMode.ONLINE, GameType.REVERSI);
-			break;
-		case START_TICTACTOE_MULTIPLAYER:
-			gameModel.startGame(GameMode.ONLINE, GameType.TICTACTOE);
+		case START_ONLINE_GAME: // subscribe <gametype>
+			if(arguments[0].equals("reversi")) {
+				gameModel.startGame(GameMode.ONLINE, GameType.REVERSI);
+			} 
+			if(arguments[0].equals("tictactoe")) {
+				gameModel.startGame(GameMode.ONLINE, GameType.TICTACTOE);
+			}
 			break;
 		case END_REVERSI_MULTIPLAYER:
 			break;

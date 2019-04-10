@@ -6,7 +6,7 @@ import com.reversi.model.*;
 import com.reversi.view.*;
 
 public class Main {
-	
+
 	public static boolean running;
 
 	// Pass args for javaFX
@@ -16,20 +16,20 @@ public class Main {
 		// Give model to controllers because they must have a model
 		ClientController clientController = new ClientController(model);
 		UserController userController = new UserController(model);
-		
+
 		// Make a client that connects to the server
 		Client client = new Client(clientController);
-		
-		// Make view and add a reference to controller 
+
+		// Make view and add a reference to controller
 		// also pass args for javaFX
 		GameView view = new GameView(userController, args);
-		
+
 		// Add the view references to the model
-		model.setView(view);
 		model.setClient(client);
-		
+		model.setView(view);
+
 		Thread viewThread = new Thread(view);
-		
+
 		viewThread.start();
 	}
 

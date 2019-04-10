@@ -37,6 +37,7 @@ public class GameModel extends Model {
 				break;
 			} else {
 				reversi = new Reversi(GameMode.ONLINE);
+				client.sendCommand("subscribe Reversi");
 				break;
 			}
 		case TICTACTOE:
@@ -45,6 +46,7 @@ public class GameModel extends Model {
 				break;
 			} else {
 				ticTacToe = new TicTacToe(GameMode.ONLINE);
+				client.sendCommand("subscribe Tic-tac-toe");
 				break;
 			}
 		default:
