@@ -205,6 +205,8 @@ public class Reversi extends Game {
 		}
 
 		// Check if the new move is valid
+		
+		
 		boolean validMove = false;
 		for (int check = 0; check < validMoves.size(); check++) {
 
@@ -267,6 +269,20 @@ public class Reversi extends Game {
 
 	// Used by AI and called multiple times to make a good decision
 	public Board makeForwardMove(Player player, int move, Board b) {
+		if (player.id == 1 && player.type.equals(PlayerType.HUMAN)) {
+			
+
+			player1.setTurn(false);
+			player2.setTurn(true);
+		} else {
+			// AI has to make a move
+			// input = player.ai.calculateMove(board, player);
+			
+
+			player1.setTurn(true);
+			player2.setTurn(false);
+		}
+		
 		int input = 0;
 		boolean validMove = false;
 
@@ -326,17 +342,17 @@ public class Reversi extends Game {
 
 		// Get all the valid moves if there are any
 		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(board, player.id);
-
+		printValidMoves(validMoves,board);
 		// As long as the input isn't correct, this will loop
 		while (validMove == false) {
 			// Check if there are any possible moves
 			if (!validMoves.isEmpty()) {
 				if (turn < 100) {
 					input = player.ai.boardWeighting(board, player);
-				} else if (turn < 50) {
+				} else if (turn < 49) {
 					input = player.ai.minimaxAvailableMoves(board, player, 0, 5, 0, 0);
 				} else {
-					input = player.ai.minimax(board, player, 0, 14, 0, 0);
+					input = player.ai.minimax(board, player, 0, 15, 0, 0);
 				}
 				// input = player.ai.boardWeighting(b, player);
 				System.out.println("PLayer: " + player.id + " (AI) is doing the following move: " + input);
@@ -359,15 +375,19 @@ public class Reversi extends Game {
 
 		// Input is last player player
 		switchTurn(player);
-
-		return input;
+		if (noWinnerCount == 0) {
+			return input;
+		}
+		else {
+			return -1;
+		}
 	}
 
 	// Used to make a move done by server or player
 	public void makeMove(Player player, int input) {
 		// Get all the valid moves if there are any
 		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(this.board, player.id);
-
+		printValidMoves(validMoves,board);
 		if (!validMoves.isEmpty()) {		
 			if (setMove(input, validMoves, player.id, this.board)) {
 				turn++;
@@ -392,13 +412,13 @@ public class Reversi extends Game {
 		// If one player can't make a move, switch who's turn it is...
 		if (noWinnerCount == 1) {
 			// This player can't make a move so set it's turn to false
-			player.setTurn(false);
+			player.setTurn(true);
 
 			// Now set the other player's turn to true
 			if (player.id == player1.id) {
-				player2.setTurn(true);
+				player2.setTurn(false);
 			} else {
-				player1.setTurn(true);
+				player1.setTurn(false);
 			}
 		} else if (noWinnerCount == 3) {
 			// If both players can't move, end the game
@@ -420,7 +440,19 @@ public class Reversi extends Game {
 			}
 		}
 	}
+	
+	public void printValidMoves(ArrayList<ArrayList<Integer>> validMoves, Board b) {
+		System.out.print("Valid moves: ");
+		for (int i = 0; i < validMoves.size(); i++) {
+			int row = chopped(validMoves.get(i), 2).get(0).get(0);
+			int col = chopped(validMoves.get(i), 2).get(0).get(1);
 
+			System.out.print((col * b.getBoardSize()) + row + " ");
+			System.out.println();
+			System.out.println("Turn: "+turn);
+		}
+	}
+	
 	public void debugMove(int playerID, Board b) {
 		// Show updated score
 		System.out.println("Black: " + player2.getScore() + "  White: " + player1.getScore());
@@ -435,16 +467,13 @@ public class Reversi extends Game {
 		// System.out.println("Valid moves: " + validMoves);
 
 		// Show the valid moves
-		System.out.print("Valid moves: ");
-
+		/*System.out.print("Valid moves: ");
 		for (int i = 0; i < validMoves.size(); i++) {
 			int row = chopped(validMoves.get(i), 2).get(0).get(0);
 			int col = chopped(validMoves.get(i), 2).get(0).get(1);
-
 			System.out.print((col * b.getBoardSize()) + row + " ");
-		}
+		}*/
 
-		System.out.println();
 	}
 
 	// https://stackoverflow.com/questions/2895342/java-how-can-i-split-an-arraylist-in-multiple-small-arraylists
