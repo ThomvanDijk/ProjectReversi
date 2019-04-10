@@ -174,7 +174,6 @@ public class AI {
 		}
 		
 	    if (depth == max_depth) {
-	    	System.out.println("Reached end depth");
 	        return 0;
 	    }
 	    
@@ -188,10 +187,8 @@ public class AI {
 	        else {
 	            for (int i = 0; i < (list.size()); i++) {	                
 	                int move = list.get(i).get(0) + (list.get(i).get(1)*8);
-	                System.out.println("AI: I think I'm going to do this move: "+move);
 	                reversi.makeMove(player, move, b);
 	                int score = reversi.getValidMoves(b, player.opponent).size();
-	                System.out.println("Score van "+player.id +": "+score);
 
 	                Player nextPlayer;
 	                if (player.id == 1) {
@@ -203,7 +200,7 @@ public class AI {
 	                nextPlayer.setTurn(true);
 	                player.setTurn(false);
 	                
-	                minimax(b, nextPlayer, depth+1, max_depth, score, move);
+	                minimaxAvailableMoves(b, nextPlayer, depth+1, max_depth, score, move);
 	                int[][] restore = new int[boardSize][boardSize];
 	        		for (int j = 0; j < boardSize; j++) {
 	        		  restore[j] = Arrays.copyOf(backup[j], backup[j].length);
@@ -217,7 +214,6 @@ public class AI {
 	                else {
 	                	if (depth%2 == 0) {
 		                	if (score < bestScore){
-		                		System.out.println("Best score is: "+score);
 			                    bestScore = score;
 			                    bestMove = move;
 			                }
@@ -235,7 +231,6 @@ public class AI {
 	            chosen_move = bestMove;
 	        }
 	    }	    
-	    System.out.println(chosen_move);
 	    return chosen_move;
 	}
 	
@@ -250,7 +245,6 @@ public class AI {
 		}
 		
 	    if (depth == max_depth) {
-	    	System.out.println("Reached end depth");
 	        return 0;
 	    }
 	    
@@ -264,10 +258,8 @@ public class AI {
 	        else {
 	            for (int i = 0; i < (list.size()); i++) {	                
 	                int move = list.get(i).get(0) + (list.get(i).get(1)*8);
-	                System.out.println("AI: I think I'm going to do this move: "+move);
 	                reversi.makeMove(player, move, b);
 	                int score = reversi.calculateValueDiff(player.id);
-	                System.out.println("Score van "+player.id +": "+score);
 
 	                Player nextPlayer;
 	                if (player.id == 1) {
@@ -293,7 +285,6 @@ public class AI {
 	                else {
 	                	if (depth%2 == 0) {
 		                	if (score > bestScore){
-		                		System.out.println("Best score is: "+score);
 			                    bestScore = score;
 			                    bestMove = move;
 			                }
@@ -311,7 +302,6 @@ public class AI {
 	            chosen_move = bestMove;
 	        }
 	    }	    
-	    System.out.println(chosen_move);
 	    return chosen_move;
 	}
 }
