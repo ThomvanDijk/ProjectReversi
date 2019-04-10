@@ -339,7 +339,7 @@ public class Reversi extends Game {
 		}
 	}
 	
-	public int makeMove(Player player, Board b) {	
+	public int makeMove(Player player) {	
 		int input = 0;
 		boolean validMove = false;
 		// Check which player is playing
@@ -355,7 +355,7 @@ public class Reversi extends Game {
 //		}
 		
 		// Get all the valid moves if there are any
-		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(b, player.id);
+		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(board, player.id);
 		
 		// As long as the input isn't correct, this will loop
 		while (validMove == false) {
@@ -365,24 +365,24 @@ public class Reversi extends Game {
 					input = scanInput.nextInt();
 				} else {
 					if (turn < 10) {
-						input = player.ai.boardWeighting(b, player);
+						input = player.ai.boardWeighting(board, player);
 					} else if (turn < 50) {
-						input = player.ai.minimaxAvailableMoves(b, player, 0, 5, 0, 0);
+						input = player.ai.minimaxAvailableMoves(board, player, 0, 5, 0, 0);
 					} else {
-						input = player.ai.minimax(b, player, 0, 14, 0, 0);
+						input = player.ai.minimax(board, player, 0, 14, 0, 0);
 					}
 					// input = player.ai.boardWeighting(b, player);
 					System.out.println("Computer is doing the following move: " + input);
 
 				}
-				validMove = setMove(input, validMoves, player.id, b);
+				validMove = setMove(input, validMoves, player.id, board);
 				if (validMove == true) {
 					turn++;
 
 					if (player.id == BLACK) {
-						debugMove(player2.id, b);
+						debugMove(player2.id, board);
 					} else {
-						debugMove(player1.id, b);
+						debugMove(player1.id, board);
 					}
 
 				}
@@ -413,11 +413,11 @@ public class Reversi extends Game {
 			if (player.id == 1) {
 				player1.setTurn(true);
 				player2.setTurn(false);
-				debugMove(player2.id, b);
+				debugMove(player2.id, board);
 			} else {
 				player1.setTurn(false);
 				player2.setTurn(true);
-				debugMove(player1.id, b);
+				debugMove(player1.id, board);
 			}
 
 		}
@@ -470,9 +470,9 @@ public class Reversi extends Game {
 
 		while (scanInput.hasNextLine() && noWinner) {
 			if (player1.hasTurn() && player1.type.equals(PlayerType.HUMAN)) {
-				makeMove(player1, board);
+				makeMove(player1);
 			} else {
-				makeMove(player2, board);
+				makeMove(player2);
 			}
 		}
 

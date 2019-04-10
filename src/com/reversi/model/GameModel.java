@@ -114,9 +114,9 @@ public class GameModel extends Model {
 				try {
 					Player[] players = reversi.getPlayers();
 					if(players[0].hasTurn()) {
-						client.sendCommand("move " + reversi.makeMove(players[0], reversi.board));
+						client.sendCommand("move " + reversi.makeMove(players[0]));
 					} else {
-						client.sendCommand("move " + reversi.makeMove(players[1], reversi.board));
+						client.sendCommand("move " + reversi.makeMove(players[1]));
 					}	
 				} catch (Exception e) {
 					e.printStackTrace();
