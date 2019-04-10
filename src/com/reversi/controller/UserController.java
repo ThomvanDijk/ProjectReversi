@@ -44,11 +44,9 @@ public class UserController extends Controller {
 			break;
 		case CHALLENGE_PLAYER:
 			break;
-		case SET_MOVE_REVERSI:
-			break;
-		case SET_MOVE_TICTACTOE:
-			// Argument should be a valid number
-			gameModel.setMove(GameType.TICTACTOE, arguments[0]);
+		case SET_MOVE:
+			// Argument should be a valid number from 0 to boardsize^2
+			gameModel.setMove(arguments[0], 1);
 			break;
 		default:
 			throw new IllegalStateException();

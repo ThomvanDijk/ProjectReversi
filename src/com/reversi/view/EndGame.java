@@ -30,7 +30,7 @@ public class EndGame {
             public void handle(ActionEvent actionEvent) {
 
                 MainMenu mainmenu = new MainMenu();
-                mainmenu.start(endGameStage);
+             //   mainmenu.start(endGameStage);
             }
         });
 

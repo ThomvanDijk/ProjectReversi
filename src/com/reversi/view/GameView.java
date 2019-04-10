@@ -45,7 +45,7 @@ public class GameView extends View {
 	}
 	
 	/**
-	 * This run function is used to refresh pages e.d.
+	 * This run function is used to refresh pages
 	 *
 	 * @param model Model
 	 */
