@@ -92,6 +92,11 @@ public class Client {
 				// Input the first element of the server command
 				switch(entry.getKey()) {
 				case SVR_GAME_MATCH:
+					// Make new string array to use as argument
+					String[] typeArguments = new String[2];
+					typeArguments[0] = keyValueMap.get(ArgumentKey.GAMETYPE);
+					
+					clientController.notifyModel(Controller.START_ONLINE_GAME, typeArguments);
 					break;
 				case SVR_GAME_YOURTURN: // Request a move from the ai
 					clientController.notifyModel(Controller.REQUEST_MOVE, null);

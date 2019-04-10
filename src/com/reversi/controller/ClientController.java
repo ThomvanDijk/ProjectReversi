@@ -17,10 +17,10 @@ public class ClientController extends Controller {
 		
 		switch (notification_id) {
 		case START_ONLINE_GAME:
-			if(arguments[0].equals("reversi")) {
+			if(arguments[0].equals("Reversi")) {
 				gameModel.startGame(GameMode.ONLINE, GameType.REVERSI);
 			} 
-			if(arguments[0].equals("tictactoe")) {
+			if(arguments[0].equals("Tic-tac-toe")) {
 				gameModel.startGame(GameMode.ONLINE, GameType.TICTACTOE);
 			}
 			break;
