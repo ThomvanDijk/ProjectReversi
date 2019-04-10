@@ -81,9 +81,9 @@ public class GameModel extends Model {
 				try {
 					Player[] players = reversi.getPlayers();
 					if(players[0].hasTurn()) {
-						reversi.makeSimpleMove(players[0], intMove);
+						reversi.makeMove(players[0], intMove);
 					} else {
-						reversi.makeSimpleMove(players[1], intMove);
+						reversi.makeMove(players[1], intMove);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -122,9 +122,9 @@ public class GameModel extends Model {
 				try {
 					Player[] players = reversi.getPlayers();
 					if(players[0].hasTurn()) {
-						client.sendCommand("move " + reversi.makeMove(players[0]));
+						client.sendCommand("move " + reversi.makeAIMove(players[0]));
 					} else {
-						client.sendCommand("move " + reversi.makeMove(players[1]));
+						client.sendCommand("move " + reversi.makeAIMove(players[1]));
 					}	
 				} catch (Exception e) {
 					e.printStackTrace();

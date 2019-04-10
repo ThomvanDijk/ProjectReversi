@@ -25,7 +25,7 @@ public abstract class Game {
 		this.gameType = gameType;
 		this.gameMode = gameMode;
 
-		noWinner = true;
+		noWinnerCount = 0;
 
 //		if (gameMode.equals(GameMode.SINGLEPLAYER)) {
 //			player1 = new Player(PlayerType.HUMAN, 1);
