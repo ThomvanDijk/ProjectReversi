@@ -16,6 +16,9 @@ public class GameModel extends Model {
 	private boolean running;
 	private TicTacToe ticTacToe;
 	private Reversi reversi;
+	
+	private int player1Score;
+	private int player2Score;
 
 	private GameType currentGameType;
 	private GameMode currentGameMode;
@@ -25,6 +28,9 @@ public class GameModel extends Model {
 	public GameModel() {
 		ticTacToe = null;
 		reversi = null;
+		
+		player1Score = 0;
+		player2Score = 0;
 
 		currentGameMode = null;
 		currentGameType = null;
@@ -62,7 +68,12 @@ public class GameModel extends Model {
 		notifyView();
 	}
 
-	public void endGame() {
+	public void endGame(String[] arguments) {
+		if(arguments != null) {
+			player1Score = Integer.parseInt(arguments[0]);
+			player2Score = Integer.parseInt(arguments[1]);
+		}
+
 		currentGameMode = null;
 		currentGameType = null;
 
@@ -150,7 +161,7 @@ public class GameModel extends Model {
 			}
 			break;
 		default:
-			throw new IllegalStateException();
+			System.out.println("No current game!");
 		}
 
 		notifyView();
@@ -239,19 +250,11 @@ public class GameModel extends Model {
 		}
 	}
 
-	public Player[] getPlayer() {
-		Player[] players = new Player[2];
-		switch (currentGameType) {
-		case REVERSI:
-			players = reversi.getPlayers();
-			return players;
-		case TICTACTOE:
-			players[0] = ticTacToe.player1;
-			players[1] = ticTacToe.player2;
-			return players;
-		default:
-			return null;
-		}
+	public int[] getPlayerScores() {
+		int[] scores = new int[2];
+		scores[0] = player1Score;
+		scores[1] = player2Score;
+		return scores;
 	}
 
 }

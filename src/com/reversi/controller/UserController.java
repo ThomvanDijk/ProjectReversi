@@ -35,7 +35,7 @@ public class UserController extends Controller {
 			}
 			break;
 		case END_ONLINE_GAME:
-			gameModel.endGame();
+			gameModel.endGame(null);
 			break;
 		case LOG_IN:
 			// Argument represents a name
