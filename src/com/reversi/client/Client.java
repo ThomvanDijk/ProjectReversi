@@ -24,14 +24,6 @@ public class Client {
 		parser = new Parser();
 		
 		currentPlayer = "";
-
-//		System.out.println("Client started and connecting... \n");
-
-//		listener = new Listener(this, "localhost");
-//		Thread listenerThread = new Thread(listener);
-//
-//		listenerThread.setDaemon(true);
-//		listenerThread.start();
 	}
 	
 	public void login(String[] arguments) {
@@ -52,7 +44,7 @@ public class Client {
 		}
 
 		// Display text to the text area
-		//System.out.println("Client: " + arguments[1] + " " + arguments[0] + "\n");
+		System.out.println("Client: " + arguments[0] + " address: " + arguments[1]);
 	}
 	
 	/**

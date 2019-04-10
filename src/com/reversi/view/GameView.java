@@ -121,12 +121,9 @@ public class GameView extends View {
 				if(commands[1] != null) {
 					userController.notifyModel(Controller.ACCEPT_CHALLENGE, new String[] {commands[1]});
 				} else {
-					System.out.println("Wrong command! Try: chal <player name> followed by tictactoe or reversi");
+					System.out.println("Wrong command! Try: accept <chal no>");
 				}
 			}
-
-			// Display text to the text area
-			System.out.println("Client: " + textToSend + "\n");
 
 			if (textToSend.equals("exit")) {
 				break;
