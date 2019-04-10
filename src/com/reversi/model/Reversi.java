@@ -55,10 +55,6 @@ public class Reversi extends Game {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-//		if (gameMode.equals(GameMode.SINGLEPLAYER)) {
-//			consoleInput();
-//		}
 	}
 	
 	public Player[] getPlayers() {
@@ -269,7 +265,7 @@ public class Reversi extends Game {
 	}
 
 	// Used by AI
-	public Board makeAIMove(Player player, int move, Board b) {
+	public Board makeForwardMove(Player player, int move, Board b) {
 		int input = 0;
 		boolean validMove = false;
 
@@ -322,6 +318,7 @@ public class Reversi extends Game {
 		return b;
 	}
 
+	// Used to make a move done by server or player
 	public void makeSimpleMove(Player player, int input) {
 		// Get all the valid moves if there are any
 		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(this.board, player.id);
@@ -342,17 +339,6 @@ public class Reversi extends Game {
 	public int makeMove(Player player) {	
 		int input = 0;
 		boolean validMove = false;
-		// Check which player is playing
-//		if (player.id == BLACK && player.type.equals(PlayerType.HUMAN)) {
-//			player1.setTurn(false);
-//			player2.setTurn(true);
-//		} else {
-//			// AI has to make a move
-//			// input = player.ai.calculateMove(board, player);
-//
-//			player1.setTurn(true);
-//			player2.setTurn(false);
-//		}
 		
 		// Get all the valid moves if there are any
 		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(board, player.id);
@@ -372,7 +358,7 @@ public class Reversi extends Game {
 						input = player.ai.minimax(board, player, 0, 14, 0, 0);
 					}
 					// input = player.ai.boardWeighting(b, player);
-					System.out.println("Computer is doing the following move: " + input);
+					System.out.println("PLayer: " + player.id + " (AI) is doing the following move: " + input);
 
 				}
 				validMove = setMove(input, validMoves, player.id, board);
