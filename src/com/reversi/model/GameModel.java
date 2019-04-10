@@ -137,10 +137,22 @@ public class GameModel extends Model {
 				}
 				try {
 					Player[] players = reversi.getPlayers();
-					if (players[0].hasTurn()) {
-						client.sendCommand("move " + reversi.makeAIMove(players[0]));
+					if(players[0].hasTurn()) {
+						int zet = reversi.makeAIMove(players[0]);
+						if (zet == -1) {
+							client.sendCommand("move " + reversi.makeAIMove(players[0]));
+						}
+						else {
+							client.sendCommand("move " + zet);
+						}
 					} else {
-						client.sendCommand("move " + reversi.makeAIMove(players[1]));
+						int zet = reversi.makeAIMove(players[1]);
+						if (zet == -1) {
+							client.sendCommand("move " + reversi.makeAIMove(players[1]));
+						}
+						else {
+							client.sendCommand("move " + zet);
+						}
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
