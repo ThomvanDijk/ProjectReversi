@@ -150,20 +150,15 @@ public class GameModel extends Model {
 				try {
 					Player[] players = reversi.getPlayers();
 					if(players[0].hasTurn()) {
-						int zet = reversi.makeAIMove(players[0]);
-						if (zet == -1) {
-							client.sendCommand("move " + reversi.makeAIMove(players[0]));
-						}
-						else {
-							client.sendCommand("move " + zet);
+						int move = reversi.makeAIMove(players[0]);
+						if (move >= 0) {
+							client.sendCommand("move " + move);
 						}
 					} else {
-						int zet = reversi.makeAIMove(players[1]);
-						if (zet == -1) {
-							client.sendCommand("move " + reversi.makeAIMove(players[1]));
-						}
-						else {
-							client.sendCommand("move " + zet);
+						
+						int move = reversi.makeAIMove(players[1]);
+						if (move >= 0) {
+							client.sendCommand("move " + move);
 						}
 					}
 				} catch (Exception e) {

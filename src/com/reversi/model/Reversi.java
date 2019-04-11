@@ -321,12 +321,12 @@ public class Reversi extends Game {
 		if (noWinnerCount == 1) {
 			System.out.println("Out of moves");
 			if (player.id == 1) {
-				player1.setTurn(true);
-				player2.setTurn(false);
-
-			} else {
 				player1.setTurn(false);
 				player2.setTurn(true);
+
+			} else {
+				player1.setTurn(true);
+				player2.setTurn(false);
 
 			}
 
@@ -337,14 +337,17 @@ public class Reversi extends Game {
 
 	// This function is used to request a move done by the AI and returns a move
 	public int makeAIMove(Player player) {
-		int input = 0;
+		int input = -1;
 		boolean validMove = false;
+		
+		System.out.println("Current player is: "+player.id);
 
 		// Get all the valid moves if there are any
 		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(board, player.id);
 		printValidMoves(validMoves,board);
 		// As long as the input isn't correct, this will loop
 		while (validMove == false) {
+			System.out.println("Infinite loop");
 			// Check if there are any possible moves
 			if (!validMoves.isEmpty()) {
 				/*ArrayList<ArrayList<Integer>> list = getValidMoves(board, player.id);
@@ -358,9 +361,9 @@ public class Reversi extends Game {
 		    		}
 		    	}
 		    	if (goodMove == false) {*/
-					if (turn < 100) {
+					if (turn < 2) {
 						input = player.ai.boardWeighting(board, player);
-					} else if (turn < 0) {
+					} else if (turn < 47) {
 						input = player.ai.minimaxAvailableMoves(board, player, 0, 5, 0, 0);
 					} else {
 						input = player.ai.minimax(board, player, 0, 17, 0, 0);
@@ -386,13 +389,13 @@ public class Reversi extends Game {
 		}
 
 		// Input is last player player
-		switchTurn(player);
-		if (noWinnerCount == 0) {
-			return input;
+		ArrayList<ArrayList<Integer>> validMovesOpponent = getValidMoves(board, player.opponent);
+		if (validMovesOpponent.size() > 0) {
+			switchTurn(player);
+			
 		}
-		else {
-			return -1;
-		}
+		
+		return input;
 	}
 
 	// Used to make a move done by server or player
@@ -415,7 +418,10 @@ public class Reversi extends Game {
 		}
 
 		// Input is last player player
-		switchTurn(player);
+		ArrayList<ArrayList<Integer>> validMovesOpponent = getValidMoves(board, player.opponent);
+		if (validMovesOpponent.size() > 0) {
+			switchTurn(player);
+		}
 	}
 
 	public void switchTurn(Player player) {
@@ -460,8 +466,10 @@ public class Reversi extends Game {
 			int col = chopped(validMoves.get(i), 2).get(0).get(1);
 
 			System.out.print((col * b.getBoardSize()) + row + " ");
-			System.out.println();
+			
 		}
+		System.out.println("Turn: "+turn);
+		System.out.println();
 	}
 	
 	public void debugMove(int playerID, Board b) {
