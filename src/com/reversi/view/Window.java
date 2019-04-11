@@ -1,40 +1,20 @@
 package com.reversi.view;
 
-import com.reversi.controller.UserController;
-
-import javafx.application.*;
-import javafx.scene.Scene;
+import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class Window extends Application {
 
-//   private Stage stage;
-	GameView gameView;
-	
-	public Window(GameView gameView) { 
-		this.gameView = gameView;
-	}
+    public void rmain(String[] args){
+        launch(args);
+    }
 
-	public Window() {
+    public void start(Stage primaryStage) {
 
-	}
+        LogIn login = new LogIn();
+        login.Start(primaryStage);
 
-	public void rmain(String[] args) {
-		Application.launch(args);
-	}
 
-	public void start(Stage primaryStage) {
 
-//      this.stage = primaryStage;
-
-		Scene scene = new Scene(new Login(gameView.getUserController()).getView(), 400, 400);
-		primaryStage.setScene(scene);
-		primaryStage.show();
-
-	}
-
-	// public void removeStage(){
-//        stage.hide();
-//    }
-
+    }
 }
