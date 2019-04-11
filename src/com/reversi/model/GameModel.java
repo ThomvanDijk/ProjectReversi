@@ -54,7 +54,7 @@ public class GameModel extends Model {
 			}
 		default:
 			throw new IllegalStateException();
-		}
+		} 
 
 		notifyView();
 	}

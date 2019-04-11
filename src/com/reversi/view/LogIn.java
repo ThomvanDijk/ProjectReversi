@@ -1,5 +1,8 @@
 package com.reversi.view;
 
+import com.reversi.controller.Controller;
+import com.reversi.controller.UserController;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -12,6 +15,12 @@ import javafx.stage.Stage;
 
 
 public class LogIn {
+	
+	private UserController userController;
+
+	public LogIn(UserController userController) {
+		this.userController = userController;
+	}
 
     // can be any Parent subclass:
 
@@ -165,10 +174,29 @@ public class LogIn {
 
 
         //textfield
-        TextField ipadres = new TextField("IP adres");
+        TextField ipadres = new TextField();
         ipadres.setMaxWidth(200);
-        TextField Gebruikersnaam = new TextField("Gebruikersnaam");
+        ipadres.setPromptText("IP Adres");
+
+        TextField Gebruikersnaam = new TextField();
         Gebruikersnaam.setMaxWidth(200);
+        Gebruikersnaam.setPromptText("Gebruikersnaam");
+
+        
+        
+        buttonLogIN.setOnAction(e -> {
+        	String username = Gebruikersnaam.getText();
+        	String ipAdres = ipadres.getText();
+        	
+    		userController.notifyModel(Controller.LOG_IN, new String[]{username, ipAdres});
+
+        	
+            buttonDaagUitKaas.setDisable(false);
+            buttonJoinLobbyKaas.setDisable(false);
+            buttonJoinLobbyReversie.setDisable(false);
+            buttonDaaguitReversie.setDisable(false);
+
+        });
 
 
 
