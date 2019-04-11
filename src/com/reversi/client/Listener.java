@@ -26,7 +26,7 @@ public class Listener implements Runnable {
 			toServer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-			System.out.println("Client connected to " + socket.getRemoteSocketAddress() + "\n");
+			//System.out.println("Client connected to " + socket.getRemoteSocketAddress() + "\n");
 		} catch (IOException e) {
 			System.out.println(e.toString() + "\n");
 		}

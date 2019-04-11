@@ -1,7 +1,5 @@
 package com.reversi.model;
 
-import com.reversi.model.Player.PlayerType;
-
 public abstract class Game {
 
 	public enum GameType {
@@ -25,18 +23,18 @@ public abstract class Game {
 		this.gameType = gameType;
 		this.gameMode = gameMode;
 
-		noWinner = true;
+		noWinnerCount = 0;
 
-		if (gameMode.equals(GameMode.SINGLEPLAYER)) {
-			player1 = new Player(PlayerType.HUMAN, 1);
-			player2 = new Player(PlayerType.AI, 2);
-		} else {
-			player1 = new Player(PlayerType.AI, 1);
-			player2 = new Player(PlayerType.SERVER, 2);
-		}
+//		if (gameMode.equals(GameMode.SINGLEPLAYER)) {
+//			player1 = new Player(PlayerType.HUMAN, 1);
+//			player2 = new Player(PlayerType.AI, 2);
+//		} else {
+//			player1 = new Player(PlayerType.AI, 2);
+//			player2 = new Player(PlayerType.SERVER, 1);
+//		}
 
-		player1.setTurn(true);
-		player2.setTurn(false);
+//		player1.setTurn(true);
+//		player2.setTurn(false);
 
 		createBoard();
 	}

@@ -3,7 +3,7 @@ package com.reversi.model;
 import com.reversi.client.Client;
 import com.reversi.view.GameView;
 
-public abstract class Model implements Runnable {
+public abstract class Model {
 	
 	protected GameView gameView;
 	protected Client client;

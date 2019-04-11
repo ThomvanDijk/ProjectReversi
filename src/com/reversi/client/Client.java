@@ -3,14 +3,12 @@ package com.reversi.client;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 import com.reversi.client.Parser.ArgumentKey;
 import com.reversi.client.Parser.ServerCommand;
 import com.reversi.controller.ClientController;
-import com.reversi.model.Model;
+import com.reversi.controller.Controller;
 
 public class Client {
 
@@ -18,27 +16,18 @@ public class Client {
 	private Listener listener;
 	private Parser parser;
 
-	private Scanner scanInput;
+	private String currentPlayer;
 
 	public Client(ClientController clientController) {
 		this.clientController = clientController;
 		
 		parser = new Parser();
-
-		scanInput = new Scanner(System.in);
-
-		System.out.println("Client started and connecting... \n");
-
-//		listener = new Listener(this);
-//		Thread listenerThread = new Thread(listener);
-//
-//		listenerThread.setDaemon(true);
-//		listenerThread.start();
-
-		//consoleInput();
+		
+		currentPlayer = "";
 	}
 	
 	public void login(String[] arguments) {
+		currentPlayer = arguments[0];
 		arguments[0] = "login " + arguments[0];
 		
 		listener = new Listener(this, arguments[1]);
@@ -55,24 +44,23 @@ public class Client {
 		}
 
 		// Display text to the text area
-		System.out.println("Client: " + arguments[1] + " " + arguments[0] + "\n");
+		System.out.println("Client: " + arguments[0] + " address: " + arguments[1]);
 	}
 	
 	/**
-	 * Update is called from model (GameModel) every time something is updated...
+	 * sendCommand is called from model (GameModel) every time there are new messages...
 	 * 
-	 * @param command Command to send to the server
+	 * @param arguments Command + arguments to send to the server.
 	 */
-	public void sendNewMessage(String[] arguments) {
+	public void sendCommand(String command) {
+		System.out.println("Client: " + command);
+		
 		try {
 			// Send command to the server
-			listener.sendMessage(arguments[0]);
+			listener.sendMessage(command);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		// Display text to the text area
-		System.out.println("Client: " + arguments[0] + "\n");
 	}
 
 	// Send commands to model via serverController
@@ -80,9 +68,6 @@ public class Client {
 		System.out.println("Server: " + message);
 		
 		HashMap<ServerCommand, String> commandMap = parser.getCommand(message);
-		
-		// Display the raw first map
-		//System.out.println("Map: " + commandMap); 
 
 		// If ERR just use the value with this key because the value is just a single string
 		if(!commandMap.containsKey(ServerCommand.ERR) && !commandMap.isEmpty()) {
@@ -97,8 +82,8 @@ public class Client {
 				
 			} else { // Parse to a map
 				HashMap.Entry<ServerCommand, String> entry = commandMap.entrySet().iterator().next();
-//				ServerCommand key = entry.getKey();
-//				String value = entry.getValue();
+				//ServerCommand key = entry.getKey();
+				//String value = entry.getValue();
 				 
 				HashMap<ArgumentKey, String> keyValueMap = parser.stringToMap(commandMap.get(entry.getKey()));
 				//System.out.println("Map key: " + entry.getKey()); 
@@ -107,12 +92,49 @@ public class Client {
 				// Input the first element of the server command
 				switch(entry.getKey()) {
 				case SVR_GAME_MATCH:
+					// Make new string array to use as argument
+					String[] typeArguments = new String[2];
+					typeArguments[0] = keyValueMap.get(ArgumentKey.GAMETYPE);
+					
+					clientController.notifyModel(Controller.START_ONLINE_GAME, typeArguments);
 					break;
-				case SVR_GAME_YOURTURN:
+				case SVR_GAME_YOURTURN: // Request a move from the ai
+					clientController.notifyModel(Controller.REQUEST_MOVE, null);
 					break;
-				case SVR_GAME_MOVE:
+				case SVR_GAME_MOVE: // Other player did a move
+					// Make new string array to use as argument
+					String[] moveArguments = new String[2];
+					moveArguments[0] = keyValueMap.get(ArgumentKey.MOVE);
+					
+					// Only notifyModel if it is not our own move!
+					if(!keyValueMap.get(ArgumentKey.PLAYER).equals(currentPlayer)) {
+						clientController.notifyModel(Controller.SERVER_DID_MOVE, moveArguments);
+					}
 					break;
 				case SVR_GAME_CHALLENGE:
+					// Make new string array to use as argument
+					String[] chalArguments = new String[3];
+					chalArguments[0] = keyValueMap.get(ArgumentKey.CHALLENGER);
+					chalArguments[1] = keyValueMap.get(ArgumentKey.CHALLENGENUMBER);
+					chalArguments[2] = keyValueMap.get(ArgumentKey.GAMETYPE);
+					
+					clientController.notifyModel(Controller.PROCESS_NEW_CHALLENGE, chalArguments);
+					break;
+				case SVR_GAME_WIN:
+					// Make new string array to use as argument
+					String[] winArguments = new String[2];
+					winArguments[0] = keyValueMap.get(ArgumentKey.PLAYERONESCORE);
+					winArguments[1] = keyValueMap.get(ArgumentKey.PLAYERTWOSCORE);
+					
+					clientController.notifyModel(Controller.END_ONLINE_GAME, winArguments);
+					break;
+				case SVR_GAME_LOSS:
+					// Make new string array to use as argument
+					String[] loseArguments = new String[2];
+					loseArguments[0] = keyValueMap.get(ArgumentKey.PLAYERONESCORE);
+					loseArguments[1] = keyValueMap.get(ArgumentKey.PLAYERTWOSCORE);
+					
+					clientController.notifyModel(Controller.END_ONLINE_GAME, loseArguments);
 					break;
 				case SVR_GAME:
 					break;
@@ -121,31 +143,6 @@ public class Client {
 				}
 			}
 		} 
-	}
-
-	// Send commands to server
-	public void consoleInput() {
-		String textToSend;
-
-		while (scanInput.hasNextLine() && !Thread.currentThread().isInterrupted()) {
-			try {
-				textToSend = scanInput.nextLine();
-
-				// Send the text to the server
-				listener.sendMessage(textToSend);
-
-				// Display text to the text area
-				System.out.println("Client: " + textToSend + "\n");
-
-				if (textToSend.equals("exit")) {
-					break;
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		scanInput.close();
 	}
 
 }

@@ -26,15 +26,16 @@ public class UserController extends Controller {
 			break;
 		case END_TICTACTOE_SINGLEPLAYER:
 			break;
-		case START_REVERSI_MULTIPLAYER:
-			gameModel.startGame(GameMode.ONLINE, GameType.REVERSI);
+		case START_ONLINE_GAME: // subscribe <gametype>
+			if(arguments[0].equals("reversi")) {
+				gameModel.subscribeToGame(GameType.REVERSI);
+			} 
+			if(arguments[0].equals("tictactoe")) {
+				gameModel.subscribeToGame(GameType.TICTACTOE);
+			}
 			break;
-		case START_TICTACTOE_MULTIPLAYER:
-			gameModel.startGame(GameMode.ONLINE, GameType.TICTACTOE);
-			break;
-		case END_REVERSI_MULTIPLAYER:
-			break;
-		case END_TICTACTOE_MULTIPLAYER:
+		case END_ONLINE_GAME:
+			gameModel.endGame(null);
 			break;
 		case LOG_IN:
 			// Argument represents a name
@@ -42,11 +43,18 @@ public class UserController extends Controller {
 			break;
 		case LOG_OUT:
 			break;
-		case CHALLENGE_PLAYER:
+		case CHALLENGE_PLAYER: // challenge <player name> followed by tictactoe or reversi
+			gameModel.challengePlayer(arguments);
 			break;
-		case SET_MOVE:
+		case SERVER_DID_MOVE:
 			// Argument should be a valid number from 0 to boardsize^2
-			gameModel.setMove(arguments[0], 1);
+			gameModel.setMove(arguments[0]);
+			break;
+		case ACCEPT_CHALLENGE:
+			gameModel.acceptChallenge(Integer.parseInt(arguments[0]));
+			break;
+		case REQUEST_PLAYERLIST:
+			gameModel.requestPlayerlist();
 			break;
 		default:
 			throw new IllegalStateException();

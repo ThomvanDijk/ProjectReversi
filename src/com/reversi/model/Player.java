@@ -1,7 +1,5 @@
 package com.reversi.model;
 
-import com.reversi.model.Game.GameType;
-
 public class Player {
 	
 	public enum PlayerType {
