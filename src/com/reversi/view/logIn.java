@@ -3,7 +3,6 @@ package com.reversi.view;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,41 +11,37 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 
-public class logIn {
+public class LogIn {
 
     // can be any Parent subclass:
-    private Stage stage;
-    private GridPane view;
+
+    public void Start (Stage menuStage) {
 
 
 
-    public logIn() {
+        //Buttons
+        Button buttonJoinLobbyReversie = new Button("Join lobby");
+        Button buttonDaaguitReversie = new Button("Daag uit");
+        Button buttonJoinLobbyKaas = new Button("Join Lobby");
+        Button buttonDaagUitKaas = new Button("Daag uit");
 
-        view = new GridPane();
-        this.stage = stage;
+        //Grid Panes
+        GridPane rootPane = new GridPane();
+        Scene scene = new Scene(rootPane);
+        GridPane gridPane = new GridPane();
+
+
 
         /** daag uit en join lobby knoppen voor reversi */
 
-        Button buttonLogIN = new Button("log in");
-        buttonLogIN.setStyle("-fx-padding: 10 20 10 20");
-        buttonLogIN.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                Parent view1 = new MainMenu().getView();
-                Scene scenemenu = new Scene(view1, 400, 400);
-                Stage stage = new Stage();
-                stage.setTitle("Mainmenu");
-                stage.initOwner(buttonLogIN.getScene().getWindow());
-                stage.setScene(scenemenu);
-                stage.show();
+        Button buttonLogIN = new Button("login");
+        buttonLogIN.setOnAction(e -> {
 
+            buttonDaagUitKaas.setDisable(false);
+            buttonJoinLobbyKaas.setDisable(false);
+            buttonJoinLobbyReversie.setDisable(false);
+            buttonDaaguitReversie.setDisable(false);
 
-                //view.getChildren().clear();
-
-                //logIn login = new logIn();
-                //login.getStage().close();
-
-            }
         });
 
 
@@ -55,14 +50,13 @@ public class logIn {
         buttonBoterKaas.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                Parent view = new boterKaas().getView();
-                Scene scenemenu = new Scene(view, 400, 400);
-                Stage stage1 = new Stage();
-                stage1.setTitle("Tic tac toe");
-                stage1.initOwner(buttonBoterKaas.getScene().getWindow());
-                stage1.setScene(scenemenu);
-                stage1.show();
+                GridPane reversi = new Reversi().getView();
+                reversi.setVisible(false);
 
+                GridPane view = new BoterKaas().getView();
+                view.setPrefSize(500, 500);
+                view.setGridLinesVisible(true);
+                rootPane.add(view, 1, 0, 50, 50);
             }
         });
 
@@ -72,48 +66,143 @@ public class logIn {
         buttonReversie.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                GridPane boterKaas = new BoterKaas().getView();
+                boterKaas.setVisible(false);
 
-                Parent view = new Reversi().getView();
-                Scene scenemenu = new Scene(view, 400, 400);
-                Stage stage1 = new Stage();
-                stage1.setTitle("Reversi");
-                stage1.initOwner(buttonReversie.getScene().getWindow());
-                stage1.setScene(scenemenu);
-                stage1.show();
-
+                GridPane view = new Reversi().getView();
+                view.setPrefSize(500, 500);
+                view.setGridLinesVisible(true);
+                rootPane.add(view, 1, 0, 50, 50);
             }
         });
 
 
+
+/** daag uit en join lobby knoppen voor reversi */
+        //Button join lobby reversie
+        buttonJoinLobbyReversie.setStyle("-fx-padding: 10 20 10 20");
+        buttonJoinLobbyReversie.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                GridPane boterKaas = new BoterKaas().getView();
+                boterKaas.setVisible(false);
+
+                GridPane view = new Reversi().getView();
+                view.setPrefSize(500, 500);
+                view.setGridLinesVisible(true);
+                rootPane.add(view, 1, 0, 50, 50);
+            }
+        });
+
+
+        //Button daaguit reversie
+        buttonDaaguitReversie.setStyle("-fx-padding: 10 20 10 20");
+        buttonDaaguitReversie.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                GridPane boterKaas = new BoterKaas().getView();
+                boterKaas.setVisible(false);
+
+                GridPane view = new Reversi().getView();
+                view.setPrefSize(500, 500);
+                view.setGridLinesVisible(true);
+                rootPane.add(view, 1, 0, 50, 50);
+            }
+        });
+
+
+/** daag uit en join lobby knoppen voor boter kaas en eieren */
+
+        //button to start boter kaas en eieren
+        buttonJoinLobbyKaas.setStyle("-fx-padding: 10 20 10 20");
+        buttonJoinLobbyKaas.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                GridPane reversi = new Reversi().getView();
+                reversi.setVisible(false);
+
+                GridPane view = new BoterKaas().getView();
+                view.setPrefSize(500, 500);
+                view.setGridLinesVisible(true);
+                rootPane.add(view, 1, 0, 50, 50);
+            }
+        });
+
+
+        //button to start boter kaas en eieren
+        buttonDaagUitKaas.setStyle("-fx-padding: 10 20 10 20");
+        buttonDaagUitKaas.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                GridPane reversi = new Reversi().getView();
+                reversi.setVisible(false);
+
+                GridPane view = new BoterKaas().getView();
+                view.setPrefSize(500, 500);
+                view.setGridLinesVisible(true);
+                rootPane.add(view, 1, 0, 50, 50);
+            }
+        });
+
+
+
+
+        //Setting title to the Stage
+        menuStage.setTitle("Mainmenu");
+        menuStage.setScene(scene);
+
+        //Displaying the contents of the stage
+        menuStage.show();
+
+
         //label
-        Label login = new Label("Vul je ip in om in te loggen");
+        Label login = new Label("Vul je ip in en je gebruikernaam om in te loggen");
         Label speeloffline = new Label("speel offline");
+        Label Reversi = new Label("Reversi");
+        Label Boterkaas = new Label("Tic tac toe");
+
 
         //textfield
-        TextField text = new TextField("IP adres");
-
-        //create gridpane
-        view.setPadding(new Insets(60));
-        view.setVgap(5);
-        view.setHgap(5);
-        view.add(buttonLogIN, 0, 2);
-        view.add(text, 0, 1 );
-        view.add(login, 0,0);
-        view.add(speeloffline, 0, 11);
-        view.add(buttonBoterKaas, 0, 12);
-        view.add(buttonReversie, 2, 12);
+        TextField ipadres = new TextField("IP adres");
+        ipadres.setMaxWidth(250);
+        TextField Gebruikersnaam = new TextField("Gebruikersnaam");
+        Gebruikersnaam.setMaxWidth(250);
 
 
-    }
+
+        //speel online en log in
+        gridPane.add(login, 0,0);
+        gridPane.add(ipadres, 0,1);
+        gridPane.add(Gebruikersnaam, 0,2);
+        gridPane.add(buttonLogIN, 0, 3 );
+
+        //Reversi online knoppen
+        gridPane.add(Reversi, 0, 15);
+        gridPane.add(buttonDaaguitReversie, 0, 16);
+        gridPane.add(buttonJoinLobbyReversie, 0, 17);
+        buttonDaaguitReversie.setDisable(true);
+        buttonJoinLobbyReversie.setDisable(true);
+
+        //Tic tac toe online knoppen
+        gridPane.add(Boterkaas, 1, 15);
+        gridPane.add(buttonDaagUitKaas, 1, 16);
+        gridPane.add(buttonJoinLobbyKaas, 1, 17);
+        buttonDaagUitKaas.setDisable(true);
+        buttonJoinLobbyKaas.setDisable(true);
+
+        //Speel offline knoppen
+        gridPane.add(speeloffline,0,45);
+        gridPane.add(buttonBoterKaas, 0,46);
+        gridPane.add(buttonReversie, 1, 46);
+        gridPane.setPadding(new Insets(60));
+        gridPane.setVgap(5);
+        gridPane.setHgap(5);
 
 
-    public Parent getView() {
-        return view ;
-    }
+        rootPane.getChildren().addAll(gridPane);
 
-    public Stage getStage(){
-        return stage;
     }
 
 
 }
+

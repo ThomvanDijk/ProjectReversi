@@ -23,7 +23,8 @@ public class Main {
 		// Make view and add a reference to controller 
 		// also pass args for javaFX
 		GameView view = new GameView(userController, args);
-		
+
+
 		// Add the view references to the model
 		model.setView(view);
 		model.setClient(client);
