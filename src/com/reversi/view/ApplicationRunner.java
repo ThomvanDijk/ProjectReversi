@@ -14,7 +14,6 @@ public class ApplicationRunner extends Application {
     public void init(){
 
         GameModel model = new GameModel();
-        System.out.println("bij start gekomen");
 
         // Give model to controllers because they must have a model
         ClientController clientController = new ClientController(model);
