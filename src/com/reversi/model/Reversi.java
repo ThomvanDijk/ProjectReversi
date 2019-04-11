@@ -347,14 +347,26 @@ public class Reversi extends Game {
 		while (validMove == false) {
 			// Check if there are any possible moves
 			if (!validMoves.isEmpty()) {
-				if (turn < 100) {
-					input = player.ai.boardWeighting(board, player);
-				} else if (turn < 49) {
-					input = player.ai.minimaxAvailableMoves(board, player, 0, 5, 0, 0);
-				} else {
-					input = player.ai.minimax(board, player, 0, 15, 0, 0);
-				}
-				// input = player.ai.boardWeighting(b, player);
+				/*ArrayList<ArrayList<Integer>> list = getValidMoves(board, player.id);
+				boolean goodMove = false;
+		    	for(int i = list.size() -1; i > -1; i--) {
+		    		int a = list.get(i).get(0) + (list.get(i).get(1) * 8);
+		    		int c = player.ai.areaValue(board, player)[a];
+		    		if (c > 50) {
+		    			goodMove = true;
+		    			input = a;
+		    		}
+		    	}
+		    	if (goodMove == false) {*/
+					if (turn < 100) {
+						input = player.ai.boardWeighting(board, player);
+					} else if (turn < 0) {
+						input = player.ai.minimaxAvailableMoves(board, player, 0, 5, 0, 0);
+					} else {
+						input = player.ai.minimax(board, player, 0, 17, 0, 0);
+					}
+					// input = player.ai.boardWeighting(b, player);
+		    	//}
 				System.out.println("PLayer: " + player.id + " (AI) is doing the following move: " + input);
 
 				validMove = setMove(input, validMoves, player.id, board);
@@ -449,7 +461,6 @@ public class Reversi extends Game {
 
 			System.out.print((col * b.getBoardSize()) + row + " ");
 			System.out.println();
-			System.out.println("Turn: "+turn);
 		}
 	}
 	

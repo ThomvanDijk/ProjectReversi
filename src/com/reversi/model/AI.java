@@ -54,106 +54,18 @@ public class AI {
 	}
 	
 	public int boardWeighting(Board b, Player player) {
-		int bestMoveValue = 0;
+		int bestMoveValue = -200;
 		int bestMove = -1;
 		
 		// haal mogelijke zetten op
 		ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
 		
-		// geef waardes aan elke zet
-		HashMap<Integer, Integer> boardValue = new HashMap<Integer, Integer>();
-		int i;
-		// hoeken
-		i = 100;
-		boardValue.put(0, i);
-		boardValue.put(7, i);
-		boardValue.put(56, i);
-		boardValue.put(63, i);
-		
-		// vakken horizontaal of verticaal naast hoeken
-		i = 2;
-		boardValue.put(1, i);
-		boardValue.put(6, i);
-		boardValue.put(8, i);
-		boardValue.put(15, i);
-		boardValue.put(48, i);
-		boardValue.put(55, i);
-		boardValue.put(57, i);
-		boardValue.put(62, i);
-		
-		// vakken diagonaal van hoeken
-		i = 1;
-		boardValue.put(9, i);
-		boardValue.put(14, i);
-		boardValue.put(49, i);
-		boardValue.put(54, i);
-		
-		// vakken 2 stappen horizontaal of verticaal naast hoeken
-		i = 8;
-		boardValue.put(2, i);
-		boardValue.put(5, i);
-		boardValue.put(16, i);
-		boardValue.put(23, i);
-		boardValue.put(40, i);
-		boardValue.put(47, i);
-		boardValue.put(58, i);
-		boardValue.put(61, i);
-		
-		// vakken 3 stappen horizontaal of verticaal naast hoeken
-		i = 6;
-		boardValue.put(3, i);
-		boardValue.put(4, i);
-		boardValue.put(24, i);
-		boardValue.put(31, i);
-		boardValue.put(32, i);
-		boardValue.put(39, i);
-		boardValue.put(59, i);
-		boardValue.put(60, i);
-		
-		// vakken 2 stappen diagonaal van hoeken		
-		i = 7;
-		boardValue.put(18, i);
-		boardValue.put(21, i);
-		boardValue.put(42, i);
-		boardValue.put(45, i);
-		
-		// vakken horizontaal of verticaal van de middelste 4 vakken
-		i = 5;
-		boardValue.put(19, i);
-		boardValue.put(20, i);
-		boardValue.put(26, i);
-		boardValue.put(29, i);
-		boardValue.put(34, i);
-		boardValue.put(37, i);
-		boardValue.put(43, i);
-		boardValue.put(44, i);
-		
-		// vakken 2 stappen horizontaal of verticaal van de middelste 4 vakken
-		i = 4;
-		boardValue.put(11, i);
-		boardValue.put(12, i);
-		boardValue.put(25, i);
-		boardValue.put(30, i);
-		boardValue.put(33, i);
-		boardValue.put(38, i);
-		boardValue.put(51, i);
-		boardValue.put(52, i);
-		
-		// Overig
-		i = 3;
-		boardValue.put(10, i);
-		boardValue.put(13, i);
-		boardValue.put(17, i);
-		boardValue.put(22, i);
-		boardValue.put(41, i);
-		boardValue.put(46, i);
-		boardValue.put(50, i);
-		boardValue.put(53, i);
-		
+		int[] boardValue = areaValue(b, player);
+		System.out.println(list);
 		// kies zet met hoogste waarde
-		for (i = 0; i < list.size(); i++) {
+		for (int i = 0; i < list.size(); i++) {
 			int move = list.get(i).get(0) + (list.get(i).get(1)*8);
-			int value = boardValue.get(move);
+			int value = boardValue[move];
 			if (value > bestMoveValue) {
 				bestMove = move;
 				bestMoveValue = value;
@@ -163,6 +75,176 @@ public class AI {
 		return bestMove;
 	}
 	
+	int[] areaValue(Board b, Player player) {
+		// geef waardes aan elke zet
+		int[] boardValue = new int[64];
+		
+		int[][] board = b.getBoard();
+		int i;
+		int j;
+		// hoeken
+		i = 100;
+		boardValue[0]= i;
+		boardValue[7] = i;
+		boardValue[56] = i;
+		boardValue[63] = i;
+		
+		// vakken horizontaal of verticaal naast hoeken
+		i = 2;
+		j = -99;
+		if (board[0][2] != player.opponent) {
+			boardValue[1] = i;
+		}
+		else {
+			boardValue[1] = j;
+		}
+		
+		if (board[0][5] != player.opponent) {
+			boardValue[6] = i;
+		}
+		else {
+			boardValue[6] = j;
+		}
+		
+		if (board[2][0] != player.opponent) {
+			boardValue[8] = i;
+		}
+		else {
+			boardValue[8] = j;
+		}
+		
+		if (board[2][7] != player.opponent) {
+			boardValue[15] = i;
+		}
+		else {
+			boardValue[15] = j;
+		}
+		
+		if (board[5][0] != player.opponent) {
+			boardValue[48] = i;
+		}
+		else {
+			boardValue[48] = j;
+		}
+		
+		if (board[5][7] != player.opponent) {
+			boardValue[55] = i;
+		}
+		else {
+			boardValue[55] = j;
+		}
+		
+		if (board[7][2] != player.opponent) {
+			boardValue[57] = i;
+		}
+		else {
+			boardValue[57] = j;
+		}
+		
+		if (board[7][5] != player.opponent) {
+			boardValue[62] = i;
+		}
+		else {
+			boardValue[62] = j;
+		}
+		
+		// vakken diagonaal van hoeken
+		i = -100;
+		j = 0;
+		
+		if (board[0][0] == 0) {
+			boardValue[9] = i;
+		}
+		else {
+			boardValue[9] = j;
+		}
+		
+		if (board[0][7] == 0) {
+			boardValue[14] = i;
+		}
+		else {
+			boardValue[14] = j;
+		}
+		
+		if (board[7][0] == 0) {
+			boardValue[49] = i;
+		}
+		else {
+			boardValue[49] = j;
+		}
+
+		if (board[7][7] == 0) {
+			boardValue[54] = i;
+		}
+		else {
+			boardValue[54] = j;
+		}
+		
+		// vakken 2 stappen horizontaal of verticaal naast hoeken
+		i = 8;
+		boardValue[2] = i;
+		boardValue[5] = i;
+		boardValue[16] = i;
+		boardValue[23] = i;
+		boardValue[40] = i;
+		boardValue[47] = i;
+		boardValue[58] = i;
+		boardValue[61] = i;
+		
+		// vakken 3 stappen horizontaal of verticaal naast hoeken
+		i = 6;
+		boardValue[3] = i;
+		boardValue[4] = i;
+		boardValue[24] = i;
+		boardValue[31] = i;
+		boardValue[32] = i;
+		boardValue[39] = i;
+		boardValue[59] = i;
+		boardValue[60] = i;
+		
+		// vakken 2 stappen diagonaal van hoeken		
+		i = 7;
+		boardValue[18] = i;
+		boardValue[21] = i;
+		boardValue[42] = i;
+		boardValue[45] = i;
+		
+		// vakken horizontaal of verticaal van de middelste 4 vakken
+		i = 5;
+		boardValue[19] = i;
+		boardValue[20] = i;
+		boardValue[26] = i;
+		boardValue[29] = i;
+		boardValue[34] = i;
+		boardValue[37] = i;
+		boardValue[43] = i;
+		boardValue[44] = i;
+		
+		// vakken 2 stappen horizontaal of verticaal van de middelste 4 vakken
+		i = 4;
+		boardValue[11] = i;
+		boardValue[12] = i;
+		boardValue[25] = i;
+		boardValue[30] = i;
+		boardValue[33] = i;
+		boardValue[38] = i;
+		boardValue[51] = i;
+		boardValue[52] = i;
+		
+		// Overig
+		i = 3;
+		boardValue[10] = i;
+		boardValue[13] = i;
+		boardValue[17] = i;
+		boardValue[22] = i;
+		boardValue[41] = i;
+		boardValue[46] = i;
+		boardValue[50] = i;
+		boardValue[53] = i;
+		
+		return boardValue;
+	}
+
 	public int minimaxAvailableMoves(Board b, Player player, int depth, int max_depth, int chosen_score, int chosen_move){
 		//int[][] backup = b.getBoard().clone();
 		int boardSize = b.getBoardSize();
@@ -175,12 +257,25 @@ public class AI {
 		
 	    if (depth == max_depth) {
 	        return 0;
-	    }
-	    
+	    }	    
 	    else {
 	    	int bestScore = 100;
 	    	int bestMove = -1;
+	    	
 	    	ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
+	    	ArrayList<ArrayList<Integer>> goodList = (ArrayList<ArrayList<Integer>>) list.clone();
+	    	
+	    	for(int i = list.size() -1; i > -1; i--) {
+	    		int a = list.get(i).get(0) + (list.get(i).get(1) * 8);
+	    		int c = areaValue(b, player)[a];
+	    		if (c < -50) {
+	    			goodList.remove(i);
+	    		}
+	    	}
+	    	if (goodList.size() > 0) {
+	    		list = goodList;
+	    	}
+	    	
 	        if (list.size() == 0) {
 	            return 0;
 	        }
