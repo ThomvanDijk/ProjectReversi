@@ -25,7 +25,7 @@ public class GameView extends View {
 		scanInput = new Scanner(System.in);
 		consoleInput = false;
 		
-		// Examples
+		// Examples notify Model
 		//userController.notifyModel(Controller.LOG_IN, new String[] {"Naam", "localhost"});
 		//userController.notifyModel(Controller.START_ONLINE_GAME, new String[] {"reversi"});
 		//userController.notifyModel(Controller.CHALLENGE_PLAYER, new String[] {"Naam", "reversi"});
