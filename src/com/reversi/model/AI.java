@@ -246,6 +246,20 @@ public class AI {
 	}
 
 	public int minimaxAvailableMoves(Board b, Player player, int depth, int max_depth, int chosen_score, int chosen_move){
+		
+		if (depth == 0) {
+		ArrayList<ArrayList<Integer>> nicelist = reversi.getValidMoves(b, player.id);
+			boolean goodMove = false;
+	    	for(int q = nicelist.size() -1; q > -1; q--) {
+	    		int a = nicelist.get(q).get(0) + (nicelist.get(q).get(1) * 8);
+	    		int c = player.ai.areaValue(b, player)[a];
+	    		if (c > 50) {
+	    			System.out.println(a);
+	    			return a;
+	    		}
+	    	}
+		}
+		
 		//int[][] backup = b.getBoard().clone();
 		int boardSize = b.getBoardSize();
 		int[][] currentBoard = b.getBoard();
@@ -284,7 +298,7 @@ public class AI {
 	                int move = list.get(i).get(0) + (list.get(i).get(1)*8);
 	                reversi.makeForwardMove(player, move, b);
 	                int score = reversi.getValidMoves(b, player.opponent).size();
-
+	
 	                Player nextPlayer;
 	                if (player.id == 1) {
 	                	nextPlayer = new Player(PlayerType.AI, 2);

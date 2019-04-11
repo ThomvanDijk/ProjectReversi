@@ -361,12 +361,12 @@ public class Reversi extends Game {
 		    		}
 		    	}
 		    	if (goodMove == false) {*/
-					if (turn < 48) {
+					if (turn < 2) {
 						input = player.ai.boardWeighting(board, player);
-					} else if (turn < 47) {
+					} else if (turn < 49) {
 						input = player.ai.minimaxAvailableMoves(board, player, 0, 5, 0, 0);
 					} else {
-						input = player.ai.minimax(board, player, 0, 12, 0, 0);
+						input = player.ai.minimax(board, player, 0, 11, 0, 0);
 					}
 					// input = player.ai.boardWeighting(b, player);
 		    	//}
