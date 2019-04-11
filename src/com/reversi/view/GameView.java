@@ -42,6 +42,7 @@ public class GameView extends View {
 
 		Window window = new Window();
 		window.rmain(args);
+
 	}
 	
 	/**
