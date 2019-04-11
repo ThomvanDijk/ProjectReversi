@@ -13,7 +13,7 @@ import com.reversi.model.Model;
 
 public abstract class View implements Runnable {
 
-	private final UserController userController;
+	public final UserController userController;
 
 	public View(UserController userController) {
 		this.userController = userController;

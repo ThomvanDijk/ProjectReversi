@@ -75,7 +75,7 @@ public class Reversi {
 		view.setHgap(5);
 
 	}
-
+ 
 	public Parent getView() {
 		return view;
 	}
