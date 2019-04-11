@@ -194,6 +194,10 @@ public class GameModel extends Model {
 	public void login(String[] arguments) {
 		client.login(arguments);
 	}
+	
+	public void requestPlayerlist() {
+		client.sendCommand("get playerlist");
+	}
 
 	// Challenge other player
 	public void challengePlayer(String[] arguments) {

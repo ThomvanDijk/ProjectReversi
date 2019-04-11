@@ -53,6 +53,9 @@ public class UserController extends Controller {
 		case ACCEPT_CHALLENGE:
 			gameModel.acceptChallenge(Integer.parseInt(arguments[0]));
 			break;
+		case REQUEST_PLAYERLIST:
+			gameModel.requestPlayerlist();
+			break;
 		default:
 			throw new IllegalStateException();
 		}

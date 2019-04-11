@@ -124,6 +124,10 @@ public class GameView extends View {
 					System.out.println("Wrong command! Try: accept <chal no>");
 				}
 			}
+			
+			if(commands[0].equals("players")) { // accept <chal no>
+				userController.notifyModel(Controller.REQUEST_PLAYERLIST, null);
+			}
 
 			if (textToSend.equals("exit")) {
 				break;
