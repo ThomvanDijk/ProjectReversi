@@ -1,12 +1,7 @@
 package com.reversi.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.reversi.controller.*;
 import com.reversi.model.Game.GameMode;
 import com.reversi.model.Game.GameType;
-import com.reversi.view.*;
 
 public class GameModel extends Model {
 
@@ -18,7 +13,7 @@ public class GameModel extends Model {
 	private GameMode currentGameMode;
 
 	public GameModel() {
-		reversi = new Reversi(GameMode.SINGLEPLAYER);
+		//reversi = new Reversi(GameMode.SINGLEPLAYER);
 		// currentGameType = GameType.NOGAME;
 	}
 

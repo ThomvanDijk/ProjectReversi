@@ -1,12 +1,11 @@
 package com.reversi.model;
 
+import com.reversi.model.Player.PlayerType;
+import com.reversi.view.ApplicationRunner;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
-
-import com.reversi.main.Main;
-import com.reversi.model.Player.PlayerType;
 
 public class Reversi extends Game {
 
@@ -431,7 +430,7 @@ public class Reversi extends Game {
 			}
 		}
 
-		if (!Main.running) {
+		if (!ApplicationRunner.running) {
 			scanInput.close();
 		}
 	}

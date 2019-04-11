@@ -14,7 +14,7 @@ import com.reversi.model.Model;
 
 public class GameView extends View {
 
-	public GameView(UserController userController, String[] args) {
+	public GameView(UserController userController) {
 		super(userController);
 		
 		// Below are all the current notification id's you can use as argument in the function
@@ -40,8 +40,6 @@ public class GameView extends View {
 		// Example
 		//userController.notifyModel(Controller.LOG_IN, new String[] {"Naam", "localhost"});
 
-		Window window = new Window(this);
-		window.rmain(args);
 
 	}
 	
