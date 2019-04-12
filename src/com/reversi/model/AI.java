@@ -53,6 +53,38 @@ public class AI {
 		return move;
 	}
 	
+	@SuppressWarnings("unlikely-arg-type")
+	public ArrayList<ArrayList<Integer>> removeBadMoves(ArrayList<ArrayList<Integer>> list, Board b, Player player) {
+		int boardSize = b.getBoardSize();
+		int[][] currentBoard = b.getBoard();
+		int[][] backup = new int[boardSize][boardSize];
+		for (int i = 0; i < boardSize; i++) {
+			backup[i] = Arrays.copyOf(currentBoard[i], currentBoard[i].length);
+		}
+		
+		// List with good moves
+		ArrayList<ArrayList<Integer>> newList = new ArrayList<ArrayList<Integer>>();
+		
+		boolean goodMoveLeft = false;
+		for (int i = 0; i < list.size(); i++) {
+			int move = list.get(i).get(0) + (list.get(i).get(1)*8);
+			//code
+			ArrayList<ArrayList<Integer>> opponentMoves = reversi.getValidMoves(reversi.makeForwardMove(player, move, b), player.opponent);
+			if ((opponentMoves.contains(0) || opponentMoves.contains(7) || opponentMoves.contains(56) || opponentMoves.contains(63)) == false) {
+				newList.add(list.get(i));
+				goodMoveLeft = true;
+			}
+			int[][] restore = new int[boardSize][boardSize];
+			for (int j = 0; j < boardSize; j++) {
+			  restore[j] = Arrays.copyOf(backup[j], backup[j].length);
+			}
+	        b.setBoard(restore);				
+		}
+		if (goodMoveLeft) {
+			return newList;
+		}
+		return list;
+	}
 	public int boardWeighting(Board b, Player player) {
 		int bestMoveValue = -200;
 		int bestMove = -1;
@@ -74,6 +106,32 @@ public class AI {
 		
 		return bestMove;
 	}
+	public int blockingMove(ArrayList<ArrayList<Integer>> list, Board b, Player player) {
+		int boardSize = b.getBoardSize();
+		int[][] currentBoard = b.getBoard();
+		int[][] backup = new int[boardSize][boardSize];
+		for (int i = 0; i < boardSize; i++) {
+			backup[i] = Arrays.copyOf(currentBoard[i], currentBoard[i].length);
+		}
+		 
+		boolean block = false;
+		for (int i = 0; i < list.size(); i++) {
+			int move = list.get(i).get(0) + (list.get(i).get(1)*8);
+			if(reversi.getValidMoves(reversi.makeForwardMove(player, move, b), player.opponent).size() == 0){
+				System.out.println("You got blocked, son");
+				block = true;
+			}
+			int[][] restore = new int[boardSize][boardSize];
+			for (int j = 0; j < boardSize; j++) {
+			  restore[j] = Arrays.copyOf(backup[j], backup[j].length);
+			}
+	        b.setBoard(restore);	
+			if (block == true) {
+				return move;
+			}
+		}
+		return -1;
+	}
 	
 	int[] areaValue(Board b, Player player) {
 		// geef waardes aan elke zet
@@ -82,6 +140,7 @@ public class AI {
 		int[][] board = b.getBoard();
 		int i;
 		int j;
+		int k;
 		// hoeken
 		i = 100;
 		boardValue[0]= i;
@@ -92,6 +151,19 @@ public class AI {
 		// vakken horizontaal of verticaal naast hoeken
 		i = 2;
 		j = -99;
+		k = 51;
+		
+		/*if (board[0][2] == player.opponent && board[0][3] == player.id) {
+			boardValue[1] = k;
+		}			
+		else
+		if (board[0][2] == player.id) {
+			boardValue[1] = i;
+		}
+		else {
+			boardValue[1] = j;
+		}*/
+		
 		if (board[0][2] != player.opponent) {
 			boardValue[1] = i;
 		}
@@ -254,7 +326,7 @@ public class AI {
 	    		int a = nicelist.get(q).get(0) + (nicelist.get(q).get(1) * 8);
 	    		int c = player.ai.areaValue(b, player)[a];
 	    		if (c > 50) {
-	    			System.out.println(a);
+	    			System.out.println("We got a good spot, boss: "+a);
 	    			return a;
 	    		}
 	    	}
@@ -277,7 +349,9 @@ public class AI {
 	    	int bestMove = -1;
 	    	
 	    	ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
-	    	ArrayList<ArrayList<Integer>> goodList = (ArrayList<ArrayList<Integer>>) list.clone();
+	    	ArrayList<ArrayList<Integer>> goodList = removeBadMoves(list, b, player);
+	    	//list = goodList;
+	    	/*ArrayList<ArrayList<Integer>> goodList = (ArrayList<ArrayList<Integer>>) list.clone();
 	    	
 	    	for(int i = list.size() -1; i > -1; i--) {
 	    		int a = list.get(i).get(0) + (list.get(i).get(1) * 8);
@@ -288,7 +362,7 @@ public class AI {
 	    	}
 	    	if (goodList.size() > 0) {
 	    		list = goodList;
-	    	}
+	    	}*/
 	    	
 	        if (list.size() == 0) {
 	            return 0;
