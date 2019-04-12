@@ -1,12 +1,11 @@
 package com.reversi.model;
 
+import com.reversi.model.Player.PlayerType;
+import com.reversi.view.ApplicationRunner;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
-
-import com.reversi.main.Main;
-import com.reversi.model.Player.PlayerType;
 
 public class Reversi extends Game {
 
@@ -255,12 +254,6 @@ public class Reversi extends Game {
 		if (!validMove) {
 			System.out.println("Move " + input + " is not a valid move!");
 
-			try {
-				TimeUnit.SECONDS.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
 			return false;
 		}
 
@@ -471,7 +464,7 @@ public class Reversi extends Game {
 		System.out.println("Turn: "+turn);
 		System.out.println();
 	}
-	
+
 	public void debugMove(int playerID, Board b) {
 		// Show updated score
 		System.out.println("Black: " + player2.getScore() + "  White: " + player1.getScore());

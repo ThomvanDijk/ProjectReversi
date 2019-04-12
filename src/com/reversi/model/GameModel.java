@@ -7,6 +7,7 @@ import java.util.Queue;
 
 import com.reversi.client.Parser.ArgumentKey;
 import com.reversi.client.Parser.ServerCommand;
+
 import com.reversi.model.Game.GameMode;
 import com.reversi.model.Game.GameType;
 import com.reversi.model.Player.PlayerType;
@@ -75,7 +76,7 @@ public class GameModel extends Model {
 			}
 		default:
 			throw new IllegalStateException();
-		}
+		} 
 
 		notifyView();
 	}

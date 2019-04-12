@@ -1,9 +1,9 @@
 package com.reversi.model;
 
-import java.util.Scanner;
-
-import com.reversi.main.*;
 import com.reversi.model.Player.PlayerType;
+import com.reversi.view.ApplicationRunner;
+
+import java.util.Scanner;
 
 public class TicTacToe extends Game {
 
@@ -160,7 +160,7 @@ public class TicTacToe extends Game {
 			}
 		}
 
-		if (!Main.running) {
+		if (!ApplicationRunner.running) {
 			scanInput.close();
 		}
 	}

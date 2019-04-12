@@ -17,56 +17,22 @@ import com.reversi.model.Model;
 public class GameView extends View {
 	
 	private Scanner scanInput;
-	private boolean running;
+	private boolean consoleInput;
 
-	public GameView(UserController userController, String[] args) {
+	public GameView(UserController userController) {
 		super(userController);
 	
 		scanInput = new Scanner(System.in);
-		running = true;
+		consoleInput = false;
 		
-		// Below are all the current notification id's you can use as argument in the function
-		// userController.notifyModel(notification_id, argument) The argument is used in case
-		// you give a new board position or when you login.
-		
-		// START_REVERSI_SINGLEPLAYER   
-		// START_TICTACTOE_SINGLEPLAYER 
-		// END_REVERSI_SINGLEPLAYER     
-		// END_TICTACTOE_SINGLEPLAYER   
-		// START_REVERSI_MULTIPLAYER    
-		// START_TICTACTOE_MULTIPLAYER  
-		// END_REVERSI_MULTIPLAYER      
-		// END_TICTACTOE_MULTIPLAYER    
-		// LOG_IN  						// args { "Name" }                                              
-		// LOG_OUT                                                                                      
-		// CHALLENGE_PLAYER		        // args { "PlayerName", "GameType" } GameType.REVERSI GameType.TICTACTOE
-		// SET_MOVE_REVERSI             // args { "Value between 0 and board^2" }                       
-		// SET_MOVE_TICTACTOE           // args { "Value between 0 and board^2" }                       
-
-		//userController.notifyModel(notification_id, arguments); // Argument is a String array
-		
-		// Example
+		// Examples notify Model
 		//userController.notifyModel(Controller.LOG_IN, new String[] {"Naam", "localhost"});
+		//userController.notifyModel(Controller.START_ONLINE_GAME, new String[] {"reversi"});
+		//userController.notifyModel(Controller.CHALLENGE_PLAYER, new String[] {"Naam", "reversi"});
+		//userController.notifyModel(Controller.ACCEPT_CHALLENGE, new String[] {"23"});
+		//userController.notifyModel(Controller.REQUEST_PLAYERLIST, null);
+	}
 
-		//Window window = new Window();
-		//window.rmain(args);
-	}
-	
-	/**
-	 * This run function is used to refresh pages
-	 *
-	 * @param model Model
-	 */
-	@Override
-	public void run() {
-		// If needed this function keeps running until the thread is terminated
-		
-		if(running) {
-			consoleInput();
-			running = false;
-		}
-	}
-	
 	/**
 	 * This update function must be used to get the new values from model (GameModel).
 	 * Update is only called when model had some changes.
@@ -79,8 +45,25 @@ public class GameView extends View {
 		
 		//gameModel.getBoard();
 		//gameModel.getPlayer(); returns a player array
+		//gameModel.getPlayerScores();
+		//hasChallenge(); // returns boolean
 	}
 	
+	/**
+	 * This run function is used to refresh pages
+	
+	 * @param model Model
+	 */
+	@Override
+	public void run() {
+		// If needed this function keeps running until the thread is terminated
+		
+		if(consoleInput) {
+			consoleInput();
+			consoleInput = false;
+		}
+	}
+
 	// Use console as input and alternative ui
 	public void consoleInput() {
 		String textToSend;
@@ -138,3 +121,4 @@ public class GameView extends View {
 	}
 
 }
+
