@@ -18,6 +18,7 @@ public abstract class Controller {
 	public static final int SERVER_DID_MOVE	             = 12; // args { "Value between 0 and board^2" }
 	public static final int ACCEPT_CHALLENGE             = 13; 
 	public static final int REQUEST_PLAYERLIST           = 14; 
+	public static final int CANCEL_CHALLENGE			 = 15;
 	
 	protected final Model model; // Can and must only have one model
 	

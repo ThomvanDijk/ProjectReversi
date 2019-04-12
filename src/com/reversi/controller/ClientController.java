@@ -39,6 +39,9 @@ public class ClientController extends Controller {
 		case PROCESS_NEW_CHALLENGE:
 			gameModel.addChallenge(arguments);
 			break;
+		case CANCEL_CHALLENGE:
+			gameModel.removeChallenge(Integer.parseInt(arguments[0]));
+			break;
 		default:
 			throw new IllegalStateException();
 		}

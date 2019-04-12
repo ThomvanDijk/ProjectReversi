@@ -19,11 +19,8 @@ public class Client {
 	private String currentPlayer;
 
 	public Client(ClientController clientController) {
-		this.clientController = clientController;
-		
+		this.clientController = clientController;		
 		parser = new Parser();
-		
-		currentPlayer = "";
 	}
 	
 	public void login(String[] arguments) {
@@ -86,55 +83,46 @@ public class Client {
 				//String value = entry.getValue();
 				 
 				HashMap<ArgumentKey, String> keyValueMap = parser.stringToMap(commandMap.get(entry.getKey()));
-				//System.out.println("Map key: " + entry.getKey()); 
-				//System.out.println("Key value map: " + keyValueMap);
+				
+				// Make string array to send to the controller
+				String[] arguments = new String[3];
 				
 				// Input the first element of the server command
 				switch(entry.getKey()) {
 				case SVR_GAME_MATCH:
-					// Make new string array to use as argument
-					String[] typeArguments = new String[2];
-					typeArguments[0] = keyValueMap.get(ArgumentKey.GAMETYPE);
-					
-					clientController.notifyModel(Controller.START_ONLINE_GAME, typeArguments);
+					arguments[0] = keyValueMap.get(ArgumentKey.GAMETYPE);
+					clientController.notifyModel(Controller.START_ONLINE_GAME, arguments);
 					break;
-				case SVR_GAME_YOURTURN: // Request a move from the ai
+				case SVR_GAME_YOURTURN: // Request a move from the AI
 					clientController.notifyModel(Controller.REQUEST_MOVE, null);
 					break;
 				case SVR_GAME_MOVE: // Other player did a move
-					// Make new string array to use as argument
-					String[] moveArguments = new String[2];
-					moveArguments[0] = keyValueMap.get(ArgumentKey.MOVE);
+					arguments[0] = keyValueMap.get(ArgumentKey.MOVE);
 					
 					// Only notifyModel if it is not our own move!
 					if(!keyValueMap.get(ArgumentKey.PLAYER).equals(currentPlayer)) {
-						clientController.notifyModel(Controller.SERVER_DID_MOVE, moveArguments);
+						clientController.notifyModel(Controller.SERVER_DID_MOVE, arguments);
 					}
 					break;
 				case SVR_GAME_CHALLENGE:
-					// Make new string array to use as argument
-					String[] chalArguments = new String[3];
-					chalArguments[0] = keyValueMap.get(ArgumentKey.CHALLENGER);
-					chalArguments[1] = keyValueMap.get(ArgumentKey.CHALLENGENUMBER);
-					chalArguments[2] = keyValueMap.get(ArgumentKey.GAMETYPE);
-					
-					clientController.notifyModel(Controller.PROCESS_NEW_CHALLENGE, chalArguments);
+					arguments[0] = keyValueMap.get(ArgumentKey.CHALLENGER);
+					arguments[1] = keyValueMap.get(ArgumentKey.CHALLENGENUMBER);
+					arguments[2] = keyValueMap.get(ArgumentKey.GAMETYPE);		
+					clientController.notifyModel(Controller.PROCESS_NEW_CHALLENGE, arguments);					
+					break;
+				case SVR_GAME_CHALLENGE_CANCELLED:
+					arguments[0] = keyValueMap.get(ArgumentKey.CHALLENGENUMBER);
+					clientController.notifyModel(Controller.CANCEL_CHALLENGE, arguments);
 					break;
 				case SVR_GAME_WIN:
-					// Make new string array to use as argument
-					String[] winArguments = new String[2];
-					winArguments[0] = keyValueMap.get(ArgumentKey.PLAYERONESCORE);
-					winArguments[1] = keyValueMap.get(ArgumentKey.PLAYERTWOSCORE);
-					
-					clientController.notifyModel(Controller.END_ONLINE_GAME, winArguments);
+					arguments[0] = keyValueMap.get(ArgumentKey.PLAYERONESCORE);
+					arguments[1] = keyValueMap.get(ArgumentKey.PLAYERTWOSCORE);
+					clientController.notifyModel(Controller.END_ONLINE_GAME, arguments);
 					break;
 				case SVR_GAME_LOSS:
-					// Make new string array to use as argument
-					String[] loseArguments = new String[2];
-					loseArguments[0] = keyValueMap.get(ArgumentKey.PLAYERONESCORE);
-					loseArguments[1] = keyValueMap.get(ArgumentKey.PLAYERTWOSCORE);
-					
-					clientController.notifyModel(Controller.END_ONLINE_GAME, loseArguments);
+					arguments[0] = keyValueMap.get(ArgumentKey.PLAYERONESCORE);
+					arguments[1] = keyValueMap.get(ArgumentKey.PLAYERTWOSCORE);
+					clientController.notifyModel(Controller.END_ONLINE_GAME, arguments);
 					break;
 				case SVR_GAME:
 					break;
