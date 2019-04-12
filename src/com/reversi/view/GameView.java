@@ -14,16 +14,30 @@ import com.reversi.controller.*;
 import com.reversi.model.GameModel;
 import com.reversi.model.Model;
 
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+
 public class GameView extends View {
 	
 	private Scanner scanInput;
 	public static boolean consoleInput;
+	
+	private GridPane boardPane;
 
-	public GameView(UserController userController) {
+	public GameView(UserController userController, StackPane gamePane) {
 		super(userController);
 	
 		scanInput = new Scanner(System.in);
 		consoleInput = false;
+		
+		boardPane = new GridPane();
+		boardPane.setPadding(new Insets(10, 10, 10, 10));
 		
 		// Examples notify Model
 		//userController.notifyModel(Controller.LOG_IN, new String[] {"Naam", "localhost"});
@@ -31,6 +45,12 @@ public class GameView extends View {
 		//userController.notifyModel(Controller.CHALLENGE_PLAYER, new String[] {"Naam", "reversi"});
 		//userController.notifyModel(Controller.ACCEPT_CHALLENGE, new String[] {"23"});
 		//userController.notifyModel(Controller.REQUEST_PLAYERLIST, null);
+		
+		int[][] board = new int[8][8];
+		
+		showBoard(board);
+		
+		gamePane.getChildren().add(boardPane);
 	}
 
 	/**
@@ -43,10 +63,43 @@ public class GameView extends View {
 	protected void update(Model model) {
 		GameModel gameModel = (GameModel) model; // cast
 		
-		//gameModel.getBoard();
+		Platform.runLater(() -> showBoard(gameModel.getBoard()));
 		//gameModel.getPlayer(); returns a player array
 		//gameModel.getPlayerScores();
 		//hasChallenge(); // returns boolean
+	}
+	
+	public void showBoard(int[][] board) {
+		int spacing = 2;
+		int squareSize = (Main.SCREEN_WIDTH / board.length) - spacing - 45;
+		
+		boardPane.getChildren().clear();
+		
+		for(int col = 0; col < board.length; col++) {
+			for(int row = 0; row < board[0].length; row++) {
+				Button backgroundSquare = new Button();
+				backgroundSquare.setPrefWidth(squareSize);
+				backgroundSquare.setPrefHeight(squareSize);
+				backgroundSquare.setStyle("-fx-background-color: darkseagreen; -fx-text-fill: white;");
+				
+				Pane squareHolder = new Pane(backgroundSquare);
+				squareHolder.setPadding(new Insets(spacing));
+				
+				boardPane.add(squareHolder, row, col);
+	
+				if(board[col][row] == 1) {
+					Circle blackCircle = new Circle(0, 0, squareSize / 2);
+					boardPane.add(blackCircle, row, col);
+				}
+				
+				if(board[col][row] == 2) {
+					Circle whiteCircle = new Circle(0, 0, squareSize / 2);
+					whiteCircle.setFill(Color.WHITE);
+					boardPane.add(whiteCircle, row, col);
+				}			
+			}
+		}
+		
 	}
 
 	// Use console as input and alternative ui

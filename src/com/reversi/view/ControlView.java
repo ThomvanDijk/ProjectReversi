@@ -12,17 +12,30 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 
 public class ControlView extends View {
+	
+	private Button subReversiButton;
 
-	public ControlView(UserController userController, Pane controlPane) {
+	public ControlView(UserController userController, StackPane controlPane) {
 		super(userController);
+		
+		subReversiButton = new Button("Subscribe Reversi");
+		subReversiButton.setDisable(true);
 
 		GridPane gridPane = new GridPane();
 		gridPane.setAlignment(Pos.TOP_CENTER);
 
 		// Create all the necessities to login
 		createLogin(gridPane);
+
+		//subReversiButton.setStyle("-fx-padding: 10 20 10 20");
+		subReversiButton.setOnAction(e -> {
+			userController.notifyModel(Controller.SUBSCRIBE_TO_REVERSI, null);
+		});
+		
+		gridPane.add(subReversiButton, 0, 3);
 
 		controlPane.getChildren().add(gridPane);
 	}
@@ -51,6 +64,7 @@ public class ControlView extends View {
 		loginButton.setOnAction(e -> {
 			userController.notifyModel(Controller.LOG_IN,
 					new String[] { usernameField.getText(), addressField.getText() });
+			subReversiButton.setDisable(false);
 		});
 
 		HBox alignButtonRight = new HBox();

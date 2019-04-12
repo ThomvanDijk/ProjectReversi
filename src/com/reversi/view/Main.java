@@ -17,8 +17,8 @@ public class Main extends Application {
 
 	public static boolean running;
 	
-	private final int SCREEN_WIDTH = 900;
-	private final int SCREEN_HEIGHT = 600;
+	public static final int SCREEN_WIDTH = 900;
+	public static final int SCREEN_HEIGHT = 600;
 
 	private GameModel model;
 	private UserController userController;
@@ -64,19 +64,20 @@ public class Main extends Application {
 		hBox = new HBox();
 		
 		gamePane = new StackPane();
-		gamePane.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+		//gamePane.setStyle("-fx-background-color: red; -fx-text-fill: white;");
 		gamePane.setPadding(new Insets(10, 10, 10, 10));
-		gamePane.getChildren().add(new Rectangle(100, 100, 100, 100));
 		gamePane.setMinWidth(SCREEN_HEIGHT); // Make squared
 		
 		controlPane = new StackPane();
-		controlPane.setStyle("-fx-background-color: green; -fx-text-fill: white;");
+		controlPane.setStyle("-fx-background-color: lightgray; -fx-text-fill: white;");
 		controlPane.setPadding(new Insets(10, 10, 10, 10));
 		controlPane.prefWidthProperty().bind(hBox.widthProperty());
 
+		GameView gameView = new GameView(userController, gamePane);
 		ControlView controlView = new ControlView(userController, controlPane);
 		
 		// Add the view references to the model
+		model.addView(gameView);
 		model.addView(controlView);
 
 //		HBox.setMargin(gamePane, new Insets(20, 20, 20, 20)); 
