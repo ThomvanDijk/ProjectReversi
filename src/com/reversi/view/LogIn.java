@@ -15,6 +15,8 @@ import javafx.stage.Stage;
 public class LogIn {
 
 	private UserController userController;
+	private GridPane reversi;
+	private GridPane boterKaas;
 
 	public LogIn(UserController userController) {
 		this.userController = userController;
@@ -64,15 +66,15 @@ public class LogIn {
 		// Button join lobby reversie
 		buttonJoinLobbyReversie.setStyle("-fx-padding: 10 20 10 20");
 		buttonJoinLobbyReversie.setOnAction(e -> {
-			GridPane boterKaas = new BoterKaas().getView();
-			boterKaas.setVisible(false);
-
-			GridPane view = new Reversi().getView();
-			view.setPrefSize(500, 500);
-			view.setGridLinesVisible(true);
-			rootPane.add(view, 1, 0, 50, 50);
+			// Set het andere board op false
 
 			userController.notifyModel(Controller.START_ONLINE_GAME, new String[] { "reversi" });
+
+			this.reversi = new Reversi().getView();
+			reversi.setPrefSize(500, 500);
+			reversi.setGridLinesVisible(true);
+			rootPane.add(reversi, 1, 0, 50, 50);
+
 		});
 
 		// Button daaguit reversie
@@ -92,14 +94,13 @@ public class LogIn {
 		// button to start boter kaas en eieren
 		buttonJoinLobbyKaas.setStyle("-fx-padding: 10 20 10 20");
 		buttonJoinLobbyKaas.setOnAction(e -> {
-				GridPane reversi = new Reversi().getView();
-				reversi.setVisible(false);
+				// Set het andere board op false
 
-				GridPane view = new BoterKaas().getView();
+				this.boterKaas = new BoterKaas().getView();
 
-				view.setPrefSize(500, 500);
-				view.setGridLinesVisible(true);
-				rootPane.add(view, 1, 0, 50, 50);
+				boterKaas.setPrefSize(500, 500);
+				boterKaas.setGridLinesVisible(true);
+				rootPane.add(boterKaas, 1, 0, 50, 50);
 				userController.notifyModel(Controller.START_ONLINE_GAME, new String[] { "tictactoe" });
 		});
 

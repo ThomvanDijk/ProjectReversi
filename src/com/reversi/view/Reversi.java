@@ -1,5 +1,8 @@
 package com.reversi.view;
 
+import com.reversi.model.GameModel;
+import com.reversi.model.Model;
+
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Control;
@@ -8,13 +11,15 @@ import javafx.scene.layout.*;
 public class Reversi {
 
     private GridPane view ;
+    private GameModel gameModel;
+
 
     public Reversi(){
-
+    	this.gameModel = new GameModel();
         view = new GridPane();
 
         //draw board
-        int[][] boardReversi = new int[8][8];
+        int[][] boardReversi = gameModel.getBoard();
         char ch = '1';
         for (int i = 0; i < 8; i++){
             for (int j = 0; j < 8; j++) {
@@ -46,6 +51,10 @@ public class Reversi {
         }
 
 
+    }
+    
+    public void notify(Model model) {
+    	
     }
 
     public GridPane getView() {
