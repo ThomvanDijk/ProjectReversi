@@ -78,7 +78,7 @@ public class GameModel extends Model {
 			throw new IllegalStateException();
 		} 
 
-		notifyView();
+		//notifyView();
 	}
 
 	public void endGame(String[] arguments) {

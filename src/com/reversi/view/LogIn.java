@@ -70,9 +70,9 @@ public class LogIn {
 
 			userController.notifyModel(Controller.START_ONLINE_GAME, new String[] { "reversi" });
 
-			this.reversi = new GameView(userController).getView();
-			reversi.setGridLinesVisible(true);
-			rootPane.add(reversi, 1, 0, 50, 50);
+//			this.reversi = new GameView(userController).getView();
+//			reversi.setGridLinesVisible(true);
+//			rootPane.add(reversi, 1, 0, 50, 50);
 
 		});
 
