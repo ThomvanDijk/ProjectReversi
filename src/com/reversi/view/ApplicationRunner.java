@@ -11,9 +11,10 @@ public class ApplicationRunner extends Application {
 
     public static boolean running;
 
-    public void init(){
+    GameModel model = new GameModel();
 
-        GameModel model = new GameModel();
+
+    public void init(){
 
         // Give model to controllers because they must have a model
         ClientController clientController = new ClientController(model);
@@ -38,8 +39,9 @@ public class ApplicationRunner extends Application {
 
 
     public void start(Stage primaryStage) {
+        UserController userController = new UserController(model);
 
-		LogIn login = new LogIn();
+		LogIn login = new LogIn(userController);
         login.Start(primaryStage);
         primaryStage.show();
 

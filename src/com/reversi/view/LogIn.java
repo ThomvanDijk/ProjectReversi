@@ -1,5 +1,7 @@
 package com.reversi.view;
 
+import com.reversi.controller.Controller;
+import com.reversi.controller.UserController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -12,6 +14,12 @@ import javafx.stage.Stage;
 
 
 public class LogIn {
+
+    private UserController userController;
+
+    public LogIn(UserController userController){
+        this.userController = userController;
+    }
 	
 
     // can be any Parent subclass:
@@ -33,19 +41,7 @@ public class LogIn {
 
 
 
-        /** daag uit en join lobby knoppen voor reversi */
-
-        Button buttonLogIN = new Button("login");
-        buttonLogIN.setOnAction(e -> {
-
-            buttonDaagUitKaas.setDisable(false);
-            buttonJoinLobbyKaas.setDisable(false);
-            buttonJoinLobbyReversie.setDisable(false);
-            buttonDaaguitReversie.setDisable(false);
-
-        });
-
-
+        /** offline knoppen voor boter kaas  en reversi */
         Button buttonBoterKaas = new Button("Boter Kaas en eieren");
         buttonBoterKaas.setStyle("-fx-padding: 10 20 10 20");
         buttonBoterKaas.setOnAction(new EventHandler<ActionEvent>() {
@@ -112,7 +108,7 @@ public class LogIn {
         });
 
 
-/** daag uit en join lobby knoppen voor boter kaas en eieren */
+/** daag uit en join lobby voor boterkaas */
 
         //button to start boter kaas en eieren
         buttonJoinLobbyKaas.setStyle("-fx-padding: 10 20 10 20");
@@ -122,7 +118,10 @@ public class LogIn {
                 GridPane reversi = new Reversi().getView();
                 reversi.setVisible(false);
 
+
                 GridPane view = new BoterKaas().getView();
+
+
                 view.setPrefSize(500, 500);
                 view.setGridLinesVisible(true);
                 rootPane.add(view, 1, 0, 50, 50);
@@ -174,11 +173,15 @@ public class LogIn {
         Gebruikersnaam.setMaxWidth(200);
         Gebruikersnaam.setPromptText("Gebruikersnaam");
 
+        Button buttonLogIN = new Button("login");
         
-        
+        //button log in
         buttonLogIN.setOnAction(e -> {
         	String username = Gebruikersnaam.getText();
         	String ipAdres = ipadres.getText();
+
+            userController.notifyModel(Controller.LOG_IN, new String[] {username, ipAdres});
+
 
             buttonDaagUitKaas.setDisable(false);
             buttonJoinLobbyKaas.setDisable(false);
