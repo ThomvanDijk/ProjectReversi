@@ -179,9 +179,7 @@ public class LogIn {
         buttonLogIN.setOnAction(e -> {
         	String username = Gebruikersnaam.getText();
         	String ipAdres = ipadres.getText();
-
             userController.notifyModel(Controller.LOG_IN, new String[] {username, ipAdres});
-
 
             buttonDaagUitKaas.setDisable(false);
             buttonJoinLobbyKaas.setDisable(false);
