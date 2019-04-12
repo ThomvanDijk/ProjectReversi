@@ -1,5 +1,6 @@
 package com.reversi.view;
 
+import com.reversi.controller.UserController;
 import com.reversi.model.GameModel;
 import com.reversi.model.Model;
 
@@ -12,10 +13,14 @@ public class Reversi {
 
     private GridPane view ;
     private GameModel gameModel;
+    private GameView gameView;
+    private UserController userController;
 
 
     public Reversi(){
     	this.gameModel = new GameModel();
+    	this.userController = new UserController(gameModel);
+    	this.gameView = new GameView(userController);
         view = new GridPane();
 
         //draw board
