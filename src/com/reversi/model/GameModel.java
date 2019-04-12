@@ -6,20 +6,24 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import com.reversi.client.Parser.ArgumentKey;
-import com.reversi.client.Parser.ServerCommand;
 
 import com.reversi.model.Game.GameMode;
 import com.reversi.model.Game.GameType;
 import com.reversi.model.Player.PlayerType;
 
+/**
+ * This class manages the different games that are being played.
+ * 
+ * @author Thom van Dijk
+ * @version 1.0
+ * @since 12-04-2019
+ */
 public class GameModel extends Model {
 
-	private boolean running;
 	private TicTacToe ticTacToe;
 	private Reversi reversi;
-	
-	private int player1Score;
-	private int player2Score;
+
+	private int[] playerScores;
 
 	private GameType currentGameType;
 	private GameMode currentGameMode;
@@ -29,16 +33,15 @@ public class GameModel extends Model {
 	public GameModel() {
 		ticTacToe = null;
 		reversi = null;
-		
-		player1Score = 0;
-		player2Score = 0;
+
+		playerScores = new int[2];
 
 		currentGameMode = null;
 		currentGameType = null;
 
 		challenges = new LinkedList<>();
 	}
-	
+
 	public void subscribeToGame(GameType gameType) {
 		switch (gameType) {
 		case REVERSI:
@@ -62,7 +65,7 @@ public class GameModel extends Model {
 				// reversi = new Reversi(GameMode.SINGLEPLAYER);
 				break;
 			} else {
-				// reversi = new Reversi(GameMode.ONLINE);				
+				// reversi = new Reversi(GameMode.ONLINE);
 				break;
 			}
 		case TICTACTOE:
@@ -76,15 +79,15 @@ public class GameModel extends Model {
 			}
 		default:
 			throw new IllegalStateException();
-		} 
+		}
 
 		notifyView();
 	}
 
 	public void endGame(String[] arguments) {
-		if(arguments != null) {
-			player1Score = Integer.parseInt(arguments[0]);
-			player2Score = Integer.parseInt(arguments[1]);
+		if (arguments != null) {
+			playerScores[0] = Integer.parseInt(arguments[0]);
+			playerScores[1] = Integer.parseInt(arguments[1]);
 		}
 
 		currentGameMode = null;
@@ -150,13 +153,13 @@ public class GameModel extends Model {
 				}
 				try {
 					Player[] players = reversi.getPlayers();
-					if(players[0].hasTurn()) {
+					if (players[0].hasTurn()) {
 						int move = reversi.makeAIMove(players[0]);
 						if (move >= 0) {
 							client.sendCommand("move " + move);
 						}
 					} else {
-						
+
 						int move = reversi.makeAIMove(players[1]);
 						if (move >= 0) {
 							client.sendCommand("move " + move);
@@ -190,7 +193,7 @@ public class GameModel extends Model {
 	public void login(String[] arguments) {
 		client.login(arguments);
 	}
-	
+
 	public void requestPlayerlist() {
 		client.sendCommand("get playerlist");
 	}
@@ -233,8 +236,14 @@ public class GameModel extends Model {
 		notifyView();
 	}
 
-	// Add new challenge to a queue of challenges
-	public void addNewServerChallenge(String[] arguments) {
+	/**
+	 * This function creates a map containing three entries and adds it to the
+	 * challenges queue.
+	 * 
+	 * @param arguments A string array containing three elements and in this order:
+	 *                  the challenger, challenge number and game type.
+	 */
+	public void addChallenge(String[] arguments) {
 		HashMap<ArgumentKey, String> map = new HashMap<>();
 
 		map.put(ArgumentKey.CHALLENGER, arguments[0]);
@@ -245,20 +254,29 @@ public class GameModel extends Model {
 		notifyView();
 	}
 
+	/**
+	 * The challenges queue contains all the requested challenges.
+	 * 
+	 * @return The whole challenges queue.
+	 */
+	public Queue<HashMap<ArgumentKey, String>> getChallenges() {
+		return challenges;
+	}
 
-	// Return the head of the queue
-	public HashMap<ArgumentKey, String> getChallenge() {
+	/**
+	 * The challenges queue contains all the requested challenges.
+	 * 
+	 * @return The challenge at the head of the queue.
+	 */
+	public HashMap<ArgumentKey, String> getFirstChallenge() {
 		return challenges.peek();
 	}
 
-	// Returns true if model has a challenge
-	public boolean hasChallenge() {
-		if (!challenges.isEmpty()) {
-			return true;
-		}
-		return false;
-	}
-
+	/**
+	 * Returns current game board.
+	 * 
+	 * @return The currently used board as 2D int array.
+	 */
 	public int[][] getBoard() {
 		switch (currentGameType) {
 		case REVERSI:
@@ -270,11 +288,13 @@ public class GameModel extends Model {
 		}
 	}
 
+	/**
+	 * Element[0] is player 1 and element[1] is player 2.
+	 * 
+	 * @return Integer array of player scores with size 2.
+	 */
 	public int[] getPlayerScores() {
-		int[] scores = new int[2];
-		scores[0] = player1Score;
-		scores[1] = player2Score;
-		return scores;
+		return playerScores;
 	}
 
 }

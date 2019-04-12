@@ -1,12 +1,3 @@
-/**
-* This class converts strings from the server to workable lists, maps or strings
-* and converts the message header to a valid command
-* 
-* @author Thom van Dijk
-* @version 1.0
-* @since 08-04-2019
-*/
-
 package com.reversi.client;
 
 import java.util.ArrayList;
@@ -16,6 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+/**
+ * This class converts strings from the server to workable lists, maps or
+ * strings and converts the message header to a valid command.
+ * 
+ * @author Thom van Dijk
+ * @version 1.0
+ * @since 08-04-2019
+ */
 public class Parser {
 	
 	public enum ServerCommand {
