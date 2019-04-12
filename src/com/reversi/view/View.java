@@ -11,6 +11,8 @@ package com.reversi.view;
 import com.reversi.controller.UserController;
 import com.reversi.model.Model;
 
+import javafx.application.Platform;
+
 public abstract class View {
 
 	protected final UserController userController;
@@ -25,7 +27,7 @@ public abstract class View {
 	 * @param model Model
 	 */
 	public void notify(Model model) {
-		update(model);
+		Platform.runLater(() -> update(model));
 	}
 
 	/**

@@ -63,7 +63,7 @@ public class GameView extends View {
 	protected void update(Model model) {
 		GameModel gameModel = (GameModel) model; // cast
 		
-		Platform.runLater(() -> showBoard(gameModel.getBoard()));
+		showBoard(gameModel.getBoard());
 		//gameModel.getPlayer(); returns a player array
 		//gameModel.getPlayerScores();
 		//hasChallenge(); // returns boolean
