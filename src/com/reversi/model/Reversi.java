@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-import com.reversi.main.Main;
 import com.reversi.model.Player.PlayerType;
 
 public class Reversi extends Game {
