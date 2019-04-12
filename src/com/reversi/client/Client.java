@@ -16,7 +16,7 @@ public class Client {
 	private Listener listener;
 	private Parser parser;
 
-	private String currentPlayer;
+	private String loginName;
 
 	public Client(ClientController clientController) {
 		this.clientController = clientController;		
@@ -24,7 +24,7 @@ public class Client {
 	}
 	
 	public void login(String[] arguments) {
-		currentPlayer = arguments[0];
+		loginName = arguments[0];
 		arguments[0] = "login " + arguments[0];
 		
 		listener = new Listener(this, arguments[1]);
@@ -90,7 +90,9 @@ public class Client {
 				// Input the first element of the server command
 				switch(entry.getKey()) {
 				case SVR_GAME_MATCH:
-					arguments[0] = keyValueMap.get(ArgumentKey.GAMETYPE);
+					arguments[0] = keyValueMap.get(ArgumentKey.PLAYERTOMOVE);
+					arguments[1]= keyValueMap.get(ArgumentKey.OPPONENT);
+					arguments[2]= keyValueMap.get(ArgumentKey.GAMETYPE);
 					clientController.notifyModel(Controller.START_ONLINE_GAME, arguments);
 					break;
 				case SVR_GAME_YOURTURN: // Request a move from the AI
@@ -100,7 +102,7 @@ public class Client {
 					arguments[0] = keyValueMap.get(ArgumentKey.MOVE);
 					
 					// Only notifyModel if it is not our own move!
-					if(!keyValueMap.get(ArgumentKey.PLAYER).equals(currentPlayer)) {
+					if(!keyValueMap.get(ArgumentKey.PLAYER).equals(loginName)) {
 						clientController.notifyModel(Controller.SERVER_DID_MOVE, arguments);
 					}
 					break;
@@ -117,12 +119,12 @@ public class Client {
 				case SVR_GAME_WIN:
 					arguments[0] = keyValueMap.get(ArgumentKey.PLAYERONESCORE);
 					arguments[1] = keyValueMap.get(ArgumentKey.PLAYERTWOSCORE);
-					clientController.notifyModel(Controller.END_ONLINE_GAME, arguments);
+					clientController.notifyModel(Controller.END_GAME, arguments);
 					break;
 				case SVR_GAME_LOSS:
 					arguments[0] = keyValueMap.get(ArgumentKey.PLAYERONESCORE);
 					arguments[1] = keyValueMap.get(ArgumentKey.PLAYERTWOSCORE);
-					clientController.notifyModel(Controller.END_ONLINE_GAME, arguments);
+					clientController.notifyModel(Controller.END_GAME, arguments);
 					break;
 				case SVR_GAME:
 					break;

@@ -86,7 +86,13 @@ public class GameView extends View {
 			
 			if(commands[0].equals("sub")) { // sub tictactoe or reversi
 				if(commands[1] != null) {
-					userController.notifyModel(Controller.START_ONLINE_GAME, new String[] {commands[1]});
+					if(commands[1].equals("reversi")) {
+						userController.notifyModel(Controller.SUBSCRIBE_TO_REVERSI, null);
+					} else if(commands[1].equals("tictactoe")) {
+						userController.notifyModel(Controller.SUBSCRIBE_TO_TICTACTOE, null);
+					} else {
+						
+					}
 				} else {
 					System.out.println("Wrong command! Try: sub tictactoe or reversi");
 				}

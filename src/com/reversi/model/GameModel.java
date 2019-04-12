@@ -29,6 +29,9 @@ public class GameModel extends Model {
 	private GameMode currentGameMode;
 
 	private Queue<HashMap<ArgumentKey, String>> challenges;
+	
+	private String loginName;
+	private String opponentName;
 
 	public GameModel() {
 		ticTacToe = null;
@@ -55,17 +58,29 @@ public class GameModel extends Model {
 		}
 	}
 
-	public void startGame(GameMode gameMode, GameType gameType) {
+	public void startGame(GameMode gameMode, GameType gameType, String[] players) {
+		PlayerType startPlayer = PlayerType.AI; // Our AI
+		
 		currentGameMode = gameMode;
 		currentGameType = gameType;
+		
+		// If players is null then it is a singleplayer game
+		if(players != null) {
+			opponentName = players[1];
+			
+			// Check if opponent is also the player to move
+			if(opponentName.equals(players[0])) {
+				startPlayer = PlayerType.SERVER;
+			}
+		}
 
 		switch (gameType) {
 		case REVERSI:
 			if (gameMode.equals(GameMode.SINGLEPLAYER)) {
-				// reversi = new Reversi(GameMode.SINGLEPLAYER);
+				reversi = new Reversi(GameMode.SINGLEPLAYER, null);
 				break;
 			} else {
-				// reversi = new Reversi(GameMode.ONLINE);
+				reversi = new Reversi(GameMode.ONLINE, startPlayer);
 				break;
 			}
 		case TICTACTOE:
@@ -84,6 +99,7 @@ public class GameModel extends Model {
 		notifyView();
 	}
 
+	// Arguments from server giving the final points
 	public void endGame(String[] arguments) {
 		if (arguments != null) {
 			playerScores[0] = Integer.parseInt(arguments[0]);
@@ -105,11 +121,6 @@ public class GameModel extends Model {
 		switch (currentGameType) {
 		case REVERSI:
 			if (currentGameMode.equals(GameMode.ONLINE)) {
-				if (reversi == null) {
-					// If the set move function is called and there is no game then it is always the
-					// server who starts from here
-					reversi = new Reversi(GameMode.ONLINE, PlayerType.SERVER);
-				}
 				try {
 					Player[] players = reversi.getPlayers();
 					if (players[0].hasTurn()) {
@@ -146,11 +157,6 @@ public class GameModel extends Model {
 		switch (currentGameType) {
 		case REVERSI:
 			if (currentGameMode.equals(GameMode.ONLINE)) {
-				if (reversi == null) {
-					// If the set move function is called and there is no game then it is always the
-					// AI who starts from here
-					reversi = new Reversi(GameMode.ONLINE, PlayerType.AI);
-				}
 				try {
 					Player[] players = reversi.getPlayers();
 					if (players[0].hasTurn()) {
@@ -191,6 +197,7 @@ public class GameModel extends Model {
 	}
 
 	public void login(String[] arguments) {
+		loginName = arguments[0];
 		client.login(arguments);
 	}
 

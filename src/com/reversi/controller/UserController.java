@@ -10,45 +10,41 @@ public class UserController extends Controller {
 		super(model);
 	}
 
-	// From GameView use this notify function to send a notification to model. Arguments can be null...
+	// From GameView use this notify function to send a notification to model.
+	// Arguments can be null...
 	@Override
 	public void notifyModel(int notification_id, String[] arguments) {
-		GameModel gameModel = (GameModel) model; // cast
-		
+		GameModel gameModel = (GameModel) model;
+
 		switch (notification_id) {
 		case START_REVERSI_SINGLEPLAYER:
-			gameModel.startGame(GameMode.SINGLEPLAYER, GameType.REVERSI);
+			gameModel.startGame(GameMode.SINGLEPLAYER, GameType.REVERSI, null);
 			break;
 		case START_TICTACTOE_SINGLEPLAYER:
-			gameModel.startGame(GameMode.SINGLEPLAYER, GameType.TICTACTOE);
+			gameModel.startGame(GameMode.SINGLEPLAYER, GameType.TICTACTOE, null);
 			break;
-		case END_REVERSI_SINGLEPLAYER:
+		case SUBSCRIBE_TO_REVERSI:
+			gameModel.subscribeToGame(GameType.REVERSI);
 			break;
-		case END_TICTACTOE_SINGLEPLAYER:
+		case SUBSCRIBE_TO_TICTACTOE:
+			gameModel.subscribeToGame(GameType.TICTACTOE);
 			break;
-		case START_ONLINE_GAME: // subscribe <gametype>
-			if(arguments[0].equals("reversi")) {
-				gameModel.subscribeToGame(GameType.REVERSI);
-			} 
-			if(arguments[0].equals("tictactoe")) {
-				gameModel.subscribeToGame(GameType.TICTACTOE);
-			}
-			break;
-		case END_ONLINE_GAME:
+		case END_GAME:
 			gameModel.endGame(null);
 			break;
 		case LOG_IN:
 			// Argument represents a name
-			gameModel.login(arguments);
+			gameModel.login(arguments); 
 			break;
 		case LOG_OUT:
 			break;
-		case CHALLENGE_PLAYER: // challenge <player name> followed by tictactoe or reversi
+		case CHALLENGE_PLAYER: 
+			// Arguments should be player name followed by tictactoe or reversi
 			gameModel.challengePlayer(arguments);
 			break;
 		case SERVER_DID_MOVE:
-			// Argument should be a valid number from 0 to boardsize^2
-			gameModel.setMove(arguments[0]);
+			// Argument should be a valid number
+			gameModel.setMove(arguments[0]); 
 			break;
 		case ACCEPT_CHALLENGE:
 			gameModel.acceptChallenge(Integer.parseInt(arguments[0]));
