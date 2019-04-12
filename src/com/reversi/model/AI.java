@@ -53,7 +53,6 @@ public class AI {
 		return move;
 	}
 	
-	@SuppressWarnings("unlikely-arg-type")
 	public ArrayList<ArrayList<Integer>> removeBadMoves(ArrayList<ArrayList<Integer>> list, Board b, Player player) {
 		int boardSize = b.getBoardSize();
 		int[][] currentBoard = b.getBoard();
@@ -65,14 +64,22 @@ public class AI {
 		// List with good moves
 		ArrayList<ArrayList<Integer>> newList = new ArrayList<ArrayList<Integer>>();
 		
-		boolean goodMoveLeft = false;
 		for (int i = 0; i < list.size(); i++) {
+			boolean goodMoveLeft = true;
 			int move = list.get(i).get(0) + (list.get(i).get(1)*8);
-			//code
+			
 			ArrayList<ArrayList<Integer>> opponentMoves = reversi.getValidMoves(reversi.makeForwardMove(player, move, b), player.opponent);
-			if ((opponentMoves.contains(0) || opponentMoves.contains(7) || opponentMoves.contains(56) || opponentMoves.contains(63)) == false) {
+			
+			for (ArrayList<Integer> x : opponentMoves)
+			{
+			   int check = x.get(0) + (x.get(1)*8);
+			   if (check == 0 || check == 7 || check == 56 || check == 63) {				
+					goodMoveLeft = false;
+				}
+
+			}
+			if (goodMoveLeft == true){
 				newList.add(list.get(i));
-				goodMoveLeft = true;
 			}
 			int[][] restore = new int[boardSize][boardSize];
 			for (int j = 0; j < boardSize; j++) {
@@ -80,7 +87,7 @@ public class AI {
 			}
 	        b.setBoard(restore);				
 		}
-		if (goodMoveLeft) {
+		if (newList.size() > 0) {
 			return newList;
 		}
 		return list;
@@ -164,56 +171,56 @@ public class AI {
 			boardValue[1] = j;
 		}*/
 		
-		if (board[0][2] != player.opponent) {
+		if (board[0][2] == player.id) {
 			boardValue[1] = i;
 		}
 		else {
 			boardValue[1] = j;
 		}
 		
-		if (board[0][5] != player.opponent) {
+		if (board[0][5] == player.id) {
 			boardValue[6] = i;
 		}
 		else {
 			boardValue[6] = j;
 		}
 		
-		if (board[2][0] != player.opponent) {
+		if (board[2][0] == player.id) {
 			boardValue[8] = i;
 		}
 		else {
 			boardValue[8] = j;
 		}
 		
-		if (board[2][7] != player.opponent) {
+		if (board[2][7] == player.id) {
 			boardValue[15] = i;
 		}
 		else {
 			boardValue[15] = j;
 		}
 		
-		if (board[5][0] != player.opponent) {
+		if (board[5][0] == player.id) {
 			boardValue[48] = i;
 		}
 		else {
 			boardValue[48] = j;
 		}
 		
-		if (board[5][7] != player.opponent) {
+		if (board[5][7] == player.id) {
 			boardValue[55] = i;
 		}
 		else {
 			boardValue[55] = j;
 		}
 		
-		if (board[7][2] != player.opponent) {
+		if (board[7][2] == player.id) {
 			boardValue[57] = i;
 		}
 		else {
 			boardValue[57] = j;
 		}
 		
-		if (board[7][5] != player.opponent) {
+		if (board[7][5] == player.id) {
 			boardValue[62] = i;
 		}
 		else {
@@ -318,17 +325,32 @@ public class AI {
 	}
 
 	public int minimaxAvailableMoves(Board b, Player player, int depth, int max_depth, int chosen_score, int chosen_move){
-		
+		ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
+    	ArrayList<ArrayList<Integer>> goodList = removeBadMoves(list, b, player);
+    	list = goodList;
 		if (depth == 0) {
-		ArrayList<ArrayList<Integer>> nicelist = reversi.getValidMoves(b, player.id);
 			boolean goodMove = false;
-	    	for(int q = nicelist.size() -1; q > -1; q--) {
-	    		int a = nicelist.get(q).get(0) + (nicelist.get(q).get(1) * 8);
+			int bestAreaScore = 49;
+			int bestAreaMove = -2;
+	    	for(int q = list.size() -1; q > -1; q--) {
+	    		int a = list.get(q).get(0) + (list.get(q).get(1) * 8);
 	    		int c = player.ai.areaValue(b, player)[a];
 	    		if (c > 50) {
-	    			System.out.println("We got a good spot, boss: "+a);
-	    			return a;
+	    			if (goodMove == true) {
+	    				if (c > bestAreaScore) {
+	    					bestAreaMove = a;
+			    			bestAreaScore = c;
+	    				}
+	    			} else {
+		    			System.out.println("We got a good spot, boss: "+a);
+		    			goodMove = true;
+		    			bestAreaMove = a;
+		    			bestAreaScore = c;
+	    			}
 	    		}
+	    	}
+	    	if (goodMove == true) {
+	    		return bestAreaMove;
 	    	}
 		}
 		
@@ -348,10 +370,8 @@ public class AI {
 	    	int bestScore = 100;
 	    	int bestMove = -1;
 	    	
-	    	ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
-	    	ArrayList<ArrayList<Integer>> goodList = removeBadMoves(list, b, player);
-	    	//list = goodList;
-	    	/*ArrayList<ArrayList<Integer>> goodList = (ArrayList<ArrayList<Integer>>) list.clone();
+	    	
+	    	goodList = (ArrayList<ArrayList<Integer>>) list.clone();
 	    	
 	    	for(int i = list.size() -1; i > -1; i--) {
 	    		int a = list.get(i).get(0) + (list.get(i).get(1) * 8);
@@ -362,7 +382,7 @@ public class AI {
 	    	}
 	    	if (goodList.size() > 0) {
 	    		list = goodList;
-	    	}*/
+	    	}
 	    	
 	        if (list.size() == 0) {
 	            return 0;
@@ -413,7 +433,8 @@ public class AI {
 	            chosen_score = bestScore;
 	            chosen_move = bestMove;
 	        }
-	    }	    
+
+	    }
 	    return chosen_move;
 	}
 	

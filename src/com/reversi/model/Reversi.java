@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+import com.reversi.main.Main;
 import com.reversi.model.Player.PlayerType;
 
 public class Reversi extends Game {
@@ -354,11 +355,11 @@ public class Reversi extends Game {
 				} else if (turn < 0) {
 					input = player.ai.boardWeighting(board, player);
 				} else if (turn < 48) {
-					input = player.ai.minimaxAvailableMoves(board, player, 0, 6, 0, 0);
+					input = player.ai.minimaxAvailableMoves(board, player, 0, 5, 0, 0);
 				} else {
 					input = player.ai.minimax(board, player, 0, 12, 0, 0);
 				}
-
+				System.out.println("These are the good moves: "+player.ai.removeBadMoves(validMoves, board, player));
 				System.out.println("Player: " + player.id + " (AI) is doing the following move: " + input);
 
 				validMove = setMove(input, validMoves, player.id, board);
