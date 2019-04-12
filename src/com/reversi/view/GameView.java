@@ -17,13 +17,13 @@ import com.reversi.model.Model;
 public class GameView extends View {
 	
 	private Scanner scanInput;
-	private boolean consoleInput;
+	public static boolean consoleInput;
 
 	public GameView(UserController userController) {
 		super(userController);
 	
 		scanInput = new Scanner(System.in);
-		consoleInput = false;
+		consoleInput = true;
 		
 		// Examples notify Model
 		//userController.notifyModel(Controller.LOG_IN, new String[] {"Naam", "localhost"});

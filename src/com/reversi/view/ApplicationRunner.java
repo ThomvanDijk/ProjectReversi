@@ -11,14 +11,15 @@ public class ApplicationRunner extends Application {
 
     public static boolean running;
 
-    GameModel model = new GameModel();
+    private GameModel model;
+    private UserController userController;
 
-
-    public void init(){
+    public void init() {
+    	model = new GameModel();
 
         // Give model to controllers because they must have a model
         ClientController clientController = new ClientController(model);
-        UserController userController = new UserController(model);
+        userController = new UserController(model);
 
         // Make a client that connects to the server
         Client client = new Client(clientController);
@@ -36,19 +37,13 @@ public class ApplicationRunner extends Application {
         viewThread.start();
     }
 
-
-
     public void start(Stage primaryStage) {
-        UserController userController = new UserController(model);
+    	if(!GameView.consoleInput) {
+    		LogIn login = new LogIn(userController);
+        	login.Start(primaryStage);
 
-        System.out.println(userController);
-
-		LogIn login = new LogIn(userController);
-        login.Start(primaryStage);
-        primaryStage.show();
-
-
-
+        	primaryStage.show();
+        }
     }
     
     public static void main(String[] args) {
