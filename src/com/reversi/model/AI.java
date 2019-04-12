@@ -326,9 +326,13 @@ public class AI {
 
 	public int minimaxAvailableMoves(Board b, Player player, int depth, int max_depth, int chosen_score, int chosen_move){
 		ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
-    	ArrayList<ArrayList<Integer>> goodList = removeBadMoves(list, b, player);
-    	list = goodList;
+    	
 		if (depth == 0) {
+			// remove bad moves
+			ArrayList<ArrayList<Integer>> goodList = removeBadMoves(list, b, player);
+	    	list = goodList;
+			
+	    	// see if there are any really good moves
 			boolean goodMove = false;
 			int bestAreaScore = 49;
 			int bestAreaMove = -2;
@@ -354,7 +358,7 @@ public class AI {
 	    	}
 		}
 		
-		//int[][] backup = b.getBoard().clone();
+		// Make backup of current board state
 		int boardSize = b.getBoardSize();
 		int[][] currentBoard = b.getBoard();
 		
@@ -371,7 +375,7 @@ public class AI {
 	    	int bestMove = -1;
 	    	
 	    	
-	    	goodList = (ArrayList<ArrayList<Integer>>) list.clone();
+	    	ArrayList<ArrayList<Integer>> goodList = (ArrayList<ArrayList<Integer>>) list.clone();
 	    	
 	    	for(int i = list.size() -1; i > -1; i--) {
 	    		int a = list.get(i).get(0) + (list.get(i).get(1) * 8);
