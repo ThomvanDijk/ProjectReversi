@@ -245,14 +245,10 @@ public class GameModel extends Model {
 		notifyView();
 	}
 
-	// TODO a better way to get challenges from model
-	// Return the top of the queue and remove it from the queue
+
+	// Return the head of the queue
 	public HashMap<ArgumentKey, String> getChallenge() {
-		if (!challenges.isEmpty()) {
-			// return challenges.remove();
-			return null;
-		}
-		return null;
+		return challenges.peek();
 	}
 
 	// Returns true if model has a challenge
