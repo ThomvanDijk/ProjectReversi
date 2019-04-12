@@ -23,7 +23,7 @@ public class GameView extends View {
 		super(userController);
 	
 		scanInput = new Scanner(System.in);
-		consoleInput = true;
+		consoleInput = false;
 		
 		// Examples notify Model
 		//userController.notifyModel(Controller.LOG_IN, new String[] {"Naam", "localhost"});
@@ -47,21 +47,6 @@ public class GameView extends View {
 		//gameModel.getPlayer(); returns a player array
 		//gameModel.getPlayerScores();
 		//hasChallenge(); // returns boolean
-	}
-	
-	/**
-	 * This run function is used to refresh pages
-	
-	 * @param model Model
-	 */
-	@Override
-	public void run() {
-		// If needed this function keeps running until the thread is terminated
-		
-		if(consoleInput) {
-			consoleInput();
-			consoleInput = false;
-		}
 	}
 
 	// Use console as input and alternative ui

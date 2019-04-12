@@ -1,19 +1,17 @@
 package com.reversi.model;
 
+import java.util.ArrayList;
+
 import com.reversi.client.Client;
-import com.reversi.view.GameView;
+import com.reversi.view.View;
 
 public abstract class Model {
 	
-	protected GameView gameView;
+	private ArrayList<View> views = new ArrayList<>();
 	protected Client client;
 
-	
-	public void setView(GameView view) {
-		if (this.gameView!=null) {
-			throw new IllegalStateException("View already set.");
-		}
-		this.gameView = view;
+	public void addView(View view) {
+		views.add(view);
 	}
 	
 	public void setClient(Client client) {
@@ -24,8 +22,10 @@ public abstract class Model {
 	}
 	
 	// Call notify view every time something is updated
-	public void notifyView() {
-		gameView.notify(this);
+	public void notifyViews() {
+		for (View view : views) {
+			view.notify(this);
+		}
 	}
 	
 }

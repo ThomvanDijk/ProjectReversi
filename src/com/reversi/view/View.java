@@ -11,7 +11,7 @@ package com.reversi.view;
 import com.reversi.controller.UserController;
 import com.reversi.model.Model;
 
-public abstract class View implements Runnable {
+public abstract class View {
 
 	protected final UserController userController;
 

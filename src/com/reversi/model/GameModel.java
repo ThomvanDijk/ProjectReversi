@@ -96,7 +96,7 @@ public class GameModel extends Model {
 			throw new IllegalStateException();
 		}
 
-		notifyView();
+		notifyViews();
 	}
 
 	// Arguments from server giving the final points
@@ -112,7 +112,7 @@ public class GameModel extends Model {
 		reversi = null;
 		ticTacToe = null;
 
-		notifyView();
+		notifyViews();
 	}
 
 	// A move set by the player or server...
@@ -150,7 +150,7 @@ public class GameModel extends Model {
 			throw new IllegalStateException();
 		}
 
-		notifyView();
+		notifyViews();
 	}
 
 	public void getMove() {
@@ -193,7 +193,7 @@ public class GameModel extends Model {
 			System.out.println("No current game!");
 		}
 
-		notifyView();
+		notifyViews();
 	}
 
 	public void login(String[] arguments) {
@@ -225,7 +225,7 @@ public class GameModel extends Model {
 			}
 		}
 
-		notifyView();
+		notifyViews();
 	}
 
 	// Remove a challenge because challenge is cancelled
@@ -240,7 +240,7 @@ public class GameModel extends Model {
 			}
 		}
 
-		notifyView();
+		notifyViews();
 	}
 
 	/**
@@ -258,7 +258,7 @@ public class GameModel extends Model {
 		map.put(ArgumentKey.GAMETYPE, arguments[2]);
 
 		challenges.add(map);
-		notifyView();
+		notifyViews();
 	}
 
 	/**
