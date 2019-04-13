@@ -66,7 +66,7 @@ public class ControlView extends View {
 	protected void update(Model model) {
 	}
 	
-	public GridPane createLogin(GridPane gridPane) {
+	public void createLogin(GridPane gridPane) {
 		Label usernameLabel = new Label("Username:");
 		usernameLabel.setPadding(new Insets(0, 15, 0, 0));
 
@@ -109,8 +109,6 @@ public class ControlView extends View {
 		GridPane.setMargin(addressLabel, new Insets(0, 0, 10, 0));
 		GridPane.setMargin(addressField, new Insets(0, 0, 10, 0));
 		GridPane.setMargin(alignButtonRight, new Insets(0, 0, 10, 0));
-		
-		return gridPane;
 	}
 
 }

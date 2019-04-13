@@ -18,10 +18,12 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -31,13 +33,22 @@ public class GameView extends View {
 	public static boolean consoleInput;
 	
 	private GridPane boardPane;
+	
+	private Label blackScore;
+	private Label whiteScore;
+	
+	private Label blackPlayer;
+	private Label whitePlayer;
 
 	public GameView(UserController userController, StackPane gamePane) {
 		super(userController);
 		
-		HBox hBoxRight = new HBox();
-		HBox hBoxLeft = new HBox();
-	
+		blackScore = new Label("0");
+		whiteScore = new Label("0");
+		
+		blackPlayer = new Label("Player");
+		whitePlayer = new Label("Computer");
+
 		scanInput = new Scanner(System.in);
 		consoleInput = false;
 
@@ -47,11 +58,6 @@ public class GameView extends View {
 		//userController.notifyModel(Controller.CHALLENGE_PLAYER, new String[] {"Naam", "reversi"});
 		//userController.notifyModel(Controller.ACCEPT_CHALLENGE, new String[] {"23"});
 		//userController.notifyModel(Controller.REQUEST_PLAYERLIST, null);
-		
-		hBoxRight.setAlignment(Pos.TOP_RIGHT);
-		hBoxRight.setStyle("-fx-background-color: lightgray; -fx-text-fill: white;");
-		hBoxLeft.setAlignment(Pos.TOP_LEFT);
-		hBoxRight.setStyle("-fx-background-color: black; -fx-text-fill: white;");
 
 		boardPane = new GridPane();
 		boardPane.setPadding(new Insets(10, 10, 10, 10));
@@ -59,8 +65,36 @@ public class GameView extends View {
 		
 		int[][] board = new int[8][8];
 		showBoard(board);
+		
+		
+		HBox hBoxLeft = new HBox();
+		HBox hBoxRight = new HBox();
+		
+		hBoxLeft.setAlignment(Pos.TOP_LEFT);
+		hBoxLeft.setStyle("-fx-background-color: green;");
+		//hBoxLeft.setPrefWidth(200);
+		hBoxLeft.prefWidthProperty().bind(gamePane.widthProperty());
+		
+		hBoxRight.setAlignment(Pos.TOP_RIGHT);
+		hBoxRight.setStyle("-fx-background-color: red;");
+		//hBoxRight.setPrefWidth(200);
+		hBoxRight.prefWidthProperty().bind(gamePane.widthProperty());
+		
+		Circle blackCircle = new Circle(0, 0, 25);
+		Circle whiteCircle = new Circle(0, 0, 25);
+		whiteCircle.setFill(Color.WHITE);
+		
+		hBoxLeft.getChildren().addAll(blackCircle, blackScore, blackPlayer);
+		hBoxRight.getChildren().addAll(whitePlayer, whiteScore, whiteCircle);		
+		
+		
+		GridPane mainPane = new GridPane();
+		mainPane.setAlignment(Pos.TOP_CENTER);
 
-		gamePane.getChildren().addAll(hBoxLeft, hBoxRight, boardPane);
+		mainPane.add(hBoxLeft, 0, 0);
+		mainPane.add(hBoxRight, 1, 0);
+
+		gamePane.getChildren().addAll(mainPane, boardPane);
 	}
 
 	/**
