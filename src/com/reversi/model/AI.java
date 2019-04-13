@@ -378,7 +378,12 @@ public class AI {
 	    		}
 	    	}
 	    	int currentScore = removeBadMoves(list, b, player).size();
-	        return 100 * (currentScore - chosenScore) / (currentScore + chosenScore + 1);
+	    	if (depth % 2 == 0) {
+	    		return 100 * (currentScore - chosenScore) / (currentScore + chosenScore + 1);
+	    	}
+	    	else {
+	    		return 100 * (chosenScore - currentScore) / (chosenScore + currentScore + 1);
+	    	}
 	    }	    
 	    else {
 	    	int bestScore = 100;
@@ -409,7 +414,12 @@ public class AI {
 		    		}
 		    	}
 		    	int currentScore = removeBadMoves(list, b, player).size();
-		        return 100 * (currentScore - chosenScore) / (currentScore + chosenScore + 1);
+		    	if (depth % 2 == 0) {
+		    		return 100 * (currentScore - chosenScore) / (currentScore + chosenScore + 1);
+		    	}
+		    	else {
+		    		return 100 * (chosenScore - currentScore) / (chosenScore + currentScore + 1);
+		    	}
 	        		
 	        }
 	        else {
