@@ -337,10 +337,18 @@ public class AI {
 		return boardValue;
 	}
 
-	public int minimaxAvailableMoves(Board b, Player player, int depth, int maxDepth, int chosenScore, int chosenMove, int alpha, int beta){
-		ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
-    	
+	public int minimaxAvailableMoves(Board b, Player player, int depth, int maxDepth, int chosenScore, int chosenMove, int alpha, int beta, long time){
+		ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);		
+    	long endTime = time;
 		if (depth == 0) {
+			// Time check
+			long start = System.currentTimeMillis();
+			endTime = start + 8*1000;
+			
+			// If big list, make it do 1 depth less
+			if (list.size() > 8) {
+				maxDepth--;
+			}
 			// remove bad moves
 			ArrayList<ArrayList<Integer>> goodList = removeBadMoves(list, b, player);
 			if (goodList.size() > 0) {
@@ -376,11 +384,30 @@ public class AI {
 			if (checkCorners (b, player).size() > 0) {
 				int stableMove = stability(list, b, player);
 				if (stableMove != -1) {
-					System.out.println("Hey babe, het werkt hoor. Ik ga deze move doen: "+stableMove);
+					System.out.println("Hey kerel, ik houd het stabiel. Ik ga deze move doen: "+stableMove);
 					//return stableMove;
 				}
 			}
 		}				
+		if (System.currentTimeMillis() > endTime) {
+			System.out.println("Tijd om naar bed te gaan");
+			ArrayList<ArrayList<Integer>> goodList = (ArrayList<ArrayList<Integer>>) list.clone();
+	    	
+	    	for(int i = list.size() -1; i > -1; i--) {
+	    		int a = list.get(i).get(0) + (list.get(i).get(1) * 8);
+	    		int c = areaValue(b, player)[a];
+	    		if (c < -50) {
+	    			goodList.remove(i);
+	    		}
+	    	}
+	    	int currentScore = removeBadMoves(list, b, player).size();
+	    	if (depth % 2 == 0) {
+	    		return 100 * (currentScore - chosenScore) / (currentScore + chosenScore + 1);
+	    	}
+	    	else {
+	    		return 100 * (chosenScore - currentScore) / (chosenScore + currentScore + 1);
+	    	}
+		}
 		
 		// Make backup of current board state
 		int boardSize = b.getBoardSize();
@@ -462,7 +489,7 @@ public class AI {
 	                nextPlayer.setTurn(true);
 	                player.setTurn(false);
 	                
-	                int score = minimaxAvailableMoves(b, nextPlayer, depth+1, maxDepth, currentscore, move, alpha, beta);
+	                int score = minimaxAvailableMoves(b, nextPlayer, depth+1, maxDepth, currentscore, move, alpha, beta, endTime);
 	                int[][] restore = new int[boardSize][boardSize];
 	        		for (int j = 0; j < boardSize; j++) {
 	        		  restore[j] = Arrays.copyOf(backup[j], backup[j].length);
@@ -517,8 +544,23 @@ public class AI {
 	    }
 	}
 	
-	public int minimax(Board b, Player player, int depth, int maxDepth, int chosenScore, int chosenMove, int alpha, int beta){
-		//int[][] backup = b.getBoard().clone();
+	public int minimax(Board b, Player player, int depth, int maxDepth, int chosenScore, int chosenMove, int alpha, int beta, long time){
+		long endTime = time;
+		if (depth == 0) {
+			// Time check
+			long start = System.currentTimeMillis();
+			endTime = start + 8*1000;
+		}
+		
+		if (System.currentTimeMillis() > endTime) {
+			if (depth % 2 == 0) {
+	    		reversi.calculateValueDiff(player.id);
+	    	}
+	    	else {
+	    		reversi.calculateValueDiff(player.opponent);
+	    	}
+		}
+		
 		int boardSize = b.getBoardSize();
 		int[][] currentBoard = b.getBoard();
 		
@@ -528,7 +570,12 @@ public class AI {
 		}
 		
 	    if (depth == maxDepth) {
-	    	reversi.calculateValueDiff(player.id);
+	    	if (depth % 2 == 0) {
+	    		reversi.calculateValueDiff(player.id);
+	    	}
+	    	else {
+	    		reversi.calculateValueDiff(player.opponent);
+	    	}
 	    }
 	    
 	    else {
@@ -536,7 +583,12 @@ public class AI {
 	    	int bestMove = -1;
 	    	ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
 	        if (list.size() == 0) {
-	            return reversi.calculateValueDiff(player.id);
+	        	if (depth % 2 == 0) {
+		    		reversi.calculateValueDiff(player.id);
+		    	}
+		    	else {
+		    		reversi.calculateValueDiff(player.opponent);
+		    	}
 	        }
 	        else {
 	            for (int i = 0; i < (list.size()); i++) {	                
@@ -554,7 +606,7 @@ public class AI {
 	                nextPlayer.setTurn(true);
 	                player.setTurn(false);
 	                
-	                score = minimax(b, nextPlayer, depth+1, maxDepth, score, move, alpha, beta);
+	                score = minimax(b, nextPlayer, depth+1, maxDepth, score, move, alpha, beta, endTime);
 	                int[][] restore = new int[boardSize][boardSize];
 	        		for (int j = 0; j < boardSize; j++) {
 	        		  restore[j] = Arrays.copyOf(backup[j], backup[j].length);
@@ -605,146 +657,7 @@ public class AI {
 	    }
 	}
 	
-	public int minimaxTest(Board b, Player player, int depth, int maxDepth, int chosenScore, int chosenMove, int alpha, int beta){
-		ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
-    	
-		if (depth == 0) {
-			// remove bad moves
-			ArrayList<ArrayList<Integer>> goodList = removeBadMoves(list, b, player);
-			if (goodList.size() > 0) {
-		    	list = goodList;
-			}
-			
-	    	// see if there are any really good moves
-			boolean goodMove = false;
-			int bestAreaScore = 49;
-			int bestAreaMove = -2;
-	    	for(int q = list.size() -1; q > -1; q--) {
-	    		int a = list.get(q).get(0) + (list.get(q).get(1) * 8);
-	    		int c = player.ai.areaValue(b, player)[a];
-	    		if (c > 50) {
-	    			if (goodMove == true) {
-	    				if (c > bestAreaScore) {
-	    					bestAreaMove = a;
-			    			bestAreaScore = c;
-	    				}
-	    			} else {
-		    			System.out.println("We got a good spot, boss: "+a);
-		    			goodMove = true;
-		    			bestAreaMove = a;
-		    			bestAreaScore = c;
-	    			}
-	    		}
-	    	}
-	    	if (goodMove == true) {
-	    		return bestAreaMove;
-	    	}
-		}
-		
-		// Make backup of current board state
-		int boardSize = b.getBoardSize();
-		int[][] currentBoard = b.getBoard();
-		
-		int[][] backup = new int[boardSize][boardSize];
-		for (int i = 0; i < boardSize; i++) {
-		  backup[i] = Arrays.copyOf(currentBoard[i], currentBoard[i].length);
-		}
-		
-	    if (depth == maxDepth) {
-	    	return reversi.calculateValueDiff(player.id);
-	    }	    
-	    else {
-	    	int bestScore = 100;
-	    	int bestMove = -1;
-  	
-	    	
-	    	ArrayList<ArrayList<Integer>> goodList = (ArrayList<ArrayList<Integer>>) list.clone();
-	    	
-	    	for(int i = list.size() -1; i > -1; i--) {
-	    		int a = list.get(i).get(0) + (list.get(i).get(1) * 8);
-	    		int c = areaValue(b, player)[a];
-	    		if (c < -50) {
-	    			goodList.remove(i);
-	    		}
-	    	}
-	    	if (goodList.size() > 0) {
-	    		list = goodList;
-	    	}
-	    	
-	        if (list.size() == 0) {
-	        	return reversi.calculateValueDiff(player.id);
-	        		
-	        }
-	        else {
-	            for (int i = 0; i < (list.size()); i++) {	                
-	                int move = list.get(i).get(0) + (list.get(i).get(1)*8);
-	                reversi.makeForwardMove(player, move, b);
-	                int score = reversi.getValidMoves(b, player.opponent).size();
 	
-	                Player nextPlayer;
-	                if (player.id == 1) {
-	                	nextPlayer = new Player(PlayerType.AI, 2);
-	                }
-	                else {
-	                	nextPlayer = new Player(PlayerType.AI, 1);	           
-	                }
-	                nextPlayer.setTurn(true);
-	                player.setTurn(false);
-	                
-	                score = minimaxAvailableMoves(b, nextPlayer, depth+1, maxDepth, score, move, alpha, beta);
-	                int[][] restore = new int[boardSize][boardSize];
-	        		for (int j = 0; j < boardSize; j++) {
-	        		  restore[j] = Arrays.copyOf(backup[j], backup[j].length);
-	        		}
-	                b.setBoard(restore);
-	                
-	                if (bestMove == -1) {
-	                	bestScore = score;
-	                    bestMove = move;
-	                }
-	                	                	
-                	if (depth%2 == 0) {
-	                	if (score > bestScore){
-		                    bestScore = score;
-		                    bestMove = move;
-		                }
-	                	if(score > alpha) {
-	                		alpha = score;
-	                	}
-	                	if(beta <= alpha) {
-	                		break;
-	                	}
-	                }
-	                else {
-	                	if (score < bestScore){
-		                    bestScore = score;
-		                    bestMove = move;
-		                }
-	                	if(score < beta) {
-	                		beta = score;
-	                	}
-	                	if(beta <= alpha) {
-	                		break;
-	                	}
-	                }
-		                
-	                
-	            }	            
-	            chosenScore = bestScore;
-	            chosenMove = bestMove;
-	        }
-
-	    }
-	    /*if (chosenMove == -1) {
-	    	return boardWeighting(b, player);
-	    }*/
-	    if (depth != 0) {
-	    	return chosenScore;
-	    } 
-	    else {  
-	    	return chosenMove;
-	    }
-	}
 	public ArrayList<int[]> checkCorners (Board b, Player player) {
 		ArrayList<int[]> cornersTaken = new ArrayList<int[]>();
 		
