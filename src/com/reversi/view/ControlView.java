@@ -47,12 +47,17 @@ public class ControlView extends View {
 		
 		GridPane.setMargin(separator1, new Insets(0, 0, 10, 0));
 		GridPane.setMargin(separator2, new Insets(0, 0, 10, 0));
-		GridPane.setMargin(subReversiButton, new Insets(0, 0, 10, 0));
+		//GridPane.setMargin(subReversiButton, new Insets(0, 0, 10, 0));
 		
 		gridPane.add(separator1, 0, 3);
 		gridPane.add(separator2, 1, 3);
 		gridPane.add(subReversiButton, 0, 4);
-		gridPane.add(subTictactoeButton, 0, 5);
+		
+		HBox alignButtonRight = new HBox();
+		alignButtonRight.setAlignment(Pos.CENTER_RIGHT);
+		alignButtonRight.getChildren().add(subTictactoeButton);
+		
+		gridPane.add(alignButtonRight, 1, 4);
 
 		controlPane.getChildren().add(gridPane);
 	}
