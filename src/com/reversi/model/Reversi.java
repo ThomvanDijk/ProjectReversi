@@ -55,10 +55,6 @@ public class Reversi extends Game {
 		}
 	}
 
-	public Player[] getPlayers() {
-		return new Player[] { player1, player2 };
-	}
-
 	public ArrayList<ArrayList<Integer>> getValidMoves(Board b, int playerID) {
 		// Array met mogelijke zetten
 		ArrayList<ArrayList<Integer>> validMoves = new ArrayList<ArrayList<Integer>>();
@@ -273,7 +269,7 @@ public class Reversi extends Game {
 		boolean validMove = false;
 
 		// Get all the valid moves if there are any
-		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(b, player.id);
+		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(b, player.color);
 
 		// As long as the input isn't correct, this will loop
 		while (validMove == false) {
@@ -281,7 +277,7 @@ public class Reversi extends Game {
 			if (!validMoves.isEmpty()) {
 				input = move;
 
-				validMove = setMove(input, validMoves, player.id, b);
+				validMove = setMove(input, validMoves, player.color, b);
 				// Reset noWinnerCount
 				noWinnerCount = 0;
 			} else {
@@ -306,7 +302,7 @@ public class Reversi extends Game {
 		// If one player can't make a move, switch who's turn it is
 		if (noWinnerCount == 1) {
 			System.out.println("Out of moves");
-			if (player.id == 1) {
+			if (player.color == 1) {
 				player1.setTurn(false);
 				player2.setTurn(true);
 
@@ -328,10 +324,10 @@ public class Reversi extends Game {
 		int input = -1;
 		boolean validMove = false;
 		
-		System.out.println("Current player is: "+player.id);
+		System.out.println("Current player is: "+player.color);
 
 		// Get all the valid moves if there are any
-		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(board, player.id);
+		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(board, player.color);
 		printValidMoves(validMoves,board);
 		// As long as the input isn't correct, this will loop
 		while (validMove == false) {
@@ -348,9 +344,9 @@ public class Reversi extends Game {
 					input = player.ai.minimax(board, player, 0, 12, 0, 0);
 				}
 
-				System.out.println("Player: " + player.id + " (AI) is doing the following move: " + input);
+				System.out.println("Player: " + player.color + " (AI) is doing the following move: " + input);
 
-				validMove = setMove(input, validMoves, player.id, board);
+				validMove = setMove(input, validMoves, player.color, board);
 
 				if (validMove == true) {
 					turn++;
@@ -379,10 +375,10 @@ public class Reversi extends Game {
 	// Used to make a move done by server or player
 	public void makeMove(Player player, int input) {
 		// Get all the valid moves if there are any
-		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(this.board, player.id);
+		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(this.board, player.color);
 		printValidMoves(validMoves,board);
 		if (!validMoves.isEmpty()) {		
-			if (setMove(input, validMoves, player.id, this.board)) {
+			if (setMove(input, validMoves, player.color, this.board)) {
 				turn++;
 			}
 
@@ -403,7 +399,7 @@ public class Reversi extends Game {
 	}
 
 	public void switchTurn(Player player) {
-		debugMove(player.id, board);
+		debugMove(player.color, board);
 		
 		// If one player can't make a move, switch who's turn it is...
 		if (noWinnerCount == 1) {
@@ -411,7 +407,7 @@ public class Reversi extends Game {
 			player.setTurn(true);
 
 			// Now set the other player's turn to true
-			if (player.id == player1.id) {
+			if (player.color == player1.color) {
 				player2.setTurn(false);
 			} else {
 				player1.setTurn(false);

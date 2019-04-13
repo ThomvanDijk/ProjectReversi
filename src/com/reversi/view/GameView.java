@@ -16,8 +16,10 @@ import com.reversi.model.Model;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -32,13 +34,13 @@ public class GameView extends View {
 
 	public GameView(UserController userController, StackPane gamePane) {
 		super(userController);
+		
+		HBox hBoxRight = new HBox();
+		HBox hBoxLeft = new HBox();
 	
 		scanInput = new Scanner(System.in);
 		consoleInput = false;
-		
-		boardPane = new GridPane();
-		boardPane.setPadding(new Insets(10, 10, 10, 10));
-		
+
 		// Examples notify Model
 		//userController.notifyModel(Controller.LOG_IN, new String[] {"Naam", "localhost"});
 		//userController.notifyModel(Controller.START_ONLINE_GAME, new String[] {"reversi"});
@@ -46,11 +48,19 @@ public class GameView extends View {
 		//userController.notifyModel(Controller.ACCEPT_CHALLENGE, new String[] {"23"});
 		//userController.notifyModel(Controller.REQUEST_PLAYERLIST, null);
 		
+		hBoxRight.setAlignment(Pos.TOP_RIGHT);
+		hBoxRight.setStyle("-fx-background-color: lightgray; -fx-text-fill: white;");
+		hBoxLeft.setAlignment(Pos.TOP_LEFT);
+		hBoxRight.setStyle("-fx-background-color: black; -fx-text-fill: white;");
+
+		boardPane = new GridPane();
+		boardPane.setPadding(new Insets(10, 10, 10, 10));
+		boardPane.setAlignment(Pos.BOTTOM_CENTER);
+		
 		int[][] board = new int[8][8];
-		
 		showBoard(board);
-		
-		gamePane.getChildren().add(boardPane);
+
+		gamePane.getChildren().addAll(hBoxLeft, hBoxRight, boardPane);
 	}
 
 	/**

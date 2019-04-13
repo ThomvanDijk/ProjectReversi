@@ -23,8 +23,6 @@ public class GameModel extends Model {
 	private TicTacToe ticTacToe;
 	private Reversi reversi;
 
-	private int[] playerScores;
-
 	private GameType currentGameType;
 	private GameMode currentGameMode;
 
@@ -36,8 +34,6 @@ public class GameModel extends Model {
 	public GameModel() {
 		ticTacToe = null;
 		reversi = null;
-
-		playerScores = new int[2];
 
 		currentGameMode = null;
 		currentGameType = null;
@@ -78,18 +74,23 @@ public class GameModel extends Model {
 		case REVERSI:
 			if (gameMode.equals(GameMode.SINGLEPLAYER)) {
 				reversi = new Reversi(GameMode.SINGLEPLAYER, null);
+				reversi.player1.setName(loginName);
 				break;
 			} else {
 				reversi = new Reversi(GameMode.ONLINE, startPlayer);
+				reversi.player1.setName(loginName);
+				reversi.player2.setName(opponentName);
 				break;
 			}
 		case TICTACTOE:
 			if (gameMode.equals(GameMode.SINGLEPLAYER)) {
 				ticTacToe = new TicTacToe(GameMode.SINGLEPLAYER);
+				reversi.player1.setName(loginName);
 				break;
 			} else {
 				ticTacToe = new TicTacToe(GameMode.ONLINE);
-				client.sendCommand("subscribe Tic-tac-toe");
+				reversi.player1.setName(loginName);
+				reversi.player2.setName(opponentName);
 				break;
 			}
 		default:
@@ -101,11 +102,6 @@ public class GameModel extends Model {
 
 	// Arguments from server giving the final points
 	public void endGame(String[] arguments) {
-		if (arguments != null) {
-			playerScores[0] = Integer.parseInt(arguments[0]);
-			playerScores[1] = Integer.parseInt(arguments[1]);
-		}
-
 		currentGameMode = null;
 		currentGameType = null;
 
@@ -120,9 +116,10 @@ public class GameModel extends Model {
 		int intMove = Integer.valueOf(move);
 		switch (currentGameType) {
 		case REVERSI:
+			Player[] players = reversi.getPlayers();
+			
 			if (currentGameMode.equals(GameMode.ONLINE)) {
 				try {
-					Player[] players = reversi.getPlayers();
 					if (players[0].hasTurn()) {
 						reversi.makeMove(players[0], intMove);
 					} else {
@@ -298,10 +295,17 @@ public class GameModel extends Model {
 	/**
 	 * Element[0] is player 1 and element[1] is player 2.
 	 * 
-	 * @return Integer array of player scores with size 2.
+	 * @return Array of players.
 	 */
-	public int[] getPlayerScores() {
-		return playerScores;
+	public Player[] getPlayerNames() {
+		switch (currentGameType) {
+		case REVERSI:
+			return reversi.getPlayers();
+		case TICTACTOE:
+			return ticTacToe.getPlayers();
+		default:
+			return null;
+		}
 	}
 
 }

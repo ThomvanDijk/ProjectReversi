@@ -7,23 +7,25 @@ public class Player {
 	}
 	
 	protected final PlayerType type;
-	protected final int id;
+	protected final int color;
 	private int score;
+	private String name;
 	private boolean hasTurn;
 	protected int opponent;
 	protected AI ai = null;
 
-	public Player(PlayerType type, int id) {
+	public Player(PlayerType type, int color) {
 		this.type = type;
-		this.id = id;
+		this.color = color;
 		
-		if (id == 1){
+		if (color == 1){
 			opponent = 2;
 		}
 		else {
 			opponent = 1;
 		}
 		score = 0;
+		name = "Computer";
 		hasTurn = false;	
 		
 		if(type.equals(PlayerType.AI)) {
@@ -31,6 +33,14 @@ public class Player {
 		}
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public int getScore() {
 		return score;
 	}

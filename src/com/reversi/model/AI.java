@@ -31,7 +31,7 @@ public class AI {
 		int move = 0;
 		
 		if(board.emptyPlaces()) {
-			while(!ticTacToe.isValidMove(move, player.id)) {
+			while(!ticTacToe.isValidMove(move, player.color)) {
 				// between 0 and board.getBoardSize() * 2 (exclusive)
 				move = rand.nextInt(board.getBoardSize() * board.getBoardSize());
 				System.out.println("AI check move: " + move);
@@ -43,7 +43,7 @@ public class AI {
 	
 	public int random(Board b, Player player) {
 		// haal mogelijke zetten op
-		ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
+		ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.color);
 		
 		// kies random zet uit mogelijke zetten
 		Random rand = new Random();
@@ -90,7 +90,7 @@ public class AI {
 		int bestMove = -1;
 		
 		// haal mogelijke zetten op
-		ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
+		ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.color);
 		
 		int[] boardValue = areaValue(b, player);
 		System.out.println(list);
@@ -320,7 +320,7 @@ public class AI {
 	public int minimaxAvailableMoves(Board b, Player player, int depth, int max_depth, int chosen_score, int chosen_move){
 		
 		if (depth == 0) {
-		ArrayList<ArrayList<Integer>> nicelist = reversi.getValidMoves(b, player.id);
+		ArrayList<ArrayList<Integer>> nicelist = reversi.getValidMoves(b, player.color);
 			boolean goodMove = false;
 	    	for(int q = nicelist.size() -1; q > -1; q--) {
 	    		int a = nicelist.get(q).get(0) + (nicelist.get(q).get(1) * 8);
@@ -348,7 +348,7 @@ public class AI {
 	    	int bestScore = 100;
 	    	int bestMove = -1;
 	    	
-	    	ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
+	    	ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.color);
 	    	ArrayList<ArrayList<Integer>> goodList = removeBadMoves(list, b, player);
 	    	//list = goodList;
 	    	/*ArrayList<ArrayList<Integer>> goodList = (ArrayList<ArrayList<Integer>>) list.clone();
@@ -374,7 +374,7 @@ public class AI {
 	                int score = reversi.getValidMoves(b, player.opponent).size();
 	
 	                Player nextPlayer;
-	                if (player.id == 1) {
+	                if (player.color == 1) {
 	                	nextPlayer = new Player(PlayerType.AI, 2);
 	                }
 	                else {
@@ -434,7 +434,7 @@ public class AI {
 	    else {
 	    	int bestScore = 100;
 	    	int bestMove = -1;
-	    	ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
+	    	ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.color);
 	        if (list.size() == 0) {
 	            return 0;
 	        }
@@ -442,10 +442,10 @@ public class AI {
 	            for (int i = 0; i < (list.size()); i++) {	                
 	                int move = list.get(i).get(0) + (list.get(i).get(1)*8);
 	                reversi.makeForwardMove(player, move, b);
-	                int score = reversi.calculateValueDiff(player.id);
+	                int score = reversi.calculateValueDiff(player.color);
 
 	                Player nextPlayer;
-	                if (player.id == 1) {
+	                if (player.color == 1) {
 	                	nextPlayer = new Player(PlayerType.AI, 2);
 	                }
 	                else {

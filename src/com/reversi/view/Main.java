@@ -18,7 +18,7 @@ public class Main extends Application {
 	public static boolean running;
 	
 	public static final int SCREEN_WIDTH = 900;
-	public static final int SCREEN_HEIGHT = 600;
+	public static final int SCREEN_HEIGHT = 700;
 
 	private GameModel model;
 	private UserController userController;
@@ -66,7 +66,7 @@ public class Main extends Application {
 		gamePane = new StackPane();
 		//gamePane.setStyle("-fx-background-color: red; -fx-text-fill: white;");
 		gamePane.setPadding(new Insets(10, 10, 10, 10));
-		gamePane.setMinWidth(SCREEN_HEIGHT); // Make squared
+		gamePane.setMinWidth(SCREEN_HEIGHT - 100); // Make squared
 		
 		controlPane = new StackPane();
 		controlPane.setStyle("-fx-background-color: lightgray; -fx-text-fill: white;");

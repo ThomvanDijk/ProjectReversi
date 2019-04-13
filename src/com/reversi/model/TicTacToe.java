@@ -80,7 +80,7 @@ public class TicTacToe extends Game {
 	public void makeMove(Player player) {
 		int input = 0;
 
-		if (player.id == 1 && player.type.equals(PlayerType.HUMAN)) {
+		if (player.color == 1 && player.type.equals(PlayerType.HUMAN)) {
 			input = scanInput.nextInt();
 			
 			player1.setTurn(false);
@@ -94,14 +94,14 @@ public class TicTacToe extends Game {
 		}
 
 		try {
-			System.out.println("Player " + player.id + " plays: " + input);
-			setMove(input, player.id);
+			System.out.println("Player " + player.color + " plays: " + input);
+			setMove(input, player.color);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		if(playerWon(player)) {
-			System.out.println("Player " + player.id + " won!");
+			System.out.println("Player " + player.color + " won!");
 			noWinner = false;
 		}
 	}
@@ -141,7 +141,7 @@ public class TicTacToe extends Game {
 	// Check three values to see if they are the same. If so, we have a winner.
 	public boolean checkRow(int pos0, int pos1, int pos2, Player player) {
 		if ((pos0 == pos1) && (pos0 == pos2)) {
-			if(player.id == pos0) {
+			if(player.color == pos0) {
 				return true;
 			}
 		}
