@@ -377,7 +377,8 @@ public class AI {
 	    			goodList.remove(i);
 	    		}
 	    	}
-	        return chosenScore - removeBadMoves(list, b, player).size();
+	    	int currentScore = removeBadMoves(list, b, player).size();
+	        return 100 * (currentScore - chosenScore) / (currentScore + chosenScore + 1);
 	    }	    
 	    else {
 	    	int bestScore = 100;
@@ -398,19 +399,24 @@ public class AI {
 	    	}
 	    	
 	        if (list.size() == 0) {
-	        	if (depth%2 == 0) {
-	        		return chosenScore;
-	        	}
-	        	else {
-	        		return chosenScore * -1;
-	        	}
+	        	ArrayList<ArrayList<Integer>> tempList = (ArrayList<ArrayList<Integer>>) list.clone();
+		    	
+		    	for(int i = list.size() -1; i > -1; i--) {
+		    		int a = list.get(i).get(0) + (list.get(i).get(1) * 8);
+		    		int c = areaValue(b, player)[a];
+		    		if (c < -50) {
+		    			tempList.remove(i);
+		    		}
+		    	}
+		    	int currentScore = removeBadMoves(list, b, player).size();
+		        return 100 * (currentScore - chosenScore) / (currentScore + chosenScore + 1);
 	        		
 	        }
 	        else {
 	            for (int i = 0; i < (list.size()); i++) {	                
 	                int move = list.get(i).get(0) + (list.get(i).get(1)*8);
 	                reversi.makeForwardMove(player, move, b);
-	                int score = reversi.getValidMoves(b, player.opponent).size();
+	                int currentscore = reversi.getValidMoves(b, player.id).size();
 	
 	                Player nextPlayer;
 	                if (player.id == 1) {
@@ -422,7 +428,7 @@ public class AI {
 	                nextPlayer.setTurn(true);
 	                player.setTurn(false);
 	                
-	                score = minimaxAvailableMoves(b, nextPlayer, depth+1, maxDepth, score, move, alpha, beta);
+	                int score = minimaxAvailableMoves(b, nextPlayer, depth+1, maxDepth, currentscore, move, alpha, beta);
 	                int[][] restore = new int[boardSize][boardSize];
 	        		for (int j = 0; j < boardSize; j++) {
 	        		  restore[j] = Arrays.copyOf(backup[j], backup[j].length);
