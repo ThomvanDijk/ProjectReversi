@@ -359,7 +359,6 @@ public class Reversi extends Game {
 				} else {
 					input = player.ai.minimax(board, player, 0, 12, 0, 0);
 				}
-				System.out.println("These are the good moves: "+player.ai.removeBadMoves(validMoves, board, player));
 				System.out.println("Player: " + player.id + " (AI) is doing the following move: " + input);
 
 				validMove = setMove(input, validMoves, player.id, board);

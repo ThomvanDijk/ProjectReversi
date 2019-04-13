@@ -87,10 +87,9 @@ public class AI {
 			}
 	        b.setBoard(restore);				
 		}
-		if (newList.size() > 0) {
-			return newList;
-		}
-		return list;
+
+		return newList;
+
 	}
 	public int boardWeighting(Board b, Player player) {
 		int bestMoveValue = -200;
@@ -100,7 +99,6 @@ public class AI {
 		ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
 		
 		int[] boardValue = areaValue(b, player);
-		System.out.println(list);
 		// kies zet met hoogste waarde
 		for (int i = 0; i < list.size(); i++) {
 			int move = list.get(i).get(0) + (list.get(i).get(1)*8);
@@ -324,13 +322,15 @@ public class AI {
 		return boardValue;
 	}
 
-	public int minimaxAvailableMoves(Board b, Player player, int depth, int max_depth, int chosen_score, int chosen_move){
+	public int minimaxAvailableMoves(Board b, Player player, int depth, int maxDepth, int chosenScore, int chosenMove){
 		ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
     	
 		if (depth == 0) {
 			// remove bad moves
 			ArrayList<ArrayList<Integer>> goodList = removeBadMoves(list, b, player);
-	    	list = goodList;
+			if (goodList.size() > 0) {
+		    	list = goodList;
+			}
 			
 	    	// see if there are any really good moves
 			boolean goodMove = false;
@@ -367,13 +367,22 @@ public class AI {
 		  backup[i] = Arrays.copyOf(currentBoard[i], currentBoard[i].length);
 		}
 		
-	    if (depth == max_depth) {
-	        return 0;
+	    if (depth == maxDepth) {
+	    	ArrayList<ArrayList<Integer>> goodList = (ArrayList<ArrayList<Integer>>) list.clone();
+	    	
+	    	for(int i = list.size() -1; i > -1; i--) {
+	    		int a = list.get(i).get(0) + (list.get(i).get(1) * 8);
+	    		int c = areaValue(b, player)[a];
+	    		if (c < -50) {
+	    			goodList.remove(i);
+	    		}
+	    	}
+	        return chosenScore - removeBadMoves(list, b, player).size();
 	    }	    
 	    else {
 	    	int bestScore = 100;
 	    	int bestMove = -1;
-	    	
+  	
 	    	
 	    	ArrayList<ArrayList<Integer>> goodList = (ArrayList<ArrayList<Integer>>) list.clone();
 	    	
@@ -389,11 +398,21 @@ public class AI {
 	    	}
 	    	
 	        if (list.size() == 0) {
-	            return 0;
+	        	goodList = (ArrayList<ArrayList<Integer>>) list.clone();
+		    	
+		    	for(int i = list.size() -1; i > -1; i--) {
+		    		int a = list.get(i).get(0) + (list.get(i).get(1) * 8);
+		    		int c = areaValue(b, player)[a];
+		    		if (c < -50) {
+		    			goodList.remove(i);
+		    		}
+		    	}
+		        return chosenScore - removeBadMoves(list, b, player).size();
 	        }
 	        else {
 	            for (int i = 0; i < (list.size()); i++) {	                
 	                int move = list.get(i).get(0) + (list.get(i).get(1)*8);
+	                int antiscore = list.size();
 	                reversi.makeForwardMove(player, move, b);
 	                int score = reversi.getValidMoves(b, player.opponent).size();
 	
@@ -407,7 +426,7 @@ public class AI {
 	                nextPlayer.setTurn(true);
 	                player.setTurn(false);
 	                
-	                minimaxAvailableMoves(b, nextPlayer, depth+1, max_depth, score, move);
+	                score = minimaxAvailableMoves(b, nextPlayer, depth+1, maxDepth, score, move);
 	                int[][] restore = new int[boardSize][boardSize];
 	        		for (int j = 0; j < boardSize; j++) {
 	        		  restore[j] = Arrays.copyOf(backup[j], backup[j].length);
@@ -418,31 +437,31 @@ public class AI {
 	                	bestScore = score;
 	                    bestMove = move;
 	                }
-	                else {
-	                	if (depth%2 == 0) {
-		                	if (score < bestScore){
-			                    bestScore = score;
-			                    bestMove = move;
-			                }
+	                else {	                	
+	                	if (score < bestScore){
+		                    bestScore = score;
+		                    bestMove = move;
 		                }
-		                else {
-		                	if (score < bestScore){
-			                    bestScore = score;
-			                    bestMove = move;
-			                }
-		                }
-	                }		        	                
-	            }
-	            
-	            chosen_score = bestScore;
-	            chosen_move = bestMove;
+		                
+	                }
+	            }	            
+	            chosenScore = bestScore;
+	            chosenMove = bestMove;
 	        }
 
 	    }
-	    return chosen_move;
+	    /*if (chosenMove == -1) {
+	    	return boardWeighting(b, player);
+	    }*/
+	    if (depth != 0) {
+	    	return chosenScore;
+	    } 
+	    else {  
+	    	return chosenMove;
+	    }
 	}
 	
-	public int minimax(Board b, Player player, int depth, int max_depth, int chosen_score, int chosen_move){
+	public int minimax(Board b, Player player, int depth, int maxDepth, int chosenScore, int chosenMove){
 		//int[][] backup = b.getBoard().clone();
 		int boardSize = b.getBoardSize();
 		int[][] currentBoard = b.getBoard();
@@ -452,8 +471,8 @@ public class AI {
 		  backup[i] = Arrays.copyOf(currentBoard[i], currentBoard[i].length);
 		}
 		
-	    if (depth == max_depth) {
-	        return 0;
+	    if (depth == maxDepth) {
+	    	reversi.calculateValueDiff(player.id);
 	    }
 	    
 	    else {
@@ -461,7 +480,7 @@ public class AI {
 	    	int bestMove = -1;
 	    	ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
 	        if (list.size() == 0) {
-	            return 0;
+	            return reversi.calculateValueDiff(player.id);
 	        }
 	        else {
 	            for (int i = 0; i < (list.size()); i++) {	                
@@ -479,7 +498,7 @@ public class AI {
 	                nextPlayer.setTurn(true);
 	                player.setTurn(false);
 	                
-	                minimax(b, nextPlayer, depth+1, max_depth, score, move);
+	                score = minimax(b, nextPlayer, depth+1, maxDepth, score, move);
 	                int[][] restore = new int[boardSize][boardSize];
 	        		for (int j = 0; j < boardSize; j++) {
 	        		  restore[j] = Arrays.copyOf(backup[j], backup[j].length);
@@ -506,10 +525,15 @@ public class AI {
 	                }		        	                
 	            }
 	            
-	            chosen_score = bestScore;
-	            chosen_move = bestMove;
+	            chosenScore = bestScore;
+	            chosenMove = bestMove;
 	        }
-	    }	    
-	    return chosen_move;
+	    }
+	    if (depth != 0) {
+	    	return chosenScore;
+	    }
+	    else {
+	    	return chosenMove;
+	    }
 	}
 }
