@@ -352,6 +352,8 @@ public class Reversi extends Game {
 				int blockMove = player.ai.blockingMove(validMoves, board, player);
 				if (blockMove != -1) {
 					input = blockMove;
+				} else if (turn < 2) {
+					input = player.ai.random(board, player);
 				} else if (turn < 0) {
 					input = player.ai.boardWeighting(board, player);
 				} else if (turn < 48) {

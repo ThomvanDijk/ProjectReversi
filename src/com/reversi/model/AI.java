@@ -398,21 +398,17 @@ public class AI {
 	    	}
 	    	
 	        if (list.size() == 0) {
-	        	goodList = (ArrayList<ArrayList<Integer>>) list.clone();
-		    	
-		    	for(int i = list.size() -1; i > -1; i--) {
-		    		int a = list.get(i).get(0) + (list.get(i).get(1) * 8);
-		    		int c = areaValue(b, player)[a];
-		    		if (c < -50) {
-		    			goodList.remove(i);
-		    		}
-		    	}
-		        return chosenScore - removeBadMoves(list, b, player).size();
+	        	if (depth%2 == 0) {
+	        		return chosenScore;
+	        	}
+	        	else {
+	        		return chosenScore * -1;
+	        	}
+	        		
 	        }
 	        else {
 	            for (int i = 0; i < (list.size()); i++) {	                
 	                int move = list.get(i).get(0) + (list.get(i).get(1)*8);
-	                int antiscore = list.size();
 	                reversi.makeForwardMove(player, move, b);
 	                int score = reversi.getValidMoves(b, player.opponent).size();
 	
@@ -438,9 +434,17 @@ public class AI {
 	                    bestMove = move;
 	                }
 	                else {	                	
-	                	if (score < bestScore){
-		                    bestScore = score;
-		                    bestMove = move;
+	                	if (depth%2 == 0) {
+		                	if (score > bestScore){
+			                    bestScore = score;
+			                    bestMove = move;
+			                }
+		                }
+		                else {
+		                	if (score < bestScore){
+			                    bestScore = score;
+			                    bestMove = move;
+			                }
 		                }
 		                
 	                }
