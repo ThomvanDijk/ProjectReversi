@@ -168,57 +168,72 @@ public class AI {
 		else {
 			boardValue[1] = j;
 		}*/
-		
-		if (board[0][2] == player.id) {
+		if (board[0][0] != 0) {
+			boardValue[1] = i;
+		} else if (board[0][2] == player.id) {
 			boardValue[1] = i;
 		}
 		else {
 			boardValue[1] = j;
 		}
 		
-		if (board[0][5] == player.id) {
+		if (board[0][7] != 0) {
+			boardValue[1] = i;
+		} else if (board[0][5] == player.id) {
 			boardValue[6] = i;
 		}
 		else {
 			boardValue[6] = j;
 		}
 		
-		if (board[2][0] == player.id) {
+		if (board[0][0] != 0) {
+			boardValue[1] = i;
+		} else if (board[2][0] == player.id) {
 			boardValue[8] = i;
 		}
 		else {
 			boardValue[8] = j;
 		}
 		
-		if (board[2][7] == player.id) {
+		if (board[0][7] != 0) {
+			boardValue[1] = i;
+		} else if (board[2][7] == player.id) {
 			boardValue[15] = i;
 		}
 		else {
 			boardValue[15] = j;
 		}
 		
-		if (board[5][0] == player.id) {
+		if (board[7][0] != 0) {
+			boardValue[1] = i;
+		} else if (board[5][0] == player.id) {
 			boardValue[48] = i;
 		}
 		else {
 			boardValue[48] = j;
 		}
 		
-		if (board[5][7] == player.id) {
+		if (board[7][7] != 0) {
+			boardValue[1] = i;
+		} else if (board[5][7] == player.id) {
 			boardValue[55] = i;
 		}
 		else {
 			boardValue[55] = j;
 		}
 		
-		if (board[7][2] == player.id) {
+		if (board[7][0] != 0) {
+			boardValue[1] = i;
+		} else if (board[7][2] == player.id) {
 			boardValue[57] = i;
 		}
 		else {
 			boardValue[57] = j;
 		}
 		
-		if (board[7][5] == player.id) {
+		if (board[7][7] != 0) {
+			boardValue[1] = i;
+		} else if (board[7][5] == player.id) {
 			boardValue[62] = i;
 		}
 		else {
@@ -356,7 +371,16 @@ public class AI {
 	    	if (goodMove == true) {
 	    		return bestAreaMove;
 	    	}
-		}
+	    	
+	    	// Stability possibility check
+			if (checkCorners (b, player).size() > 0) {
+				int stableMove = stability(list, b, player);
+				if (stableMove != -1) {
+					System.out.println("Hey babe, het werkt hoor. Ik ga deze move doen: "+stableMove);
+					//return stableMove;
+				}
+			}
+		}				
 		
 		// Make backup of current board state
 		int boardSize = b.getBoardSize();
@@ -720,5 +744,123 @@ public class AI {
 	    else {  
 	    	return chosenMove;
 	    }
+	}
+	public ArrayList<int[]> checkCorners (Board b, Player player) {
+		ArrayList<int[]> cornersTaken = new ArrayList<int[]>();
+		
+		// Linker bovenhoek
+		if (b.getBoard()[0][0] == player.id) {
+			int[] temp = {0,0};
+			cornersTaken.add(temp);
+		}
+		// Rechter bovenhoek
+		if (b.getBoard()[0][7] == player.id) {
+			int[] temp = {0,7};
+			cornersTaken.add(temp);
+		}
+		// Linker onderhoek
+		if (b.getBoard()[7][0] == player.id) {
+			int[] temp = {7,0};
+			cornersTaken.add(temp);
+		}
+		// Rechter onderhoek
+		if (b.getBoard()[7][7] == player.id) {
+			int[] temp = {7,7};
+			cornersTaken.add(temp);
+		}
+		return cornersTaken;		
+	}
+	
+	public int stability (ArrayList<ArrayList<Integer>> list, Board b, Player player) {
+		ArrayList<int[]> cornersTaken = checkCorners(b, player);
+		int boardSize = b.getBoardSize();
+		
+		for (int[] num : cornersTaken) {
+			// Check Zuid
+			if (num[0] == 0) {
+	        	for(int i = 1; i < boardSize; i++) {
+	        		int check = b.getBoard()[i][num[1]];
+	        		// Kijk of mogelijk stability vak leeg is
+	        		if (check == 0) {
+		        		for (int j = 0; j < list.size(); j++) {
+		        			for (int k = 0; k < list.get(j).size(); k = k+2) {
+		        				if ((list.get(j).get(k) == i) && (list.get(j).get(k+1) == i)) {
+		        					return list.get(j).get(0) + (list.get(j).get(1)*8);
+		        				}
+		        			}
+		        		}
+	        		}
+	        		else if (check != player.id){
+	        			// Niet stabiel meer
+	        			break;
+	        		}
+	        	}
+			}
+			
+			// Check Noord
+			if (num[0] == (boardSize-1)) {
+	        	for(int i = (boardSize-1); i > -1; i--) {
+	        		int check = b.getBoard()[i][num[1]];
+	        		// Kijk of mogelijk stability vak leeg is
+	        		if (check == 0) {
+		        		for (int j = 0; j < list.size(); j++) {
+		        			for (int k = 0; k < list.get(j).size(); k = k+2) {
+		        				if ((list.get(j).get(k) == i) && (list.get(j).get(k+1) == i)) {
+		        					return list.get(j).get(0) + (list.get(j).get(1)*8);
+		        				}
+		        			}
+		        		}
+	        		}
+	        		else if (check != player.id){
+	        			// Niet stabiel meer
+	        			break;
+	        		}
+	        	}
+			}
+			
+			// Check Oost
+			if (num[0] == 0) {
+	        	for(int i = 1; i < boardSize; i++) {
+	        		int check = b.getBoard()[num[0]][i];
+	        		// Kijk of mogelijk stability vak leeg is
+	        		if (check == 0) {
+		        		for (int j = 0; j < list.size(); j++) {
+		        			for (int k = 0; k < list.get(j).size(); k = k+2) {
+		        				if ((list.get(j).get(k) == i) && (list.get(j).get(k+1) == i)) {
+		        					return list.get(j).get(0) + (list.get(j).get(1)*8);
+		        				}
+		        			}
+		        		}
+	        		}
+	        		else if (check != player.id){
+	        			// Niet stabiel meer
+	        			break;
+	        		}
+	        	}
+			}
+			
+			// Check West
+			if (num[1] == (boardSize-1)) {
+	        	for(int i = (boardSize-1); i > -1; i--) {
+	        		int check = b.getBoard()[num[0]][i];
+	        		// Kijk of mogelijk stability vak leeg is
+	        		if (check == 0) {
+		        		for (int j = 0; j < list.size(); j++) {
+		        			for (int k = 0; k < list.get(j).size(); k = k+2) {
+		        				if ((list.get(j).get(k) == i) && (list.get(j).get(k+1) == i)) {
+		        					return list.get(j).get(0) + (list.get(j).get(1)*8);
+		        				}
+		        			}
+		        		}
+	        		}
+	        		else if (check != player.id){
+	        			// Niet stabiel meer
+	        			break;
+	        		}
+	        	}
+			}
+		}
+		
+		return -1;
 	}
 }
