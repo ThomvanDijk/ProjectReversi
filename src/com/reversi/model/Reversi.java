@@ -355,10 +355,12 @@ public class Reversi extends Game {
 					input = player.ai.random(board, player);
 				} else if (turn < 0) {
 					input = player.ai.boardWeighting(board, player);
+				} else if (turn < 40) {
+					input = player.ai.minimaxAvailableMoves(board, player, 0, 10, 0, 0, Integer.MIN_VALUE,Integer.MAX_VALUE, 0);	
 				} else if (turn < 45) {
 					input = player.ai.minimaxAvailableMoves(board, player, 0, 8, 0, 0, Integer.MIN_VALUE,Integer.MAX_VALUE, 0);					
 				} else {
-					input = player.ai.minimax(board, player, 0, 16, 0, 0, Integer.MIN_VALUE,Integer.MAX_VALUE, 0, 0);
+					input = player.ai.minimaxTest(board, player, 0, 16, 0, 0, Integer.MIN_VALUE,Integer.MAX_VALUE, 0);
 				}
 				System.out.println("Player: " + player.id + " (AI) is doing the following move: " + input);
 
@@ -382,9 +384,9 @@ public class Reversi extends Game {
 		ArrayList<ArrayList<Integer>> validMovesOpponent = getValidMoves(board, player.opponent);
 		if (validMovesOpponent.size() > 0) {
 			switchTurn(player);
-			
+			System.out.print("Het werkt");
 		}
-		
+
 		return input;
 	}
 
