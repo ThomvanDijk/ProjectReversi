@@ -18,46 +18,48 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
 
 public class ControlView extends View {
-	
+
 	private Button subReversiButton;
 	private Button subTictactoeButton;
 
+	private Button playReversiButton;
+	private Button playTictactoeButton;
+
 	public ControlView(UserController userController, StackPane controlPane) {
 		super(userController);
-		
+
 		subReversiButton = new Button("Subscribe Reversi");
 		subReversiButton.setDisable(true);
 		subTictactoeButton = new Button("Subscribe Tic-tac-toe");
 		subTictactoeButton.setDisable(true);
-		subTictactoeButton.setPrefWidth(140);
+		subTictactoeButton.setPrefWidth(130);
+
+		playReversiButton = new Button("Play Reversi");
+		playTictactoeButton = new Button("Play Tic-tac-toe");
 
 		GridPane gridPane = new GridPane();
 		gridPane.setAlignment(Pos.TOP_CENTER);
+		gridPane.setPadding(new Insets(10, 10, 10, 10));
 
 		// Create all the necessities to login
 		createLogin(gridPane);
 
-		subReversiButton.setOnAction(e -> {userController.notifyModel(Controller.SUBSCRIBE_TO_REVERSI, null);});
-		subTictactoeButton.setOnAction(e -> {userController.notifyModel(Controller.SUBSCRIBE_TO_TICTACTOE, null);});
-		
-		Separator separator1 = new Separator();
-		separator1.setStyle("-fx-background-color: black; -fx-border-height: 2;");
-		Separator separator2 = new Separator();
-		separator2.setStyle("-fx-background-color: black; -fx-border-height: 2;");
-		
-		GridPane.setMargin(separator1, new Insets(0, 0, 10, 0));
-		GridPane.setMargin(separator2, new Insets(0, 0, 10, 0));
-		//GridPane.setMargin(subReversiButton, new Insets(0, 0, 10, 0));
-		
-		gridPane.add(separator1, 0, 3);
-		gridPane.add(separator2, 1, 3);
+		// Buttons to subscribe
+		subReversiButton.setOnAction(e -> {
+			userController.notifyModel(Controller.SUBSCRIBE_TO_REVERSI, null);
+		});
+		subTictactoeButton.setOnAction(e -> {
+			userController.notifyModel(Controller.SUBSCRIBE_TO_TICTACTOE, null);
+		});
+
 		gridPane.add(subReversiButton, 0, 4);
-		
 		HBox alignButtonRight = new HBox();
 		alignButtonRight.setAlignment(Pos.CENTER_RIGHT);
 		alignButtonRight.getChildren().add(subTictactoeButton);
-		
 		gridPane.add(alignButtonRight, 1, 4);
+
+		// Buttons for offline play
+		createOfflineButtons(gridPane);
 
 		controlPane.getChildren().add(gridPane);
 	}
@@ -65,7 +67,7 @@ public class ControlView extends View {
 	@Override
 	protected void update(Model model) {
 	}
-	
+
 	public void createLogin(GridPane gridPane) {
 		Label usernameLabel = new Label("Username:");
 		usernameLabel.setPadding(new Insets(0, 15, 0, 0));
@@ -86,7 +88,7 @@ public class ControlView extends View {
 		loginButton.setOnAction(e -> {
 			userController.notifyModel(Controller.LOG_IN,
 					new String[] { usernameField.getText(), addressField.getText() });
-			
+
 			subReversiButton.setDisable(false);
 			subTictactoeButton.setDisable(false);
 		});
@@ -95,20 +97,62 @@ public class ControlView extends View {
 		alignButtonRight.setAlignment(Pos.CENTER_RIGHT);
 		alignButtonRight.getChildren().add(loginButton);
 
-		gridPane.setPadding(new Insets(10, 10, 10, 10));
-
 		gridPane.add(usernameLabel, 0, 0);
 		gridPane.add(addressLabel, 0, 1);
 
 		gridPane.add(usernameField, 1, 0);
 		gridPane.add(addressField, 1, 1);
 		gridPane.add(alignButtonRight, 1, 2);
-		
+
 		GridPane.setMargin(usernameLabel, new Insets(0, 0, 10, 0));
 		GridPane.setMargin(usernameField, new Insets(0, 0, 10, 0));
 		GridPane.setMargin(addressLabel, new Insets(0, 0, 10, 0));
 		GridPane.setMargin(addressField, new Insets(0, 0, 10, 0));
 		GridPane.setMargin(alignButtonRight, new Insets(0, 0, 10, 0));
+
+		Separator separator1 = new Separator();
+		separator1.setStyle("-fx-background-color: black; -fx-border-height: 2;");
+		Separator separator2 = new Separator();
+		separator2.setStyle("-fx-background-color: black; -fx-border-height: 2;");
+
+		GridPane.setMargin(separator1, new Insets(0, 0, 10, 0));
+		GridPane.setMargin(separator2, new Insets(0, 0, 10, 0));
+
+		gridPane.add(separator1, 0, 3);
+		gridPane.add(separator2, 1, 3);
+	}
+
+	public void createOfflineButtons(GridPane gridPane) {
+		
+		Label sectionText = new Label("Play offline");
+		
+		// Separator above offline buttons
+		Separator separator1 = new Separator();
+		separator1.setStyle("-fx-background-color: black; -fx-border-height: 2;");
+		Separator separator2 = new Separator();
+		separator2.setStyle("-fx-background-color: black; -fx-border-height: 2;");
+
+		GridPane.setMargin(sectionText, new Insets(10, 0, 0, 1));
+		GridPane.setMargin(separator1, new Insets(5, 0, 10, 0));
+		GridPane.setMargin(separator2, new Insets(5, 0, 10, 0));
+
+		gridPane.add(sectionText, 0, 19);
+		gridPane.add(separator1, 0, 20);
+		gridPane.add(separator2, 1, 20);
+
+		// Buttons to subscribe
+		playReversiButton.setOnAction(e -> {
+			userController.notifyModel(Controller.START_REVERSI_SINGLEPLAYER, null);
+		});
+		playTictactoeButton.setOnAction(e -> {
+			userController.notifyModel(Controller.START_TICTACTOE_SINGLEPLAYER, null);
+		});
+		
+		gridPane.add(playReversiButton, 0, 21);
+		HBox alignButtonRight = new HBox();
+		alignButtonRight.setAlignment(Pos.CENTER_RIGHT);
+		alignButtonRight.getChildren().add(playTictactoeButton);
+		gridPane.add(alignButtonRight, 1, 21);
 	}
 
 }

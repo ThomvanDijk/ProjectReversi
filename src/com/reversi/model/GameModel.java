@@ -23,8 +23,8 @@ public class GameModel extends Model {
 	private TicTacToe ticTacToe;
 	private Reversi reversi;
 
-	private GameType currentGameType;
-	private GameMode currentGameMode;
+	private GameType currentGameType; // Tic-tac-toe or reversi
+	private GameMode currentGameMode; // Singleplayer or online
 
 	private Queue<HashMap<ArgumentKey, String>> challenges;
 	
@@ -256,6 +256,10 @@ public class GameModel extends Model {
 
 		challenges.add(map);
 		notifyViews();
+	}
+	
+	public GameType getCurrentGameType() {
+		return currentGameType;
 	}
 
 	/**

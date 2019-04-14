@@ -48,22 +48,22 @@ public class GameView extends View {
 	public GameView(UserController userController, StackPane gamePane) {
 		super(userController);
 		
-		blackScore = new Label("0");
+		blackScore = new Label("2");
 		blackScore.setStyle("-fx-text-fill: white; -fx-font: bold 20px 'Serif';");
-		whiteScore = new Label("0");
+		whiteScore = new Label("2");
 		whiteScore.setStyle("-fx-font: bold 20px 'Serif';");
 		
 		blackPlayer = new Label("Player");
-		blackPlayer.setPadding(new Insets(0, 0, 0, 20));
+		blackPlayer.setPadding(new Insets(0, 0, 0, 25));
 		blackPlayer.setStyle("-fx-font: bold 20px 'Serif';");
 		whitePlayer = new Label("Computer");
-		whitePlayer.setPadding(new Insets(0, 20, 0, 0));
+		whitePlayer.setPadding(new Insets(0, 25, 0, 0));
 		whitePlayer.setStyle("-fx-font: bold 20px 'Serif';");
 		
-		gameName = new Label("Reversi");
+		gameName = new Label("REVERSI");
 		gameName.setStyle("-fx-font: bold 20px 'Serif';");
-		hasTurnText = new Label("Reversi");
-		hasTurnText.setStyle("-fx-font: 10px 'Serif';");
+		hasTurnText = new Label("Black has the turn");
+		hasTurnText.setStyle("-fx-font: 15px 'Serif';");
 
 		scanInput = new Scanner(System.in);
 		consoleInput = false;
@@ -80,7 +80,16 @@ public class GameView extends View {
 		//boardPane.setStyle("-fx-background-color: purple;");
 		boardPane.setAlignment(Pos.BOTTOM_CENTER);
 		
-		int[][] board = new int[8][8];
+		// Default is reversi
+		int[][] board = new int[][] { 
+			{ 0, 0, 0, 0, 0, 0, 0, 0 }, 
+			{ 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0 }, 
+			{ 0, 0, 0, 2, 1, 0, 0, 0 }, 
+			{ 0, 0, 0, 1, 2, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0 }, 
+			{ 0, 0, 0, 0, 0, 0, 0, 0 }, 
+			{ 0, 0, 0, 0, 0, 0, 0, 0 }, };
 		showBoard(board);
 		
 		
@@ -143,26 +152,40 @@ public class GameView extends View {
 		
 		showBoard(gameModel.getBoard());
 		
-		showScores(gameModel.getPlayers());
+		updateGameState(gameModel.getPlayers());
 		//gameModel.getPlayer(); returns a player array
 		//gameModel.getPlayerScores();
 		//hasChallenge(); // returns boolean
+		gameName.setText(gameModel.getCurrentGameType().name());
 	}
 	
-	public void showScores(Player[] players) {
+	public void showGameState(Player[] players) {
 		
+	}
+	
+	public void updateGameState(Player[] players) {
 		if(players[0].getColor() == Reversi.BLACK) {
 			blackScore.setText("" + players[0].getScore());
 			whiteScore.setText("" + players[1].getScore());
 					        
 			blackPlayer.setText("" + players[0].getName());
 			whitePlayer.setText("" + players[1].getName());
+			if(players[0].hasTurn()) {
+				hasTurnText.setText("Black has the turn");
+			} else {
+				hasTurnText.setText("White has the turn");
+			}
 		} else {
 			blackScore.setText("" + players[1].getScore());
 			whiteScore.setText("" + players[0].getScore());
 					        
 			blackPlayer.setText("" + players[1].getName());
 			whitePlayer.setText("" + players[0].getName());
+			if(players[1].hasTurn()) {
+				hasTurnText.setText("Black has the turn");
+			} else {
+				hasTurnText.setText("White has the turn");
+			}
 		}
 	}
 	
