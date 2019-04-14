@@ -41,15 +41,29 @@ public class GameView extends View {
 	
 	private Label blackPlayer;
 	private Label whitePlayer;
+	
+	private Label gameName;
+	private Label hasTurnText;
 
 	public GameView(UserController userController, StackPane gamePane) {
 		super(userController);
 		
 		blackScore = new Label("0");
+		blackScore.setStyle("-fx-text-fill: white; -fx-font: bold 20px 'Serif';");
 		whiteScore = new Label("0");
+		whiteScore.setStyle("-fx-font: bold 20px 'Serif';");
 		
 		blackPlayer = new Label("Player");
+		blackPlayer.setPadding(new Insets(0, 0, 0, 20));
+		blackPlayer.setStyle("-fx-font: bold 20px 'Serif';");
 		whitePlayer = new Label("Computer");
+		whitePlayer.setPadding(new Insets(0, 20, 0, 0));
+		whitePlayer.setStyle("-fx-font: bold 20px 'Serif';");
+		
+		gameName = new Label("Reversi");
+		gameName.setStyle("-fx-font: bold 20px 'Serif';");
+		hasTurnText = new Label("Reversi");
+		hasTurnText.setStyle("-fx-font: 10px 'Serif';");
 
 		scanInput = new Scanner(System.in);
 		consoleInput = false;
@@ -63,6 +77,7 @@ public class GameView extends View {
 
 		boardPane = new GridPane();
 		boardPane.setPadding(new Insets(10, 10, 10, 10));
+		//boardPane.setStyle("-fx-background-color: purple;");
 		boardPane.setAlignment(Pos.BOTTOM_CENTER);
 		
 		int[][] board = new int[8][8];
@@ -70,33 +85,50 @@ public class GameView extends View {
 		
 		
 		HBox hBoxLeft = new HBox();
+		HBox hBoxCenter = new HBox();
 		HBox hBoxRight = new HBox();
 		
-		hBoxLeft.setAlignment(Pos.TOP_LEFT);
-		hBoxLeft.setStyle("-fx-background-color: green;");
-		//hBoxLeft.setPrefWidth(200);
-		//hBoxLeft.prefWidthProperty().bind(gamePane.widthProperty());
+		hBoxLeft.setAlignment(Pos.CENTER_LEFT);
+		//hBoxLeft.setStyle("-fx-background-color: green;");
+		hBoxLeft.setPadding(new Insets(15, 0, 0, 0));
+		hBoxLeft.setPrefWidth(Main.SCREEN_HEIGHT / 3 - 20);
 		
-		hBoxRight.setAlignment(Pos.TOP_RIGHT);
-		hBoxRight.setStyle("-fx-background-color: red;");
-		//hBoxRight.setPrefWidth(200);
-		//hBoxRight.prefWidthProperty().bind(gamePane.widthProperty());
+		hBoxCenter.setAlignment(Pos.CENTER);
+		//hBoxCenter.setStyle("-fx-background-color: red;");
+		hBoxCenter.setPadding(new Insets(0, 0, 0, 0));
+		hBoxCenter.setPrefWidth(Main.SCREEN_HEIGHT / 3 - 100);
 		
-		Circle blackCircle = new Circle(0, 0, 25);
-		Circle whiteCircle = new Circle(0, 0, 25);
+		hBoxRight.setAlignment(Pos.CENTER_RIGHT);
+		//hBoxRight.setStyle("-fx-background-color: red;");
+		hBoxRight.setPadding(new Insets(15, 0, 0, 0));
+		hBoxRight.setPrefWidth(Main.SCREEN_HEIGHT / 3 - 20);
+		
+		Circle blackCircle = new Circle(0, 0, 30);
+		Circle whiteCircle = new Circle(0, 0, 30);
 		whiteCircle.setFill(Color.WHITE);
 		
-		hBoxLeft.getChildren().addAll(blackCircle, blackScore, blackPlayer);
-		hBoxRight.getChildren().addAll(whitePlayer, whiteScore, whiteCircle);		
+		StackPane blackCircleHolder = new StackPane();
+		blackCircleHolder.getChildren().addAll(blackCircle, blackScore);
+		
+		StackPane whiteCircleHolder = new StackPane();
+		whiteCircleHolder.getChildren().addAll(whiteCircle, whiteScore);
+		
+		hBoxLeft.getChildren().addAll(blackCircleHolder, blackPlayer);
+		VBox centerAlign = new VBox(5); // 5 is the spacing between elements in the VBox
+		centerAlign.setAlignment(Pos.CENTER);
+		centerAlign.getChildren().addAll(gameName, hasTurnText);
+		hBoxCenter.getChildren().addAll(centerAlign);
+		hBoxRight.getChildren().addAll(whitePlayer, whiteCircleHolder);		
 		
 		
 		GridPane mainPane = new GridPane();
 		mainPane.setAlignment(Pos.TOP_CENTER);
 
 		mainPane.add(hBoxLeft, 0, 0);
-		mainPane.add(hBoxRight, 1, 0);
+		mainPane.add(hBoxCenter, 1, 0);
+		mainPane.add(hBoxRight, 2, 0);
 
-		gamePane.getChildren().addAll(mainPane, boardPane);
+		gamePane.getChildren().addAll(boardPane, mainPane);
 	}
 
 	/**
@@ -147,7 +179,7 @@ public class GameView extends View {
 				backgroundSquare.setPrefHeight(squareSize);
 				backgroundSquare.setStyle("-fx-background-color: darkseagreen; -fx-text-fill: white;");
 				
-				Pane squareHolder = new Pane(backgroundSquare);
+				StackPane squareHolder = new StackPane(backgroundSquare);
 				squareHolder.setPadding(new Insets(spacing));
 				
 				boardPane.add(squareHolder, row, col);

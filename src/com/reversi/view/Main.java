@@ -10,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -18,7 +19,7 @@ public class Main extends Application {
 	public static boolean running;
 	
 	public static final int SCREEN_WIDTH = 900;
-	public static final int SCREEN_HEIGHT = 700;
+	public static final int SCREEN_HEIGHT = 680;
 
 	private GameModel model;
 	private UserController userController;
@@ -62,14 +63,13 @@ public class Main extends Application {
 
 		// Create HBox to split the screen in two
 		hBox = new HBox();
-		
 		gamePane = new StackPane();
-		//gamePane.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+		gamePane.setStyle("-fx-background-color: beige;");
 		gamePane.setPadding(new Insets(10, 10, 10, 10));
-		gamePane.setMinWidth(SCREEN_HEIGHT - 100); // Make squared
+		gamePane.setMinWidth(SCREEN_HEIGHT - 80); // Make squared
 		
 		controlPane = new StackPane();
-		controlPane.setStyle("-fx-background-color: lightgray; -fx-text-fill: white;");
+		controlPane.setStyle("-fx-background-color: lightgray;");
 		controlPane.setPadding(new Insets(10, 10, 10, 10));
 		controlPane.prefWidthProperty().bind(hBox.widthProperty());
 
