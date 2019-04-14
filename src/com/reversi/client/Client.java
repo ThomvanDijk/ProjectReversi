@@ -126,6 +126,11 @@ public class Client {
 					arguments[1] = keyValueMap.get(ArgumentKey.PLAYERTWOSCORE);
 					clientController.notifyModel(Controller.END_GAME, arguments);
 					break;
+				case SVR_GAME_DRAW:
+					arguments[0] = keyValueMap.get(ArgumentKey.PLAYERONESCORE);
+					arguments[1] = keyValueMap.get(ArgumentKey.PLAYERTWOSCORE);
+					clientController.notifyModel(Controller.END_GAME, arguments);
+					break;
 				case SVR_GAME:
 					break;
 				default:

@@ -268,19 +268,8 @@ public class Reversi extends Game {
 
 	// Used by AI and called multiple times to make a good decision
 	public Board makeForwardMove(Player player, int move, Board b) {
-		if (player.id == 1 && player.type.equals(PlayerType.HUMAN)) {
-			
-
-			player1.setTurn(false);
-			player2.setTurn(true);
-		} else {
-			// AI has to make a move
-			// input = player.ai.calculateMove(board, player);
-			
-
-			player1.setTurn(true);
-			player2.setTurn(false);
-		}
+		player1.setTurn(true);
+		player2.setTurn(false);
 		
 		int input = 0;
 		boolean validMove = false;
