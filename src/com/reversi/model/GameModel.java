@@ -297,7 +297,7 @@ public class GameModel extends Model {
 	 * 
 	 * @return Array of players.
 	 */
-	public Player[] getPlayerNames() {
+	public Player[] getPlayers() {
 		switch (currentGameType) {
 		case REVERSI:
 			return reversi.getPlayers();

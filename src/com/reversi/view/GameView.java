@@ -13,6 +13,8 @@ import java.util.Scanner;
 import com.reversi.controller.*;
 import com.reversi.model.GameModel;
 import com.reversi.model.Model;
+import com.reversi.model.Player;
+import com.reversi.model.Reversi;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -73,12 +75,12 @@ public class GameView extends View {
 		hBoxLeft.setAlignment(Pos.TOP_LEFT);
 		hBoxLeft.setStyle("-fx-background-color: green;");
 		//hBoxLeft.setPrefWidth(200);
-		hBoxLeft.prefWidthProperty().bind(gamePane.widthProperty());
+		//hBoxLeft.prefWidthProperty().bind(gamePane.widthProperty());
 		
 		hBoxRight.setAlignment(Pos.TOP_RIGHT);
 		hBoxRight.setStyle("-fx-background-color: red;");
 		//hBoxRight.setPrefWidth(200);
-		hBoxRight.prefWidthProperty().bind(gamePane.widthProperty());
+		//hBoxRight.prefWidthProperty().bind(gamePane.widthProperty());
 		
 		Circle blackCircle = new Circle(0, 0, 25);
 		Circle whiteCircle = new Circle(0, 0, 25);
@@ -108,9 +110,28 @@ public class GameView extends View {
 		GameModel gameModel = (GameModel) model; // cast
 		
 		showBoard(gameModel.getBoard());
+		
+		showScores(gameModel.getPlayers());
 		//gameModel.getPlayer(); returns a player array
 		//gameModel.getPlayerScores();
 		//hasChallenge(); // returns boolean
+	}
+	
+	public void showScores(Player[] players) {
+		
+		if(players[0].getColor() == Reversi.BLACK) {
+			blackScore.setText("" + players[0].getScore());
+			whiteScore.setText("" + players[1].getScore());
+					        
+			blackPlayer.setText("" + players[0].getName());
+			whitePlayer.setText("" + players[1].getName());
+		} else {
+			blackScore.setText("" + players[1].getScore());
+			whiteScore.setText("" + players[0].getScore());
+					        
+			blackPlayer.setText("" + players[1].getName());
+			whitePlayer.setText("" + players[0].getName());
+		}
 	}
 	
 	public void showBoard(int[][] board) {
