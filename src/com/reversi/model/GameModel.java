@@ -256,6 +256,10 @@ public class GameModel extends Model {
 		notifyViews();
 	}
 	
+	public GameMode getCurrentGameMode() {
+		return currentGameMode;
+	}
+	
 	public GameType getCurrentGameType() {
 		return currentGameType;
 	}

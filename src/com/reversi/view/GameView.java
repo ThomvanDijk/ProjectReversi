@@ -47,6 +47,7 @@ public class GameView extends View {
 	private Label whitePlayer;
 
 	private Label gameName;
+	private Label gameMode;
 	private Label hasTurnText;
 
 	public GameView(UserController userController, StackPane gamePane) {
@@ -74,6 +75,8 @@ public class GameView extends View {
 
 		gameName = new Label("REVERSI");
 		gameName.setStyle("-fx-font: bold 20px 'Serif';");
+		gameMode = new Label("Offline");
+		gameMode.setStyle("-fx-font: 15px 'Serif';");
 		hasTurnText = new Label("Black has the turn");
 		hasTurnText.setStyle("-fx-font: 15px 'Serif';");
 
@@ -90,8 +93,8 @@ public class GameView extends View {
 		hBoxLeft.setPrefWidth(Main.SCREEN_HEIGHT / 3 - 20);
 
 		hBoxCenter.setAlignment(Pos.CENTER);
-		// hBoxCenter.setStyle("-fx-background-color: red;");
-		hBoxCenter.setPadding(new Insets(0, 0, 0, 0));
+		//hBoxCenter.setStyle("-fx-background-color: red;");
+		hBoxCenter.setPadding(new Insets(8, 0, 0, 0));
 		hBoxCenter.setPrefWidth(Main.SCREEN_HEIGHT / 3 - 100);
 
 		hBoxRight.setAlignment(Pos.CENTER_RIGHT);
@@ -111,8 +114,8 @@ public class GameView extends View {
 
 		hBoxLeft.getChildren().addAll(blackCircleHolder, blackPlayer);
 		VBox centerAlign = new VBox(5); // 5 is the spacing between elements in the VBox
-		centerAlign.setAlignment(Pos.CENTER);
-		centerAlign.getChildren().addAll(gameName, hasTurnText);
+		centerAlign.setAlignment(Pos.BOTTOM_CENTER);
+		centerAlign.getChildren().addAll(gameName, gameMode, hasTurnText);
 		hBoxCenter.getChildren().addAll(centerAlign);
 		hBoxRight.getChildren().addAll(whitePlayer, whiteCircleHolder);
 
@@ -149,6 +152,10 @@ public class GameView extends View {
 
 			updateGameState(players);
 			gameName.setText(gameModel.getCurrentGameType().name());
+			
+			// Make only the first letter a capital
+			String gameModeString = gameModel.getCurrentGameMode().name().toLowerCase();
+			gameMode.setText(gameModeString.substring(0, 1).toUpperCase() + gameModeString.substring(1));
 		} else {
 			boardPane.setVisible(false);
 			infoPane.setVisible(false);
