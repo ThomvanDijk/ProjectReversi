@@ -15,7 +15,7 @@ public abstract class Controller {
 	public static final int PROCESS_NEW_CHALLENGE	     = 9;
 	public static final int LOG_IN                       = 10;  
 	public static final int LOG_OUT                      = 11;
-	public static final int SERVER_DID_MOVE	             = 12; 
+	public static final int SET_MOVE	             = 12; 
 	public static final int ACCEPT_CHALLENGE             = 13; 
 	public static final int REQUEST_PLAYERLIST           = 14; 
 	public static final int CANCEL_CHALLENGE			 = 15;

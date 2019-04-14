@@ -30,7 +30,7 @@ public class ClientController extends Controller {
 			break;
 		case LOG_OUT:
 			break;
-		case SERVER_DID_MOVE:
+		case SET_MOVE:
 			// Argument should be a number
 			gameModel.setMove(arguments[0]);
 			break;

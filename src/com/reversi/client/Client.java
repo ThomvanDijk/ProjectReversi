@@ -103,7 +103,7 @@ public class Client {
 					
 					// Only notifyModel if it is not our own move!
 					if(!keyValueMap.get(ArgumentKey.PLAYER).equals(loginName)) {
-						clientController.notifyModel(Controller.SERVER_DID_MOVE, arguments);
+						clientController.notifyModel(Controller.SET_MOVE, arguments);
 					}
 					break;
 				case SVR_GAME_CHALLENGE:

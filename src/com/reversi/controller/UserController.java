@@ -42,7 +42,7 @@ public class UserController extends Controller {
 			// Arguments should be player name followed by tictactoe or reversi
 			gameModel.challengePlayer(arguments);
 			break;
-		case SERVER_DID_MOVE:
+		case SET_MOVE:
 			// Argument should be a valid number
 			gameModel.setMove(arguments[0]); 
 			break;

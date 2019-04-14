@@ -21,6 +21,9 @@ public class Reversi extends Game {
 			player1 = new Player(PlayerType.HUMAN, BLACK);
 			player2 = new Player(PlayerType.AI, WHITE);
 			player2.ai.setReversi(this);
+			
+			player1.setTurn(true);
+			player1.setName("You"); // Default name for single player
 		} else { // The start player must be black
 			if (startPlayer.equals(PlayerType.SERVER)) {
 				player1 = new Player(PlayerType.AI, WHITE);
@@ -198,8 +201,6 @@ public class Reversi extends Game {
 		}
 
 		// Check if the new move is valid
-		
-		
 		boolean validMove = false;
 		for (int check = 0; check < validMoves.size(); check++) {
 
@@ -314,8 +315,6 @@ public class Reversi extends Game {
 
 		}
 		
-		
-
 		return b;
 	}
 

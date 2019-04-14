@@ -39,6 +39,8 @@ public class GameModel extends Model {
 		currentGameType = null;
 
 		challenges = new LinkedList<>();
+		
+		loginName = "You";
 	}
 
 	public void subscribeToGame(GameType gameType) {
@@ -118,20 +120,16 @@ public class GameModel extends Model {
 		case REVERSI:
 			Player[] players = reversi.getPlayers();
 			
-			if (currentGameMode.equals(GameMode.ONLINE)) {
-				try {
-					if (players[0].hasTurn()) {
-						reversi.makeMove(players[0], intMove);
-					} else {
-						reversi.makeMove(players[1], intMove);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
+			try {
+				if (players[0].hasTurn()) {
+					reversi.makeMove(players[0], intMove);
+				} else {
+					reversi.makeMove(players[1], intMove);
 				}
-				break;
-			} else { // Offline
-
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+			break;
 		case TICTACTOE:
 			if (currentGameMode.equals(GameMode.ONLINE)) {
 				try {

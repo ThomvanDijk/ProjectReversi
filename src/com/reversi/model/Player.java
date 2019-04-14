@@ -17,6 +17,9 @@ public class Player {
 	public Player(PlayerType type, int color) {
 		this.type = type;
 		this.color = color;
+		score = 0;
+		name = "Computer";
+		hasTurn = false;
 		
 		if (color == 1){
 			opponent = 2;
@@ -24,13 +27,14 @@ public class Player {
 		else {
 			opponent = 1;
 		}
-		score = 0;
-		name = "Computer";
-		hasTurn = false;	
 		
 		if(type.equals(PlayerType.AI)) {
 			ai = new AI();
 		}
+	}
+	
+	public PlayerType getType() {
+		return type;
 	}
 	
 	public int getColor() {
