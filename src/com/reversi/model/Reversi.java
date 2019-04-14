@@ -351,14 +351,14 @@ public class Reversi extends Game {
 				int blockMove = player.ai.blockingMove(validMoves, board, player);
 				if (blockMove != -1) {
 					input = blockMove;
-				} else if (turn < 2) {
+				} else if (turn < 0) {
 					input = player.ai.random(board, player);
 				} else if (turn < 0) {
 					input = player.ai.boardWeighting(board, player);
-				} else if (turn < 47) {
-					input = player.ai.minimaxAvailableMoves(board, player, 0, 7, 0, 0, Integer.MIN_VALUE,Integer.MAX_VALUE, 0);
+				} else if (turn < 45) {
+					input = player.ai.minimaxAvailableMoves(board, player, 0, 8, 0, 0, Integer.MIN_VALUE,Integer.MAX_VALUE, 0);					
 				} else {
-					input = player.ai.minimax(board, player, 0, 14, 0, 0, Integer.MIN_VALUE,Integer.MAX_VALUE, 0);
+					input = player.ai.minimax(board, player, 0, 16, 0, 0, Integer.MIN_VALUE,Integer.MAX_VALUE, 0);
 				}
 				System.out.println("Player: " + player.id + " (AI) is doing the following move: " + input);
 
@@ -496,7 +496,7 @@ public class Reversi extends Game {
 		return parts;
 	}
 
-	public int calculateValueDiff(int playerID) {
+	public int calculateScore(int playerID) {
 		if (playerID == 1) {
 			return (player1.getScore() - player2.getScore());
 		} else {
