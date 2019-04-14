@@ -146,6 +146,7 @@ public class AI {
 		int i;
 		int j;
 		int k;
+		int l;
 		// hoeken
 		i = 100;
 		boardValue[0]= i;
@@ -156,7 +157,8 @@ public class AI {
 		// vakken horizontaal of verticaal naast hoeken
 		i = 2;
 		j = -99;
-		k = 51;
+		k = 30;
+		l = -51;
 		
 		/*if (board[0][2] == player.opponent && board[0][3] == player.id) {
 			boardValue[1] = k;
@@ -168,72 +170,88 @@ public class AI {
 		else {
 			boardValue[1] = j;
 		}*/
-		if (board[0][0] != 0) {
-			boardValue[1] = i;
-		} else if (board[0][2] == 0) {
+		if (board[0][0] == player.id) {
+			boardValue[1] = k;
+		} else if (board[0][0] == player.opponent) {
+			boardValue[1] = l;
+		} else if (board[0][2] != 0) {
 			boardValue[1] = i;
 		}
 		else {
 			boardValue[1] = j;
 		}
 		
-		if (board[0][7] != 0) {
-			boardValue[1] = i;
-		} else if (board[0][5] == 0) {
+		if (board[0][7] == player.id) {
+			boardValue[6] = k;
+		} else if (board[0][7] == player.opponent) {
+			boardValue[6] = l;
+		} else if (board[0][5] != 0) {
 			boardValue[6] = i;
 		}
 		else {
 			boardValue[6] = j;
 		}
 		
-		if (board[0][0] != 0) {
-			boardValue[1] = i;
-		} else if (board[2][0] == 0) {
+		if (board[0][0] == player.id) {
+			boardValue[8] = k;
+		} else if (board[0][0] == player.opponent) {
+			boardValue[8] = l;
+		} else if (board[2][0] != 0) {
 			boardValue[8] = i;
 		}
 		else {
 			boardValue[8] = j;
 		}
 		
-		if (board[0][7] != 0) {
-			boardValue[1] = i;
-		} else if (board[2][7] == 0) {
+		if (board[0][7] == player.id) {
+			boardValue[15] = k;
+		} else if (board[0][7] == player.opponent) {
+			boardValue[15] = l;
+		} else if (board[2][7] != 0) {
 			boardValue[15] = i;
 		}
 		else {
 			boardValue[15] = j;
 		}
 		
-		if (board[7][0] != 0) {
-			boardValue[1] = i;
-		} else if (board[5][0] == 0) {
+		if (board[7][0] == player.id) {
+			boardValue[48] = k;
+		} else if (board[7][0] == player.opponent) {
+			boardValue[48] = l;
+		} else if (board[5][0] != 0) {
 			boardValue[48] = i;
 		}
 		else {
 			boardValue[48] = j;
 		}
 		
-		if (board[7][7] != 0) {
-			boardValue[1] = i;
-		} else if (board[5][7] == 0) {
+		if (board[7][7] == player.id) {
+			boardValue[55] = k;
+		} else if (board[7][7] == player.opponent) {
+			boardValue[55] = l;
+		} else if (board[5][7] != 0) {
 			boardValue[55] = i;
 		}
 		else {
 			boardValue[55] = j;
 		}
 		
-		if (board[7][0] != 0) {
-			boardValue[1] = i;
-		} else if (board[7][2] == 0) {
+		if (board[7][0] == player.id) {
+			boardValue[57] = k;
+		} else if (board[7][0] == player.opponent) {
+			boardValue[57] = l;
+		} else if (board[7][2] != 0) {
 			boardValue[57] = i;
 		}
 		else {
 			boardValue[57] = j;
 		}
 		
-		if (board[7][7] != 0) {
-			boardValue[1] = i;
-		} else if (board[7][5] == 0) {
+		if (board[7][7] == player.id) {
+			boardValue[62] = k;
+		} else if (board[7][7] == player.opponent) {
+			boardValue[62] = l;
+		} else if (board[7][5] != 0) {
 			boardValue[62] = i;
 		}
 		else {
@@ -437,13 +455,28 @@ public class AI {
 	    		}
 	    	}
 	    	int currentScore = removeBadMoves(list, b, player).size();
+	    	
+	    	int[] corners = new int[]{0, 7, 56, 63};
+	    	int cornerScore = 0;
+	    	for (int corner : corners) {
+	    		int x = corner % 8;
+	    		int y = corner / 8;
+	    		int check = b.getBoard()[x][y];
+	    		if (check == player.id) {
+	    			cornerScore = cornerScore + 1000;
+	    		}
+	    		else if (check == player.opponent) {
+	    			cornerScore = cornerScore - 1000;    			
+	    		}
+	    	}
+	    	
 	    	if (depth % 2 == 0) {
 	    		int output = 1000 * (currentScore - chosenScore) / (currentScore + chosenScore + 1);
-	    		return output + reversi.calculateScore(player.id);
+	    		return output + reversi.calculateScore(player.id) + cornerScore;
 	    	}
 	    	else {
 	    		int output = 1000 * (chosenScore - currentScore) / (chosenScore + currentScore + 1);
-	    		return output + reversi.calculateScore(player.opponent);
+	    		return output + reversi.calculateScore(player.opponent) + (cornerScore * -1);
 	    	}
 	    }	    
 	    else {
@@ -464,24 +497,13 @@ public class AI {
 	    		list = goodList;
 	    	}
 	    	
-	        if (list.size() == 0) {
-	        	ArrayList<ArrayList<Integer>> tempList = (ArrayList<ArrayList<Integer>>) list.clone();
-		    	
-		    	for(int i = list.size() -1; i > -1; i--) {
-		    		int a = list.get(i).get(0) + (list.get(i).get(1) * 8);
-		    		int c = areaValue(b, player)[a];
-		    		if (c < -50) {
-		    			tempList.remove(i);
-		    		}
-		    	}
-		    	int currentScore = removeBadMoves(list, b, player).size();
+	        if (list.size() == 0) {	        	
 		    	if (depth % 2 == 0) {
-		    		int output = 1000 * (currentScore - chosenScore) / (currentScore + chosenScore + 1);
-		    		return output + reversi.calculateScore(player.id);
+		    		
+		    		return -100000;
 		    	}
 		    	else {
-		    		int output = 1000 * (chosenScore - currentScore) / (chosenScore + currentScore + 1);
-		    		return output + reversi.calculateScore(player.opponent);
+		    		return 1000;
 		    	}
 	        		
 	        }
@@ -556,7 +578,7 @@ public class AI {
 	    }
 	}
 	
-	public int minimax(Board b, Player player, int depth, int maxDepth, int chosenScore, int chosenMove, int alpha, int beta, long time){
+	public int minimax(Board b, Player player, int depth, int maxDepth, int chosenScore, int chosenMove, int alpha, int beta, long time, int deadlock){
 		long endTime = time;
 		if (depth == 0) {
 			// Time check
@@ -566,10 +588,10 @@ public class AI {
 		
 		if (System.currentTimeMillis() > endTime) {
 			if (depth % 2 == 0) {
-	    		reversi.calculateScore(player.id);
+	    		return reversi.calculateScore(player.id);
 	    	}
 	    	else {
-	    		reversi.calculateScore(player.opponent);
+	    		return reversi.calculateScore(player.opponent);
 	    	}
 		}
 		
@@ -583,12 +605,13 @@ public class AI {
 		
 	    if (depth == maxDepth) {
 	    	if (depth % 2 == 0) {
-	    		reversi.calculateScore(player.id);
+	    		return reversi.calculateScore(player.id);
 	    	}
 	    	else {
-	    		reversi.calculateScore(player.opponent);
+	    		return reversi.calculateScore(player.opponent);
 	    	}
 	    }
+
 	    
 	    else {
 	    	int bestScore = 100;
@@ -596,10 +619,27 @@ public class AI {
 	    	ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.id);
 	        if (list.size() == 0) {
 	        	if (depth % 2 == 0) {
-		    		reversi.calculateScore(player.id);
+	        		if (deadlock == 1) {
+		        		Player nextPlayer;
+		        		if (player.id == 1) {
+		                	nextPlayer = new Player(PlayerType.AI, 2);
+		                }
+		                else {
+		                	nextPlayer = new Player(PlayerType.AI, 1);	           
+		                }
+		        		nextPlayer.setTurn(true);
+		                player.setTurn(false);
+		                
+		                chosenScore = minimax(b, nextPlayer, depth, maxDepth, chosenScore, chosenMove, alpha, beta, endTime, 1);
+	        		}
 		    	}
 		    	else {
-		    		reversi.calculateScore(player.opponent);
+		    		if (depth % 2 == 0) {
+			    		return reversi.calculateScore(player.id);
+			    	}
+			    	else {
+			    		return reversi.calculateScore(player.opponent);
+			    	}
 		    	}
 	        }
 	        else {
@@ -618,7 +658,7 @@ public class AI {
 	                nextPlayer.setTurn(true);
 	                player.setTurn(false);
 	                
-	                score = minimax(b, nextPlayer, depth+1, maxDepth, score, move, alpha, beta, endTime);
+	                score = minimax(b, nextPlayer, depth+1, maxDepth, score, move, alpha, beta, endTime, 0);
 	                int[][] restore = new int[boardSize][boardSize];
 	        		for (int j = 0; j < boardSize; j++) {
 	        		  restore[j] = Arrays.copyOf(backup[j], backup[j].length);
@@ -797,58 +837,26 @@ public class AI {
 			// Time check
 			long start = System.currentTimeMillis();
 			endTime = start + 9*1000;
-			
-			// If big list, make it do 1 depth less
-			if (list.size() > 8) {
-				maxDepth--;
-			}
-			// remove bad moves
-			ArrayList<ArrayList<Integer>> goodList = removeBadMoves(list, b, player);
-			if (goodList.size() > 0) {
-		    	list = goodList;
-			}
-			
-	    	// see if there are any really good moves
-			boolean goodMove = false;
-			int bestAreaScore = 49;
-			int bestAreaMove = -2;
-	    	for(int q = list.size() -1; q > -1; q--) {
-	    		int a = list.get(q).get(0) + (list.get(q).get(1) * 8);
-	    		int c = player.ai.areaValue(b, player)[a];
-	    		if (c > 50) {
-	    			if (goodMove == true) {
-	    				if (c > bestAreaScore) {
-	    					bestAreaMove = a;
-			    			bestAreaScore = c;
-	    				}
-	    			} else {
-		    			System.out.println("We got a good spot, boss: "+a);
-		    			goodMove = true;
-		    			bestAreaMove = a;
-		    			bestAreaScore = c;
-	    			}
-	    		}
-	    	}
-	    	if (goodMove == true) {
-	    		return bestAreaMove;
-	    	}
-	    	
-	    	// Stability possibility check
-			if (checkCorners (b, player).size() > 0) {
-				ArrayList<ArrayList<Integer>> stableMoves = stability(list, b, player);
-				if (stableMoves.size() > 0) {
-					System.out.println("Hey kerel, ik houd het stabiel. Ik ga deze move doen: "+stableMoves);
-					//return stableMove;
-				}
-			}
 		}				
 		if (System.currentTimeMillis() > endTime) {
 			System.out.println("Tijd om naar bed te gaan");
-			if (depth % 2 == 0) {
-	    		reversi.calculateScore(player.id);
+			ArrayList<ArrayList<Integer>> goodList = (ArrayList<ArrayList<Integer>>) list.clone();
+	    	
+	    	for(int i = list.size() -1; i > -1; i--) {
+	    		int a = list.get(i).get(0) + (list.get(i).get(1) * 8);
+	    		int c = areaValue(b, player)[a];
+	    		if (c < -50) {
+	    			goodList.remove(i);
+	    		}
+	    	}
+	    	int currentScore = removeBadMoves(list, b, player).size();
+	    	if (depth % 2 == 0) {
+	    		int output = 1000 * (currentScore - chosenScore) / (currentScore + chosenScore + 1);
+	    		return output + (reversi.calculateScore(player.opponent) * 1000);
 	    	}
 	    	else {
-	    		reversi.calculateScore(player.opponent);
+	    		int output = 1000 * (chosenScore - currentScore) / (chosenScore + currentScore + 1);
+	    		return output + (reversi.calculateScore(player.opponent) * 1000);
 	    	}
 		}
 		
@@ -861,12 +869,26 @@ public class AI {
 		  backup[i] = Arrays.copyOf(currentBoard[i], currentBoard[i].length);
 		}
 		
-	    if (depth == maxDepth) {
+	    if (depth == maxDepth) {	    	
+	    	int[] corners = new int[]{0, 7, 56, 63};
+	    	int cornerScore = 0;
+	    	for (int corner : corners) {
+	    		int x = corner % 8;
+	    		int y = corner / 8;
+	    		int check = b.getBoard()[x][y];
+	    		if (check == player.id) {
+	    			cornerScore = cornerScore + 1000;
+	    		}
+	    		else if (check == player.opponent) {
+	    			cornerScore = cornerScore - 1000;    			
+	    		}
+	    	}
+	    	
 	    	if (depth % 2 == 0) {
-	    		reversi.calculateScore(player.id);
+	    		return (reversi.calculateScore(player.id) * 1000) + (cornerScore * 5);
 	    	}
 	    	else {
-	    		reversi.calculateScore(player.opponent);
+	    		return (reversi.calculateScore(player.opponent) * 1000) + (cornerScore * 5);
 	    	}
 	    }	    
 	    else {
@@ -887,12 +909,13 @@ public class AI {
 	    		list = goodList;
 	    	}
 	    	
-	        if (list.size() == 0) {
-	        	if (depth % 2 == 0) {
-		    		reversi.calculateScore(player.id);
+	        if (list.size() == 0) {	        	
+		    	if (depth % 2 == 0) {
+		    		
+		    		return -100000;
 		    	}
 		    	else {
-		    		reversi.calculateScore(player.opponent);
+		    		return 1000;
 		    	}
 	        		
 	        }
