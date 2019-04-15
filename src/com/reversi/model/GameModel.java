@@ -11,6 +11,9 @@ import com.reversi.model.Game.GameMode;
 import com.reversi.model.Game.GameType;
 import com.reversi.model.Player.PlayerType;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+
 /**
  * This class manages the different games that are being played.
  * 

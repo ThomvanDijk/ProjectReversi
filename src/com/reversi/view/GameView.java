@@ -11,6 +11,8 @@ package com.reversi.view;
 import java.util.Scanner;
 
 import com.reversi.controller.*;
+import com.reversi.model.Game.GameMode;
+import com.reversi.model.Game.GameType;
 import com.reversi.model.GameModel;
 import com.reversi.model.Model;
 import com.reversi.model.Player;
@@ -18,6 +20,7 @@ import com.reversi.model.Player.PlayerType;
 import com.reversi.model.Reversi;
 
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -141,7 +144,7 @@ public class GameView extends View {
 		if (gameModel.getCurrentGameType() != null) {
 			boardPane.setVisible(true);
 			infoPane.setVisible(true);
-
+			
 			Player[] players = gameModel.getPlayers();
 			updateGameState(players);
 
@@ -159,7 +162,7 @@ public class GameView extends View {
 		} else {
 			boardPane.setVisible(false);
 			infoPane.setVisible(false);
-		}
+		}	
 	}
 
 	public void updateGameState(Player[] players) {
@@ -192,7 +195,7 @@ public class GameView extends View {
 		int spacing = 2;
 		int squareSize = (Main.SCREEN_WIDTH / board.length) - spacing - 45;
 		
-		boardPane.getChildren().clear();
+		boardPane.getChildren().clear();	
 		
 		for(int col = 0; col < board.length; col++) {
 			for(int row = 0; row < board[0].length; row++) {
@@ -207,7 +210,29 @@ public class GameView extends View {
 				
 				if(player.getType().equals(PlayerType.HUMAN)) {
 					boardButton.setOnAction(e -> {
-						userController.notifyModel(Controller.SET_MOVE, new String[] { String.valueOf(index) });
+						
+//						Task<Void> task = new Task<Void>() {
+//						    @Override
+//						    public Void call() throws Exception {
+//						    	userController.notifyModel(Controller.SET_MOVE, new String[] { String.valueOf(index) });
+//						        return null ;
+//						    }
+//						};
+//
+//						
+//						Thread thread = new Thread(task);
+//						thread.setDaemon(true);
+//						thread.start();
+						
+						// separate non-FX thread
+//			            new Thread() {
+//
+//			                // runnable for that thread
+//			                public void run() {
+			                	userController.notifyModel(Controller.SET_MOVE, new String[] { String.valueOf(index) });
+//			                }
+//			            }.start();
+						
 					});
 				}
 				
@@ -225,7 +250,7 @@ public class GameView extends View {
 					Circle whiteCircle = new Circle(0, 0, squareSize / 2);
 					whiteCircle.setFill(Color.WHITE);
 					boardPane.add(new StackPane(whiteCircle), row, col);
-				}			
+				}
 			}
 		}
 	}
