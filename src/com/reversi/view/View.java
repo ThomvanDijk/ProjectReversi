@@ -11,7 +11,9 @@ package com.reversi.view;
 import com.reversi.controller.UserController;
 import com.reversi.model.Model;
 
-abstract class View implements Runnable {
+import javafx.application.Platform;
+
+public abstract class View {
 
 	protected final UserController userController;
 
@@ -25,7 +27,7 @@ abstract class View implements Runnable {
 	 * @param model Model
 	 */
 	public void notify(Model model) {
-		update(model);
+		Platform.runLater(() -> update(model));
 	}
 
 	/**

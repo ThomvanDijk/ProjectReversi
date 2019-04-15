@@ -38,6 +38,10 @@ public abstract class Game {
 
 		createBoard();
 	}
+	
+	public Player[] getPlayers() {
+		return new Player[] { player1, player2 };
+	}
 
 	private void createBoard() {
 		switch (gameType) {

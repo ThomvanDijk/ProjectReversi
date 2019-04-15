@@ -6,39 +6,46 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import com.reversi.client.Parser.ArgumentKey;
-import com.reversi.client.Parser.ServerCommand;
 
 import com.reversi.model.Game.GameMode;
 import com.reversi.model.Game.GameType;
 import com.reversi.model.Player.PlayerType;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+
+/**
+ * This class manages the different games that are being played.
+ * 
+ * @author Thom van Dijk
+ * @version 1.0
+ * @since 12-04-2019
+ */
 public class GameModel extends Model {
 
-	private boolean running;
 	private TicTacToe ticTacToe;
 	private Reversi reversi;
-	
-	private int player1Score;
-	private int player2Score;
 
-	private GameType currentGameType;
-	private GameMode currentGameMode;
+	private GameType currentGameType; // Tic-tac-toe or reversi
+	private GameMode currentGameMode; // Singleplayer or online
 
 	private Queue<HashMap<ArgumentKey, String>> challenges;
+	
+	private String loginName;
+	private String opponentName;
 
 	public GameModel() {
 		ticTacToe = null;
 		reversi = null;
-		
-		player1Score = 0;
-		player2Score = 0;
 
 		currentGameMode = null;
 		currentGameType = null;
 
 		challenges = new LinkedList<>();
+		
+		loginName = "You";
 	}
-	
+
 	public void subscribeToGame(GameType gameType) {
 		switch (gameType) {
 		case REVERSI:
@@ -52,48 +59,61 @@ public class GameModel extends Model {
 		}
 	}
 
-	public void startGame(GameMode gameMode, GameType gameType) {
+	public void startGame(GameMode gameMode, GameType gameType, String[] players) {
+		PlayerType startPlayer = PlayerType.AI; // Our AI
+		
 		currentGameMode = gameMode;
 		currentGameType = gameType;
+		
+		// If players is null then it is a singleplayer game
+		if(players != null) {
+			opponentName = players[1];
+			
+			// Check if opponent is also the player to move
+			if(opponentName.equals(players[0])) {
+				startPlayer = PlayerType.SERVER;
+			}
+		}
 
 		switch (gameType) {
 		case REVERSI:
 			if (gameMode.equals(GameMode.SINGLEPLAYER)) {
-				// reversi = new Reversi(GameMode.SINGLEPLAYER);
+				reversi = new Reversi(GameMode.SINGLEPLAYER, null);
+				reversi.player1.setName(loginName);
 				break;
 			} else {
-				// reversi = new Reversi(GameMode.ONLINE);				
+				reversi = new Reversi(GameMode.ONLINE, startPlayer);
+				reversi.player1.setName(loginName);
+				reversi.player2.setName(opponentName);
 				break;
 			}
 		case TICTACTOE:
 			if (gameMode.equals(GameMode.SINGLEPLAYER)) {
 				ticTacToe = new TicTacToe(GameMode.SINGLEPLAYER);
+				reversi.player1.setName(loginName);
 				break;
 			} else {
 				ticTacToe = new TicTacToe(GameMode.ONLINE);
-				client.sendCommand("subscribe Tic-tac-toe");
+				reversi.player1.setName(loginName);
+				reversi.player2.setName(opponentName);
 				break;
 			}
 		default:
 			throw new IllegalStateException();
-		} 
-
-		//notifyView();
-	}
-
-	public void endGame(String[] arguments) {
-		if(arguments != null) {
-			player1Score = Integer.parseInt(arguments[0]);
-			player2Score = Integer.parseInt(arguments[1]);
 		}
 
+		notifyViews();
+	}
+
+	// Arguments from server giving the final points
+	public void endGame(String[] arguments) {
 		currentGameMode = null;
 		currentGameType = null;
 
 		reversi = null;
 		ticTacToe = null;
 
-		notifyView();
+		notifyViews();
 	}
 
 	// A move set by the player or server...
@@ -101,26 +121,18 @@ public class GameModel extends Model {
 		int intMove = Integer.valueOf(move);
 		switch (currentGameType) {
 		case REVERSI:
-			if (currentGameMode.equals(GameMode.ONLINE)) {
-				if (reversi == null) {
-					// If the set move function is called and there is no game then it is always the
-					// server who starts from here
-					reversi = new Reversi(GameMode.ONLINE, PlayerType.SERVER);
+			Player[] players = reversi.getPlayers();
+			
+			try {
+				if (players[0].hasTurn()) {
+					reversi.makeMove(players[0], intMove);
+				} else {
+					reversi.makeMove(players[1], intMove);
 				}
-				try {
-					Player[] players = reversi.getPlayers();
-					if (players[0].hasTurn()) {
-						reversi.makeMove(players[0], intMove);
-					} else {
-						reversi.makeMove(players[1], intMove);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				break;
-			} else { // Offline
-
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+			break;
 		case TICTACTOE:
 			if (currentGameMode.equals(GameMode.ONLINE)) {
 				try {
@@ -135,28 +147,30 @@ public class GameModel extends Model {
 		default:
 			throw new IllegalStateException();
 		}
-
-		notifyView();
+		
+		notifyViews();
+		
+		// If single player request a move from the AI
+		if (currentGameMode.equals(GameMode.SINGLEPLAYER)) {
+			getMove();
+		}
 	}
 
 	public void getMove() {
 		switch (currentGameType) {
 		case REVERSI:
+			Player[] players = reversi.getPlayers();
+			
 			if (currentGameMode.equals(GameMode.ONLINE)) {
-				if (reversi == null) {
-					// If the set move function is called and there is no game then it is always the
-					// AI who starts from here
-					reversi = new Reversi(GameMode.ONLINE, PlayerType.AI);
-				}
 				try {
-					Player[] players = reversi.getPlayers();
-					if(players[0].hasTurn()) {
+					
+					if (players[0].hasTurn()) {
 						int move = reversi.makeAIMove(players[0]);
 						if (move >= 0) {
 							client.sendCommand("move " + move);
 						}
 					} else {
-						
+
 						int move = reversi.makeAIMove(players[1]);
 						if (move >= 0) {
 							client.sendCommand("move " + move);
@@ -165,10 +179,18 @@ public class GameModel extends Model {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				break;
 			} else { // Offline
-
+				try {
+					if (players[0].hasTurn()) {
+						reversi.makeAIMove(players[0]);
+					} else {
+						reversi.makeAIMove(players[1]);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
+			break;
 		case TICTACTOE:
 			if (currentGameMode.equals(GameMode.ONLINE)) {
 				try {
@@ -184,13 +206,14 @@ public class GameModel extends Model {
 			System.out.println("No current game!");
 		}
 
-		notifyView();
+		notifyViews();
 	}
 
 	public void login(String[] arguments) {
+		loginName = arguments[0];
 		client.login(arguments);
 	}
-	
+
 	public void requestPlayerlist() {
 		client.sendCommand("get playerlist");
 	}
@@ -215,7 +238,7 @@ public class GameModel extends Model {
 			}
 		}
 
-		notifyView();
+		notifyViews();
 	}
 
 	// Remove a challenge because challenge is cancelled
@@ -230,11 +253,17 @@ public class GameModel extends Model {
 			}
 		}
 
-		notifyView();
+		notifyViews();
 	}
 
-	// Add new challenge to a queue of challenges
-	public void addNewServerChallenge(String[] arguments) {
+	/**
+	 * This function creates a map containing three entries and adds it to the
+	 * challenges queue.
+	 * 
+	 * @param arguments A string array containing three elements and in this order:
+	 *                  the challenger, challenge number and game type.
+	 */
+	public void addChallenge(String[] arguments) {
 		HashMap<ArgumentKey, String> map = new HashMap<>();
 
 		map.put(ArgumentKey.CHALLENGER, arguments[0]);
@@ -242,27 +271,40 @@ public class GameModel extends Model {
 		map.put(ArgumentKey.GAMETYPE, arguments[2]);
 
 		challenges.add(map);
-		notifyView();
+		notifyViews();
+	}
+	
+	public GameMode getCurrentGameMode() {
+		return currentGameMode;
+	}
+	
+	public GameType getCurrentGameType() {
+		return currentGameType;
 	}
 
-	// TODO a better way to get challenges from model
-	// Return the top of the queue and remove it from the queue
-	public HashMap<ArgumentKey, String> getChallenge() {
-		if (!challenges.isEmpty()) {
-			// return challenges.remove();
-			return null;
-		}
-		return null;
+	/**
+	 * The challenges queue contains all the requested challenges.
+	 * 
+	 * @return The whole challenges queue.
+	 */
+	public Queue<HashMap<ArgumentKey, String>> getChallenges() {
+		return challenges;
 	}
 
-	// Returns true if model has a challenge
-	public boolean hasChallenge() {
-		if (!challenges.isEmpty()) {
-			return true;
-		}
-		return false;
+	/**
+	 * The challenges queue contains all the requested challenges.
+	 * 
+	 * @return The challenge at the head of the queue.
+	 */
+	public HashMap<ArgumentKey, String> getFirstChallenge() {
+		return challenges.peek();
 	}
 
+	/**
+	 * Returns current game board.
+	 * 
+	 * @return The currently used board as 2D int array.
+	 */
 	public int[][] getBoard() {
 		switch (currentGameType) {
 		case REVERSI:
@@ -274,11 +316,20 @@ public class GameModel extends Model {
 		}
 	}
 
-	public int[] getPlayerScores() {
-		int[] scores = new int[2];
-		scores[0] = player1Score;
-		scores[1] = player2Score;
-		return scores;
+	/**
+	 * Element[0] is player 1 and element[1] is player 2.
+	 * 
+	 * @return Array of players.
+	 */
+	public Player[] getPlayers() {
+		switch (currentGameType) {
+		case REVERSI:
+			return reversi.getPlayers();
+		case TICTACTOE:
+			return ticTacToe.getPlayers();
+		default:
+			return null;
+		}
 	}
 
 }

@@ -1,18 +1,16 @@
 package com.reversi.model;
 
-import com.reversi.model.Player.PlayerType;
-import com.reversi.view.ApplicationRunner;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+
+import com.reversi.model.Player.PlayerType;
 
 public class Reversi extends Game {
 
 	public static final int BLACK = 1;
 	public static final int WHITE = 2;
-
-	private Scanner scanInput;
 
 	public Reversi(GameMode gameMode, PlayerType startPlayer) {
 		super(GameType.REVERSI, gameMode);
@@ -23,6 +21,9 @@ public class Reversi extends Game {
 			player1 = new Player(PlayerType.HUMAN, BLACK);
 			player2 = new Player(PlayerType.AI, WHITE);
 			player2.ai.setReversi(this);
+
+			player1.setTurn(true);
+			player1.setName("You"); // Default name for single player
 		} else { // The start player must be black
 			if (startPlayer.equals(PlayerType.SERVER)) {
 				player1 = new Player(PlayerType.AI, WHITE);
@@ -55,10 +56,6 @@ public class Reversi extends Game {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public Player[] getPlayers() {
-		return new Player[] { player1, player2 };
 	}
 
 	public ArrayList<ArrayList<Integer>> getValidMoves(Board b, int playerID) {
@@ -204,8 +201,6 @@ public class Reversi extends Game {
 		}
 
 		// Check if the new move is valid
-		
-		
 		boolean validMove = false;
 		for (int check = 0; check < validMoves.size(); check++) {
 
@@ -254,6 +249,12 @@ public class Reversi extends Game {
 		if (!validMove) {
 			System.out.println("Move " + input + " is not a valid move!");
 
+			try {
+				TimeUnit.SECONDS.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
 			return false;
 		}
 
@@ -262,25 +263,16 @@ public class Reversi extends Game {
 
 	// Used by AI and called multiple times to make a good decision
 	public Board makeForwardMove(Player player, int move, Board b) {
-		if (player.id == 1 && player.type.equals(PlayerType.HUMAN)) {
-			
-
-			player1.setTurn(false);
-			player2.setTurn(true);
-		} else {
-			// AI has to make a move
-			// input = player.ai.calculateMove(board, player);
-			
-
+		if (!player1.getType().equals(PlayerType.HUMAN)) {
 			player1.setTurn(true);
 			player2.setTurn(false);
 		}
-		
+
 		int input = 0;
 		boolean validMove = false;
 
 		// Get all the valid moves if there are any
-		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(b, player.id);
+		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(b, player.color);
 
 		// As long as the input isn't correct, this will loop
 		while (validMove == false) {
@@ -288,7 +280,7 @@ public class Reversi extends Game {
 			if (!validMoves.isEmpty()) {
 				input = move;
 
-				validMove = setMove(input, validMoves, player.id, b);
+				validMove = setMove(input, validMoves, player.color, b);
 				// Reset noWinnerCount
 				noWinnerCount = 0;
 			} else {
@@ -313,16 +305,13 @@ public class Reversi extends Game {
 		// If one player can't make a move, switch who's turn it is
 		if (noWinnerCount == 1) {
 			System.out.println("Out of moves");
-			if (player.id == 1) {
+			if (player.color == 1) {
 				player1.setTurn(false);
 				player2.setTurn(true);
-
 			} else {
 				player1.setTurn(true);
 				player2.setTurn(false);
-
 			}
-
 		}
 
 		return b;
@@ -332,40 +321,37 @@ public class Reversi extends Game {
 	public int makeAIMove(Player player) {
 		int input = -1;
 		boolean validMove = false;
-		
-		System.out.println("Current player is: "+player.id);
+
+		System.out.println("Current player is: " + player.color);
 
 		// Get all the valid moves if there are any
-		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(board, player.id);
-		printValidMoves(validMoves,board);
+		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(board, player.color);
+		printValidMoves(validMoves, board);
 		// As long as the input isn't correct, this will loop
 		while (validMove == false) {
-			System.out.println("Infinite loop");
 			// Check if there are any possible moves
 			if (!validMoves.isEmpty()) {
-				/*ArrayList<ArrayList<Integer>> list = getValidMoves(board, player.id);
-				boolean goodMove = false;
-		    	for(int i = list.size() -1; i > -1; i--) {
-		    		int a = list.get(i).get(0) + (list.get(i).get(1) * 8);
-		    		int c = player.ai.areaValue(board, player)[a];
-		    		if (c > 50) {
-		    			goodMove = true;
-		    			input = a;
-		    		}
-		    	}
-		    	if (goodMove == false) {*/
-					if (turn < 48) {
-						input = player.ai.boardWeighting(board, player);
-					} else if (turn < 47) {
-						input = player.ai.minimaxAvailableMoves(board, player, 0, 5, 0, 0);
-					} else {
-						input = player.ai.minimax(board, player, 0, 12, 0, 0);
-					}
-					// input = player.ai.boardWeighting(b, player);
-		    	//}
-				System.out.println("PLayer: " + player.id + " (AI) is doing the following move: " + input);
+				int blockMove = player.ai.blockingMove(validMoves, board, player);
+				if (blockMove != -1) {
+					input = blockMove;
+				} else if (turn < 0) {
+					input = player.ai.random(board, player);
+				} else if (turn < 0) {
+					input = player.ai.boardWeighting(board, player);
+				} else if (turn < 40) {
+					input = player.ai.minimaxAvailableMoves(board, player, 0, 10, 0, 0, Integer.MIN_VALUE,
+							Integer.MAX_VALUE, 0);
+				} else if (turn < 45) {
+					input = player.ai.minimaxAvailableMoves(board, player, 0, 8, 0, 0, Integer.MIN_VALUE,
+							Integer.MAX_VALUE, 0);
+				} else {
+					input = player.ai.minimaxTest(board, player, 0, 16, 0, 0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
+				}
 
-				validMove = setMove(input, validMoves, player.id, board);
+				// System.out.println("Player: " + player.color + " (AI) is doing the following
+				// move: " + input);
+
+				validMove = setMove(input, validMoves, player.color, board);
 
 				if (validMove == true) {
 					turn++;
@@ -385,19 +371,18 @@ public class Reversi extends Game {
 		ArrayList<ArrayList<Integer>> validMovesOpponent = getValidMoves(board, player.opponent);
 		if (validMovesOpponent.size() > 0) {
 			switchTurn(player);
-			
 		}
-		
+
 		return input;
 	}
 
 	// Used to make a move done by server or player
 	public void makeMove(Player player, int input) {
 		// Get all the valid moves if there are any
-		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(this.board, player.id);
-		printValidMoves(validMoves,board);
-		if (!validMoves.isEmpty()) {		
-			if (setMove(input, validMoves, player.id, this.board)) {
+		ArrayList<ArrayList<Integer>> validMoves = getValidMoves(this.board, player.color);
+		printValidMoves(validMoves, board);
+		if (!validMoves.isEmpty()) {
+			if (setMove(input, validMoves, player.color, this.board)) {
 				turn++;
 			}
 
@@ -418,15 +403,15 @@ public class Reversi extends Game {
 	}
 
 	public void switchTurn(Player player) {
-		debugMove(player.id, board);
-		
+		//debugMove(player.color, board);
+
 		// If one player can't make a move, switch who's turn it is...
 		if (noWinnerCount == 1) {
 			// This player can't make a move so set it's turn to false
 			player.setTurn(true);
 
 			// Now set the other player's turn to true
-			if (player.id == player1.id) {
+			if (player.color == player1.color) {
 				player2.setTurn(false);
 			} else {
 				player1.setTurn(false);
@@ -451,7 +436,7 @@ public class Reversi extends Game {
 			}
 		}
 	}
-	
+
 	public void printValidMoves(ArrayList<ArrayList<Integer>> validMoves, Board b) {
 		System.out.print("Valid moves: ");
 		for (int i = 0; i < validMoves.size(); i++) {
@@ -459,9 +444,9 @@ public class Reversi extends Game {
 			int col = chopped(validMoves.get(i), 2).get(0).get(1);
 
 			System.out.print((col * b.getBoardSize()) + row + " ");
-			
+
 		}
-		System.out.println("Turn: "+turn);
+		System.out.println("Turn: " + turn);
 		System.out.println();
 	}
 
@@ -479,12 +464,12 @@ public class Reversi extends Game {
 		// System.out.println("Valid moves: " + validMoves);
 
 		// Show the valid moves
-		/*System.out.print("Valid moves: ");
-		for (int i = 0; i < validMoves.size(); i++) {
-			int row = chopped(validMoves.get(i), 2).get(0).get(0);
-			int col = chopped(validMoves.get(i), 2).get(0).get(1);
-			System.out.print((col * b.getBoardSize()) + row + " ");
-		}*/
+		/*
+		 * System.out.print("Valid moves: "); for (int i = 0; i < validMoves.size();
+		 * i++) { int row = chopped(validMoves.get(i), 2).get(0).get(0); int col =
+		 * chopped(validMoves.get(i), 2).get(0).get(1); System.out.print((col *
+		 * b.getBoardSize()) + row + " "); }
+		 */
 
 	}
 
@@ -499,7 +484,7 @@ public class Reversi extends Game {
 		return parts;
 	}
 
-	public int calculateValueDiff(int playerID) {
+	public int calculateScore(int playerID) {
 		if (playerID == 1) {
 			return (player1.getScore() - player2.getScore());
 		} else {
