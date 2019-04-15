@@ -21,7 +21,7 @@ public class Listener implements Runnable {
 		this.client = client;
 
 		try {
-			Socket socket = new Socket(address, 7789);
+			Socket socket = new Socket(address, 7790); //7790 // 145.33.225.170
 
 			toServer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));

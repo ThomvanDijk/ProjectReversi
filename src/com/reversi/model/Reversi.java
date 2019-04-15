@@ -338,18 +338,15 @@ public class Reversi extends Game {
 					input = player.ai.random(board, player);
 				} else if (turn < 0) {
 					input = player.ai.boardWeighting(board, player);
+				} else if (turn < 30) {
+					input = player.ai.minimaxAvailableMoves(board, player, 0, 8, 0, 0, Integer.MIN_VALUE,Integer.MAX_VALUE, 0);	
 				} else if (turn < 40) {
-					input = player.ai.minimaxAvailableMoves(board, player, 0, 10, 0, 0, Integer.MIN_VALUE,
-							Integer.MAX_VALUE, 0);
+					input = player.ai.minimaxAvailableMoves(board, player, 0, 9, 0, 0, Integer.MIN_VALUE,Integer.MAX_VALUE, 0);	
 				} else if (turn < 45) {
-					input = player.ai.minimaxAvailableMoves(board, player, 0, 8, 0, 0, Integer.MIN_VALUE,
-							Integer.MAX_VALUE, 0);
+					input = player.ai.minimaxAvailableMoves(board, player, 0, 10, 0, 0, Integer.MIN_VALUE,Integer.MAX_VALUE, 0);					
 				} else {
-					input = player.ai.minimaxTest(board, player, 0, 16, 0, 0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
+					input = player.ai.minimaxTest(board, player, 0, 16, 0, 0, Integer.MIN_VALUE,Integer.MAX_VALUE, 0);
 				}
-
-				// System.out.println("Player: " + player.color + " (AI) is doing the following
-				// move: " + input);
 
 				validMove = setMove(input, validMoves, player.color, board);
 
