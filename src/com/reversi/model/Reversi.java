@@ -263,8 +263,11 @@ public class Reversi extends Game {
 
 	// Used by AI and called multiple times to make a good decision
 	public Board makeForwardMove(Player player, int move, Board b) {
-//		player1.setTurn(true);
-//		player2.setTurn(false);
+		if (true) {
+
+			player1.setTurn(true);
+			player2.setTurn(false);
+		}
 
 		int input = 0;
 		boolean validMove = false;
@@ -333,14 +336,21 @@ public class Reversi extends Game {
 				if (blockMove != -1) {
 					input = blockMove;
 				} else if (turn < 0) {
+					input = player.ai.random(board, player);
+				} else if (turn < 0) {
 					input = player.ai.boardWeighting(board, player);
-				} else if (turn < 48) {
-					input = player.ai.minimaxAvailableMoves(board, player, 0, 6, 0, 0);
+				} else if (turn < 40) {
+					input = player.ai.minimaxAvailableMoves(board, player, 0, 10, 0, 0, Integer.MIN_VALUE,
+							Integer.MAX_VALUE, 0);
+				} else if (turn < 45) {
+					input = player.ai.minimaxAvailableMoves(board, player, 0, 8, 0, 0, Integer.MIN_VALUE,
+							Integer.MAX_VALUE, 0);
 				} else {
-					input = player.ai.minimax(board, player, 0, 12, 0, 0);
+					input = player.ai.minimaxTest(board, player, 0, 16, 0, 0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
 				}
 
-				System.out.println("Player: " + player.color + " (AI) is doing the following move: " + input);
+				// System.out.println("Player: " + player.color + " (AI) is doing the following
+				// move: " + input);
 
 				validMove = setMove(input, validMoves, player.color, board);
 
@@ -475,7 +485,7 @@ public class Reversi extends Game {
 		return parts;
 	}
 
-	public int calculateValueDiff(int playerID) {
+	public int calculateScore(int playerID) {
 		if (playerID == 1) {
 			return (player1.getScore() - player2.getScore());
 		} else {

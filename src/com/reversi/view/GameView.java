@@ -218,13 +218,13 @@ public class GameView extends View {
 	
 				if(board[col][row] == 1) {
 					Circle blackCircle = new Circle(0, 0, squareSize / 2);
-					boardPane.add(blackCircle, row, col);
+					boardPane.add(new StackPane(blackCircle), row, col);
 				}
 				
 				if(board[col][row] == 2) {
 					Circle whiteCircle = new Circle(0, 0, squareSize / 2);
 					whiteCircle.setFill(Color.WHITE);
-					boardPane.add(whiteCircle, row, col);
+					boardPane.add(new StackPane(whiteCircle), row, col);
 				}			
 			}
 		}

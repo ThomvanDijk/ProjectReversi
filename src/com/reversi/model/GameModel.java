@@ -321,8 +321,6 @@ public class GameModel extends Model {
 	public Player[] getPlayers() {
 		switch (currentGameType) {
 		case REVERSI:
-			System.out.println("Black has the turn: " + reversi.getPlayers()[0].getType());
-			System.out.println("White has the turn: " + reversi.getPlayers()[1].getType());
 			return reversi.getPlayers();
 		case TICTACTOE:
 			return ticTacToe.getPlayers();
