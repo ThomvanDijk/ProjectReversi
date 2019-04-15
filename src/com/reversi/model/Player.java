@@ -58,6 +58,7 @@ public class Player {
 	}
 	
 	public void setTurn(boolean hasTurn) {
+		System.out.println(name + " has turn " + hasTurn);
 		this.hasTurn = hasTurn;
 	}
 	

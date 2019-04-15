@@ -143,6 +143,7 @@ public class GameView extends View {
 			infoPane.setVisible(true);
 
 			Player[] players = gameModel.getPlayers();
+			updateGameState(players);
 
 			if (players[0].hasTurn()) {
 				updateBoard(gameModel.getBoard(), players[0]);
@@ -150,7 +151,6 @@ public class GameView extends View {
 				updateBoard(gameModel.getBoard(), players[1]);
 			}
 
-			updateGameState(players);
 			gameName.setText(gameModel.getCurrentGameType().name());
 			
 			// Make only the first letter a capital

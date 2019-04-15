@@ -144,16 +144,23 @@ public class GameModel extends Model {
 		default:
 			throw new IllegalStateException();
 		}
-
+		
 		notifyViews();
+		
+		// If single player request a move from the AI
+		if (currentGameMode.equals(GameMode.SINGLEPLAYER)) {
+			getMove();
+		}
 	}
 
 	public void getMove() {
 		switch (currentGameType) {
 		case REVERSI:
+			Player[] players = reversi.getPlayers();
+			
 			if (currentGameMode.equals(GameMode.ONLINE)) {
 				try {
-					Player[] players = reversi.getPlayers();
+					
 					if (players[0].hasTurn()) {
 						int move = reversi.makeAIMove(players[0]);
 						if (move >= 0) {
@@ -169,10 +176,18 @@ public class GameModel extends Model {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				break;
 			} else { // Offline
-
+				try {
+					if (players[0].hasTurn()) {
+						reversi.makeAIMove(players[0]);
+					} else {
+						reversi.makeAIMove(players[1]);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
+			break;
 		case TICTACTOE:
 			if (currentGameMode.equals(GameMode.ONLINE)) {
 				try {
@@ -306,6 +321,8 @@ public class GameModel extends Model {
 	public Player[] getPlayers() {
 		switch (currentGameType) {
 		case REVERSI:
+			System.out.println("Black has the turn: " + reversi.getPlayers()[0].getType());
+			System.out.println("White has the turn: " + reversi.getPlayers()[1].getType());
 			return reversi.getPlayers();
 		case TICTACTOE:
 			return ticTacToe.getPlayers();
