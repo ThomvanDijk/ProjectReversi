@@ -30,7 +30,7 @@ public class ViewController extends Controller {
 			gameModel.subscribeToGame(GameType.TICTACTOE);
 			break;
 		case END_GAME:
-			gameModel.endGame(null);
+			gameModel.endGame();
 			break;
 		case LOG_IN:
 			// Argument represents a name

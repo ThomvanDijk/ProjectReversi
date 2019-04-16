@@ -2,7 +2,6 @@ package com.reversi.client;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
 import com.reversi.client.Parser.ArgumentKey;
 import com.reversi.client.Parser.ServerCommand;
