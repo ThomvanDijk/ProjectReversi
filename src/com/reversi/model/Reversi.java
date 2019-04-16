@@ -7,6 +7,15 @@ import java.util.concurrent.TimeUnit;
 
 import com.reversi.model.Player.PlayerType;
 
+/**
+ * The Reversi class contains all the rules of reversi and handles some game
+ * specific moves.
+ * 
+ * @author  Thom van Dijk
+ * @author  Sebastiaan van Vliet
+ * @version 1.0
+ * @since   12-04-2019
+ */
 public class Reversi extends Game {
 
 	public static final int BLACK = 1;
@@ -339,13 +348,16 @@ public class Reversi extends Game {
 				} else if (turn < 0) {
 					input = player.ai.boardWeighting(board, player);
 				} else if (turn < 30) {
-					input = player.ai.minimaxAvailableMoves(board, player, 0, 8, 0, 0, Integer.MIN_VALUE,Integer.MAX_VALUE, 0);	
+					input = player.ai.minimaxAvailableMoves(board, player, 0, 8, 0, 0, Integer.MIN_VALUE,
+							Integer.MAX_VALUE, 0);
 				} else if (turn < 40) {
-					input = player.ai.minimaxAvailableMoves(board, player, 0, 9, 0, 0, Integer.MIN_VALUE,Integer.MAX_VALUE, 0);	
+					input = player.ai.minimaxAvailableMoves(board, player, 0, 9, 0, 0, Integer.MIN_VALUE,
+							Integer.MAX_VALUE, 0);
 				} else if (turn < 45) {
-					input = player.ai.minimaxAvailableMoves(board, player, 0, 10, 0, 0, Integer.MIN_VALUE,Integer.MAX_VALUE, 0);					
+					input = player.ai.minimaxAvailableMoves(board, player, 0, 10, 0, 0, Integer.MIN_VALUE,
+							Integer.MAX_VALUE, 0);
 				} else {
-					input = player.ai.minimaxTest(board, player, 0, 16, 0, 0, Integer.MIN_VALUE,Integer.MAX_VALUE, 0);
+					input = player.ai.minimaxTest(board, player, 0, 16, 0, 0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
 				}
 
 				validMove = setMove(input, validMoves, player.color, board);
@@ -400,7 +412,7 @@ public class Reversi extends Game {
 	}
 
 	public void switchTurn(Player player) {
-		//debugMove(player.color, board);
+		// debugMove(player.color, board);
 
 		// If one player can't make a move, switch who's turn it is...
 		if (noWinnerCount == 1) {
