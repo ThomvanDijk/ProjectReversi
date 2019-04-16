@@ -106,8 +106,8 @@ public class Client {
 			if (commandMap.containsKey(ServerCommand.SVR_GAMELIST)
 					|| commandMap.containsKey(ServerCommand.SVR_PLAYERLIST)) {
 				
-				HashMap.Entry<ServerCommand, String> entry = commandMap.entrySet().iterator().next();
-				List<String> elemenstsList = parser.stringToList(commandMap.get(entry.getKey()));
+				//HashMap.Entry<ServerCommand, String> entry = commandMap.entrySet().iterator().next();
+				//List<String> elemenstsList = parser.stringToList(commandMap.get(entry.getKey()));
 				
 				// TODO send elemenstsList to ClientController
 				
