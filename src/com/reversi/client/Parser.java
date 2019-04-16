@@ -1,10 +1,8 @@
 package com.reversi.client;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -17,54 +15,56 @@ import java.util.regex.Pattern;
  */
 public class Parser {
 	
+	/**
+	 * Contains all the different commands the sever may send to the client.
+	 */
 	public enum ServerCommand {
-		ERR, 
-		OK, 
-		SVR_HELP, 
-		SVR_GAME_MATCH, 	// Nu bezig met een match, de inschrijving voor een speltype is vervallen
-		SVR_GAME_YOURTURN, 	// Nu mogelijkheid een zet te doen
-		SVR_GAME_MOVE, 		// Er is een zet gedaan, dit bericht geeft aan wie deze gezet heeft, wat de
-							// reactie van het spel erop is
-		SVR_GAME_CHALLENGE, // Nu mogelijkheid de uitdaging te accepteren.
-		SVR_GAME_CHALLENGE_CANCELLED, // De uitdaging is vervallen. Mogelijke oorzaken: speler heeft een 
-							// andere uitdaging gestart, speler is een match begonnen, speler heeft de 
-							// verbinding verbroken. 
-		SVR_GAME,  			// De match is afgelopen, <speler resultaat> kan de waarde 'WIN', 'LOSS' of
-							// 'DRAW' bevatten.
-		SVR_GAMELIST,		// Lijst met spellen ontvangen.
-		SVR_PLAYERLIST,	 	// List of online players
+		ERR,
+		OK,
+		SVR_HELP,
+		SVR_GAME_MATCH,
+		SVR_GAME_YOURTURN,
+		SVR_GAME_MOVE,
+		SVR_GAME_CHALLENGE,
+		SVR_GAME_CHALLENGE_CANCELLED,
+		SVR_GAME,
+		SVR_GAMELIST,
+		SVR_PLAYERLIST,
 		SVR_GAME_WIN,
-		SVR_GAME_LOSS, 
+		SVR_GAME_LOSS,
 		SVR_GAME_DRAW
 	}
-	
+
+	/**
+	 * Contains all the different keys inside the map data structure that the server
+	 * may send to the client.
+	 */
 	public enum ArgumentKey {
 		DEFAULT,
-		GAMETYPE,		// "<game type>"
-		PLAYERTOMOVE,	// "<name player who has turn>"
-		OPPONENT,		// "<name opponent>"
-		PLAYER,			// "<player name>"
-		DETAILS,		// "<reaction on game setup>"
-		MOVE,			// "<move>"
-		PLAYERONESCORE, // "<score player1>" 
-		PLAYERTWOSCORE, // "<score player2>" 
-		COMMENT, 		// "<comments on result>"
-		CHALLENGER, 	// "<name of challenger>"
-		CHALLENGENUMBER	// "<number of challenge>"
-	}
-
-	public Parser() {
-		
+		GAMETYPE,
+		PLAYERTOMOVE,
+		OPPONENT,
+		PLAYER,
+		DETAILS,
+		MOVE,
+		PLAYERONESCORE,
+		PLAYERTWOSCORE,
+		COMMENT,
+		CHALLENGER,
+		CHALLENGENUMBER
 	}
 	
 	/**
-	* This function converts a server message to a map with ServerCommand and arguments.
-	* Help messages from the server are not allowed and will not be captured!
-	* 
-	* @param message A message from the server
-	* @return HashMap<ServerCommand, String> This returns a map with 
-	* correct ServerCommand and its arguments
-	*/
+	 * This function converts a server message to a map with ServerCommand and
+	 * arguments. Help messages from the server are not allowed and will not be
+	 * captured!
+	 * 
+	 * @param  message Raw String message from the server.
+	 * @return         Returns a map with correct ServerCommand as the key and
+	 *                 arguments as value.
+	 * @see            HashMap
+	 * @see			   ServerCommand
+	 */
 	public HashMap<ServerCommand, String> getCommand(String message) {
 		HashMap<ServerCommand, String> map = new HashMap<>();
 		
@@ -86,12 +86,10 @@ public class Parser {
 		String[] parts = message.split(Pattern.quote("{"));
 
 		if(parts.length == 1) {
-			
 			// No map return so check for list return on a bracket
 			parts = message.split(Pattern.quote("["));
 			
 			if(parts.length == 1) {
-				
 				// Also no list return so split the message after the server message
 				// this can only be ERR and SVR HELP
 				parts = message.split("(?<=ERR) ");
@@ -106,6 +104,13 @@ public class Parser {
 		return map;
 	}
 	
+	/**
+	 * Converts a string to a ServerCommand.
+	 * 
+	 * @param  commandString A string which contains a command.
+	 * @return               Returns a ServerCommand.
+	 * @see                  ServerCommand
+	 */
 	public ServerCommand stringToCommand(String commandString) {
 		// parts[0] = parts[0].substring(0, parts[0].length() - 1); // Remove last char
 		commandString = commandString.trim(); // Remove last whitespace
@@ -130,6 +135,15 @@ public class Parser {
 		return command;
 	}
 	
+	/**
+	 * Converts a string to a list containing the values of the requested data from
+	 * the server.
+	 * 
+	 * @param  listString A string formatted as a list.
+	 * @return            Returns a list containing the values of the requested data
+	 *                    from the server.
+	 * @see               List
+	 */
 	public List<String> stringToList(String listString) {
 		// Create a new list
 		List<String> list = new ArrayList<>();
@@ -150,16 +164,24 @@ public class Parser {
 		return list;
 	}
 	
+	/**
+	 * Converts a string to a map. The incoming string is already formatted as a
+	 * map and comes directly from the server.
+	 * 
+	 * @param  mapString A string formatted as a map.
+	 * @return           Returns a map with key as ArgumentKey and value as a
+	 *                   string.
+	 * @see              HashMap
+	 * @see              ArgumentKey
+	 */
 	public HashMap<ArgumentKey, String> stringToMap(String mapString) {
 		HashMap<ArgumentKey, String> keyValueMap = new HashMap<>();
 		
 		// Split the arguments up
 		String[] arguments = mapString.split(",");		
 		
-		// Add the keys as ArgumentKey and the values as String
+		// Add the keys as ArgumentKey and the values as a string
 		for(int i = 0; i < arguments.length; i++) {
-			ArgumentKey tempKey = ArgumentKey.DEFAULT;
-			
 			// Make pair [key, value]
 			String[] keyValue = arguments[i].split(":");
 			
