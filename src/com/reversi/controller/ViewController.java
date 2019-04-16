@@ -4,14 +4,25 @@ import com.reversi.model.Game.GameMode;
 import com.reversi.model.Game.GameType;
 import com.reversi.model.GameModel;
 
+/**
+ * The ViewController calls functions in GameModel to create a layer of
+ * abstraction.
+ * 
+ * @author  Thom van Dijk
+ * @version 1.0
+ * @since   16-04-2019
+ */
 public class ViewController extends Controller {
 
+	/**
+	 * Passes a reference from GameModel to Controller where it will be set.
+	 * 
+	 * @param model The GameModel where functions need to be called.
+	 */
 	public ViewController(GameModel model) {
 		super(model);
 	}
 
-	// From GameView use this notify function to send a notification to model.
-	// Arguments can be null...
 	@Override
 	public void notifyModel(int notification_id, String[] arguments) {
 		GameModel gameModel = (GameModel) model;
