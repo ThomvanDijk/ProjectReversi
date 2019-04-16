@@ -1,38 +1,32 @@
-/**
-* Abstract class for GameView to hide some functions that GameView doesn't need to know. 
-* 
-* @author Thom van Dijk
-* @version 1.0
-* @since 08-04-2019
-*/
-
 package com.reversi.view;
 
 import java.util.Scanner;
 
 import com.reversi.controller.*;
-import com.reversi.model.Game.GameMode;
-import com.reversi.model.Game.GameType;
 import com.reversi.model.GameModel;
 import com.reversi.model.Model;
 import com.reversi.model.Player;
 import com.reversi.model.Player.PlayerType;
 import com.reversi.model.Reversi;
 
-import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+/**
+ * The view that displays the actual game.
+ * 
+ * @author  Thom van Dijk
+ * @version 1.0
+ * @since   08-04-2019
+ */
 public class GameView extends View {
 
 	private Scanner scanInput;
@@ -96,7 +90,7 @@ public class GameView extends View {
 		hBoxLeft.setPrefWidth(Main.SCREEN_HEIGHT / 3 - 20);
 
 		hBoxCenter.setAlignment(Pos.CENTER);
-		//hBoxCenter.setStyle("-fx-background-color: red;");
+		// hBoxCenter.setStyle("-fx-background-color: red;");
 		hBoxCenter.setPadding(new Insets(8, 0, 0, 0));
 		hBoxCenter.setPrefWidth(Main.SCREEN_HEIGHT / 3 - 100);
 
@@ -132,8 +126,8 @@ public class GameView extends View {
 	}
 
 	/**
-	 * This update function must be used to get the new values from model
-	 * (GameModel). Update is only called when model had some changes.
+	 * This update function must be used to get the new values from Model. Update is
+	 * only called when model had some changes.
 	 *
 	 * @param model Model
 	 */
@@ -144,7 +138,7 @@ public class GameView extends View {
 		if (gameModel.getCurrentGameType() != null) {
 			boardPane.setVisible(true);
 			infoPane.setVisible(true);
-			
+
 			Player[] players = gameModel.getPlayers();
 			updateGameState(players);
 
@@ -155,14 +149,14 @@ public class GameView extends View {
 			}
 
 			gameName.setText(gameModel.getCurrentGameType().name());
-			
+
 			// Make only the first letter a capital
 			String gameModeString = gameModel.getCurrentGameMode().name().toLowerCase();
 			gameMode.setText(gameModeString.substring(0, 1).toUpperCase() + gameModeString.substring(1));
 		} else {
 			boardPane.setVisible(false);
 			infoPane.setVisible(false);
-		}	
+		}
 	}
 
 	public void updateGameState(Player[] players) {
@@ -194,23 +188,23 @@ public class GameView extends View {
 	public void updateBoard(int[][] board, Player player) {
 		int spacing = 2;
 		int squareSize = (Main.SCREEN_WIDTH / board.length) - spacing - 45;
-		
-		boardPane.getChildren().clear();	
-		
-		for(int col = 0; col < board.length; col++) {
-			for(int row = 0; row < board[0].length; row++) {
-				
+
+		boardPane.getChildren().clear();
+
+		for (int col = 0; col < board.length; col++) {
+			for (int row = 0; row < board[0].length; row++) {
+
 				// From 2D to 1D array
 				int index = (col * board.length) + row;
-				
+
 				Button boardButton = new Button();
 				boardButton.setPrefWidth(squareSize);
 				boardButton.setPrefHeight(squareSize);
 				boardButton.setStyle("-fx-background-color: darkseagreen; -fx-text-fill: white;");
-				
-				if(player.getType().equals(PlayerType.HUMAN)) {
+
+				if (player.getType().equals(PlayerType.HUMAN)) {
 					boardButton.setOnAction(e -> {
-						
+
 //						Task<Void> task = new Task<Void>() {
 //						    @Override
 //						    public Void call() throws Exception {
@@ -223,30 +217,30 @@ public class GameView extends View {
 //						Thread thread = new Thread(task);
 //						thread.setDaemon(true);
 //						thread.start();
-						
+
 						// separate non-FX thread
 //			            new Thread() {
 //
 //			                // runnable for that thread
 //			                public void run() {
-			                	userController.notifyModel(Controller.SET_MOVE, new String[] { String.valueOf(index) });
+						viewController.notifyModel(Controller.SET_MOVE, new String[] { String.valueOf(index) });
 //			                }
 //			            }.start();
-						
+
 					});
 				}
-				
+
 				StackPane squareHolder = new StackPane(boardButton);
 				squareHolder.setPadding(new Insets(spacing));
-				
+
 				boardPane.add(squareHolder, row, col);
-	
-				if(board[col][row] == 1) {
+
+				if (board[col][row] == 1) {
 					Circle blackCircle = new Circle(0, 0, squareSize / 2);
 					boardPane.add(new StackPane(blackCircle), row, col);
 				}
-				
-				if(board[col][row] == 2) {
+
+				if (board[col][row] == 2) {
 					Circle whiteCircle = new Circle(0, 0, squareSize / 2);
 					whiteCircle.setFill(Color.WHITE);
 					boardPane.add(new StackPane(whiteCircle), row, col);
@@ -269,7 +263,7 @@ public class GameView extends View {
 
 			if (commands[0].equals("login")) { // login <player name>
 				if (commands[1] != null) {
-					userController.notifyModel(Controller.LOG_IN, new String[] { commands[1], "localhost" });
+					viewController.notifyModel(Controller.LOG_IN, new String[] { commands[1], "localhost" });
 				} else {
 					System.out.println("Wrong command! Try: login <name>");
 				}
@@ -278,9 +272,9 @@ public class GameView extends View {
 			if (commands[0].equals("sub")) { // sub tictactoe or reversi
 				if (commands[1] != null) {
 					if (commands[1].equals("reversi")) {
-						userController.notifyModel(Controller.SUBSCRIBE_TO_REVERSI, null);
+						viewController.notifyModel(Controller.SUBSCRIBE_TO_REVERSI, null);
 					} else if (commands[1].equals("tictactoe")) {
-						userController.notifyModel(Controller.SUBSCRIBE_TO_TICTACTOE, null);
+						viewController.notifyModel(Controller.SUBSCRIBE_TO_TICTACTOE, null);
 					} else {
 
 					}
@@ -291,7 +285,7 @@ public class GameView extends View {
 
 			if (commands[0].equals("chal")) { // chal <player name> followed by tictactoe or reversi
 				if (commands[1] != null && commands[2] != null) {
-					userController.notifyModel(Controller.CHALLENGE_PLAYER, new String[] { commands[1], commands[2] });
+					viewController.notifyModel(Controller.CHALLENGE_PLAYER, new String[] { commands[1], commands[2] });
 				} else {
 					System.out.println("Wrong command! Try: chal <player name> followed by tictactoe or reversi");
 				}
@@ -299,14 +293,14 @@ public class GameView extends View {
 
 			if (commands[0].equals("accept")) { // accept <chal no>
 				if (commands[1] != null) {
-					userController.notifyModel(Controller.ACCEPT_CHALLENGE, new String[] { commands[1] });
+					viewController.notifyModel(Controller.ACCEPT_CHALLENGE, new String[] { commands[1] });
 				} else {
 					System.out.println("Wrong command! Try: accept <chal no>");
 				}
 			}
 
 			if (commands[0].equals("players")) { // accept <chal no>
-				userController.notifyModel(Controller.REQUEST_PLAYERLIST, null);
+				viewController.notifyModel(Controller.REQUEST_PLAYERLIST, null);
 			}
 
 			if (textToSend.equals("exit")) {

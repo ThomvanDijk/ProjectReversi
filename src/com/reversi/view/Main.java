@@ -10,14 +10,21 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+/**
+ * The main class that will create everything. It is placed under view to use
+ * JavaFX elements more easily, therefore it also extends Application and the
+ * main Scene is created here.
+ * 
+ * @author  Thom van Dijk
+ * @version 1.0
+ * @since   16-04-2019
+ */
 public class Main extends Application {
 
 	public static boolean running;
-	
+
 	public static final int SCREEN_WIDTH = 900;
 	public static final int SCREEN_HEIGHT = 680;
 
@@ -28,6 +35,10 @@ public class Main extends Application {
 	private StackPane gamePane;
 	private StackPane controlPane;
 
+	/**
+	 * This function is called before start and used to create classes which must be
+	 * passed to views.
+	 */
 	public void init() {
 		model = new GameModel();
 
@@ -40,34 +51,25 @@ public class Main extends Application {
 
 		// Make view and add a reference to controller
 		// also pass args for javaFX
-		//GameView view = new GameView(userController);
+		// GameView view = new GameView(userController);
 
 		// Add the view references to the model
-		//model.setView(view);
+		// model.setView(view);
 		model.setClient(client);
 
-		//Thread viewThread = new Thread(view);
+		// Thread viewThread = new Thread(view);
 
-		//viewThread.start();
+		// viewThread.start();
 	}
 
 	public void start(Stage stage) {
-//    	if(!GameView.consoleInput) {
-//    		LogIn login = new LogIn(userController);
-//        	login.Start(primaryStage);
-//
-//        	primaryStage.show();
-//        }
-		
-		
-
 		// Create HBox to split the screen in two
 		hBox = new HBox();
 		gamePane = new StackPane();
 		gamePane.setStyle("-fx-background-color: beige;");
 		gamePane.setPadding(new Insets(10, 10, 10, 10));
 		gamePane.setMinWidth(SCREEN_HEIGHT - 80); // Make squared
-		
+
 		controlPane = new StackPane();
 		controlPane.setStyle("-fx-background-color: lightgray;");
 		controlPane.setPadding(new Insets(10, 10, 10, 10));
@@ -75,7 +77,7 @@ public class Main extends Application {
 
 		GameView gameView = new GameView(userController, gamePane);
 		ControlView controlView = new ControlView(userController, controlPane);
-		
+
 		// Add the view references to the model
 		model.addView(gameView);
 		model.addView(controlView);
@@ -83,7 +85,7 @@ public class Main extends Application {
 //		HBox.setMargin(gamePane, new Insets(20, 20, 20, 20)); 
 //		HBox.setMargin(controlsPane, new Insets(20, 20, 20, 20)); 
 
-		// Add the gamePane	and controlsPane
+		// Add the gamePane and controlsPane
 		hBox.getChildren().addAll(gamePane, controlPane);
 
 		// Create a scene and place it in the stage
@@ -93,7 +95,7 @@ public class Main extends Application {
 		stage.setTitle("Abstract strategy games");
 		stage.show();
 	}
-	
+
 	public ViewController getUserController() {
 		return userController;
 	}

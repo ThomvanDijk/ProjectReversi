@@ -4,7 +4,6 @@ import com.reversi.controller.Controller;
 import com.reversi.controller.ViewController;
 import com.reversi.model.Model;
 
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -13,10 +12,17 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Line;
 
+/**
+ * The view that displays the controls used to start a game for example or to
+ * login. This view will also show lists of online players and manages user
+ * input to the server.
+ * 
+ * @author  Thom van Dijk
+ * @version 1.0
+ * @since   16-04-2019
+ */
 public class ControlView extends View {
 
 	private Button subReversiButton;
@@ -86,7 +92,7 @@ public class ControlView extends View {
 		// Create button for login and align it right
 		Button loginButton = new Button("Login");
 		loginButton.setOnAction(e -> {
-			userController.notifyModel(Controller.LOG_IN,
+			viewController.notifyModel(Controller.LOG_IN,
 					new String[] { usernameField.getText(), addressField.getText() });
 
 			subReversiButton.setDisable(false);
@@ -123,9 +129,9 @@ public class ControlView extends View {
 	}
 
 	public void createOfflineButtons(GridPane gridPane) {
-		
+
 		Label sectionText = new Label("Play offline");
-		
+
 		// Separator above offline buttons
 		Separator separator1 = new Separator();
 		separator1.setStyle("-fx-background-color: black; -fx-border-height: 2;");
@@ -142,12 +148,12 @@ public class ControlView extends View {
 
 		// Buttons to subscribe
 		playReversiButton.setOnAction(e -> {
-			userController.notifyModel(Controller.START_REVERSI_SINGLEPLAYER, null);
+			viewController.notifyModel(Controller.START_REVERSI_SINGLEPLAYER, null);
 		});
 		playTictactoeButton.setOnAction(e -> {
-			userController.notifyModel(Controller.START_TICTACTOE_SINGLEPLAYER, null);
+			viewController.notifyModel(Controller.START_TICTACTOE_SINGLEPLAYER, null);
 		});
-		
+
 		gridPane.add(playReversiButton, 0, 21);
 		HBox alignButtonRight = new HBox();
 		alignButtonRight.setAlignment(Pos.CENTER_RIGHT);
