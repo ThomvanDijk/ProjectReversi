@@ -2,7 +2,7 @@ package com.reversi.view;
 
 import com.reversi.client.Client;
 import com.reversi.controller.ClientController;
-import com.reversi.controller.UserController;
+import com.reversi.controller.ViewController;
 import com.reversi.model.GameModel;
 
 import javafx.application.Application;
@@ -22,7 +22,7 @@ public class Main extends Application {
 	public static final int SCREEN_HEIGHT = 680;
 
 	private GameModel model;
-	private UserController userController;
+	private ViewController userController;
 
 	private HBox hBox;
 	private StackPane gamePane;
@@ -33,7 +33,7 @@ public class Main extends Application {
 
 		// Give model to controllers because they must have a model
 		ClientController clientController = new ClientController(model);
-		userController = new UserController(model);
+		userController = new ViewController(model);
 
 		// Make a client that connects to the server
 		Client client = new Client(clientController);
@@ -94,7 +94,7 @@ public class Main extends Application {
 		stage.show();
 	}
 	
-	public UserController getUserController() {
+	public ViewController getUserController() {
 		return userController;
 	}
 

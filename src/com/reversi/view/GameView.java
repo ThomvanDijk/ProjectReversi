@@ -53,7 +53,7 @@ public class GameView extends View {
 	private Label gameMode;
 	private Label hasTurnText;
 
-	public GameView(UserController userController, StackPane gamePane) {
+	public GameView(ViewController userController, StackPane gamePane) {
 		super(userController);
 
 		infoPane = new GridPane();

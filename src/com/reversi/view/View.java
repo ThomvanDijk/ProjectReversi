@@ -8,16 +8,16 @@
 
 package com.reversi.view;
 
-import com.reversi.controller.UserController;
+import com.reversi.controller.ViewController;
 import com.reversi.model.Model;
 
 import javafx.application.Platform;
 
 public abstract class View {
 
-	protected final UserController userController;
+	protected final ViewController userController;
 
-	public View(UserController userController) {
+	public View(ViewController userController) {
 		this.userController = userController;
 	}
 
@@ -38,7 +38,7 @@ public abstract class View {
 	 */
 	protected abstract void update(Model model);
 
-	public UserController getUserController() {
+	public ViewController getUserController() {
 		return userController;
 	}
 

@@ -1,7 +1,7 @@
 package com.reversi.view;
 
 import com.reversi.controller.Controller;
-import com.reversi.controller.UserController;
+import com.reversi.controller.ViewController;
 import com.reversi.model.Model;
 
 import javafx.application.Platform;
@@ -25,7 +25,7 @@ public class ControlView extends View {
 	private Button playReversiButton;
 	private Button playTictactoeButton;
 
-	public ControlView(UserController userController, StackPane controlPane) {
+	public ControlView(ViewController userController, StackPane controlPane) {
 		super(userController);
 
 		subReversiButton = new Button("Subscribe Reversi");

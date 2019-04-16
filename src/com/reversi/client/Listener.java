@@ -7,6 +7,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+/**
+ * This class manages the different games that are being played.
+ * 
+ * @author Thom van Dijk
+ * @version 1.0
+ * @since 12-04-2019
+ */
 public class Listener implements Runnable {
 
 	private Client client;

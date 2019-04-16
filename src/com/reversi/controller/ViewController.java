@@ -4,9 +4,9 @@ import com.reversi.model.Game.GameMode;
 import com.reversi.model.Game.GameType;
 import com.reversi.model.GameModel;
 
-public class UserController extends Controller {
+public class ViewController extends Controller {
 
-	public UserController(GameModel model) {
+	public ViewController(GameModel model) {
 		super(model);
 	}
 

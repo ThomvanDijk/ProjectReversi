@@ -106,7 +106,7 @@ public class GameModel extends Model {
 	}
 
 	// Arguments from server giving the final points
-	public void endGame(String[] arguments) {
+	public void endGame() {
 		currentGameMode = null;
 		currentGameType = null;
 
