@@ -22,6 +22,13 @@ public class Player {
 	protected int opponent;
 	protected AI ai = null;
 
+	/**
+	 * De constructor voor player wilt het type speler (Human, AI or Server) weten
+	 * en de kleur (wit of zwart) van de speler.
+	 * 
+	 * @param type  Het soort type van de speler, Human, AI of Server
+	 * @param color  De kleur van de speler
+	 */
 	public Player(PlayerType type, int color) {
 		this.type = type;
 		this.color = color;
@@ -40,42 +47,72 @@ public class Player {
 		}
 	}
 
+	/**
+	 * @return Krijg het type terug
+	 */
 	public PlayerType getType() {
 		return type;
 	}
 
+	/**
+	 * @return Krijg de kleur van de speler terug
+	 */
 	public int getColor() {
 		return color;
 	}
 
+	/**
+	 * @return Krijg de naam terug van de speler
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * @param name Zet de naam van de speler
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * @return Krijg de score terug van de speler
+	 */
 	public int getScore() {
 		return score;
 	}
 
+	/**
+	 * @param score Zet de score van de speler
+	 */
 	public void setScore(int score) {
 		this.score = score;
 	}
 
+	/**
+	 * @param hasTurn Verander of de speler wel of niet de beurt heeft
+	 */
 	public void setTurn(boolean hasTurn) {
 		this.hasTurn = hasTurn;
 	}
 
+	/**
+	 * @return Krijg terug of de speler de beurt heeft
+	 */
 	public boolean hasTurn() {
 		return hasTurn;
 	}
 
+	/**
+	 * Verhoog de score van de speler met 1
+	 */
 	public void incrementScore() {
 		score++;
 	}
 
+	/**
+	 * Verlaag de score van de speler met 1
+	 */
 	public void decrementScore() {
 		score--;
 	}

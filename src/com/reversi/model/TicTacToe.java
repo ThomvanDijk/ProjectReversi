@@ -5,10 +5,23 @@ import com.reversi.view.Main;
 
 import java.util.Scanner;
 
+/**
+ * The TicTacToe class contains all the rules of TicTacToe and handles some game
+ * specific moves.
+ * 
+ * @author  Thom van Dijk
+ * @version 1.0
+ * @since   1.0
+ */
 public class TicTacToe extends Game {
 
 	private Scanner scanInput;
-
+	/**
+	 * De constructor vraagt de game modus op.
+	 * In deze klasse word het gametype altijd overschreven met TicTacToe.
+	 * 
+	 * @param gameMode		De game modus van het spel.
+	 */
 	public TicTacToe(GameMode gameMode) {
 		super(GameType.TICTACTOE, gameMode);
 
@@ -29,7 +42,12 @@ public class TicTacToe extends Game {
 		}
 	}
 
-	// Check if the move is valid
+	/**
+	 * Controleren of de zet een valide zet is
+	 *
+	 * @param  input		De zet die gechecked moet worden.
+	 * @param  player 		De speler die de zet wilt doen.
+	 */
 	public boolean isValidMove(int input, int player) {
 		int row = 0;
 		int col = 0;
@@ -51,7 +69,13 @@ public class TicTacToe extends Game {
 		}
 	}
 
-	// Set the move only if it is a valid move
+	/**
+	 * De zet uitvoeren die uit de input komt, zolang
+	 * de zet een valide zet is.
+	 *
+	 * @param  input		De zet die de speler wilt uitvoeren.
+	 * @param  playerID 	Het ID van de huidige speler.
+	 */
 	public void setMove(int input, int playerID) throws Exception {
 		int row = 0;
 		int col = 0;
@@ -77,6 +101,11 @@ public class TicTacToe extends Game {
 		System.out.println();
 	}
 
+	/**
+	 * De zet voorbereiden die uit de input komt.
+	 *
+	 * @param  player 	De huidige speler.
+	 */
 	public void makeMove(Player player) {
 		int input = 0;
 
@@ -106,9 +135,15 @@ public class TicTacToe extends Game {
 		}
 	}
 	
-	// Based on: https://www.coderslexicon.com/code/15/
-	// Check board for a win by looping through rows, columns and checking diagonals.
-	// If any of them are true, then there is a winning condition.
+
+	/**
+	 * Based on: https://www.coderslexicon.com/code/15/
+	 * Check board for a win by looping through rows, columns and checking diagonals.
+	 * If any of them are true, then there is a winning condition.
+	 *
+	 * @param  player 	The current player
+	 * @return 			Return if the player has won, or not (true = win, false = no win)
+	 */
 	public boolean playerWon(Player player) {
 		int[][] boardArray = board.getBoard();
 		
@@ -138,7 +173,17 @@ public class TicTacToe extends Game {
 		return false;
 	}
 	
-	// Check three values to see if they are the same. If so, we have a winner.
+	/**
+	 * Deze functie kijkt voor een rij of er 3 dezelfde stukken zijn. Zo ja,
+	 * dan is er een winnaar.
+	 *
+	 * @param  pos0 	Positie 1 die gechecked moet worden
+	 * @param  pos1		Positie 2 die gechecked moet worden
+	 * @param  pos2 	Positie 3 die gechecked moet worden
+	 * @param  player 	De huidige speler
+	 * @return 			Stuur terug false, als de speler niet heeft gewonnen in deze
+	 * 					rij. Stuur true, als hij wel in deze rij heeft gewonnen.
+	 */
 	public boolean checkRow(int pos0, int pos1, int pos2, Player player) {
 		if ((pos0 == pos1) && (pos0 == pos2)) {
 			if(player.color == pos0) {
@@ -148,7 +193,9 @@ public class TicTacToe extends Game {
 		return false;
 	}
 
-	// This input needs to come from the GUI
+	/**
+	 * Oude functie die de input uit de console haalde.
+	 */
 	public void consoleInput() {
 		board.debugBoard();
 

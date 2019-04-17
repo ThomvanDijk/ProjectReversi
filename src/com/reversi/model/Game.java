@@ -1,5 +1,15 @@
 package com.reversi.model;
 
+/**
+ * Dit is de abstracte klasse waar Reversi en TicTacToe uit erfen.
+ * Als er in de toekomst spellen bij komen, gaan deze ook gebruik maken
+ * van deze abstracte klasse.
+ * 
+ * @author  Thom van Dijk
+ * @version 1.0
+ * @since   1.0
+ */
+
 public abstract class Game {
 
 	public enum GameType {
@@ -19,6 +29,12 @@ public abstract class Game {
 	protected Player player2;
 	protected int turn;
 
+	/**
+	 * De constructor van game wilt het type en de modus van het spel weten.
+	 * 
+	 * @param gameType Het type van het spel (Reversi/TicTacToe
+	 * @param gameMode De modus van het spel (Singleplayer/Multiplayer)
+	 */
 	public Game(GameType gameType, GameMode gameMode) {
 		this.gameType = gameType;
 		this.gameMode = gameMode;
@@ -39,10 +55,17 @@ public abstract class Game {
 		createBoard();
 	}
 	
+	/**
+	 * Getter voor spelers in de game
+	 * @return  Spelers in de game
+	 */
 	public Player[] getPlayers() {
 		return new Player[] { player1, player2 };
 	}
 
+	/**
+	 * Deze functie maakt een bord, afhankelijk van de gametype.
+	 */
 	private void createBoard() {
 		switch (gameType) {
 		case REVERSI:

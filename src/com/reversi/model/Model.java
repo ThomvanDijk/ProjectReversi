@@ -5,6 +5,14 @@ import java.util.ArrayList;
 import com.reversi.client.Client;
 import com.reversi.view.View;
 
+/**
+ * This class is an abstract class, that gameModel uses.
+ * 
+ * @author Thom van Dijk
+ * @version 1.0
+ * @since 12-04-2019
+ */
+
 public abstract class Model {
 	
 	private ArrayList<View> views = new ArrayList<>();

@@ -8,6 +8,16 @@ import java.util.Random;
 import com.reversi.model.Game.GameType;
 import com.reversi.model.Player.PlayerType;
 
+/**
+ * The AI class does the calculating work to see which
+ * move should be played to increase the odds of winning
+ * the current game played.
+ * 
+ * @author  Sebastiaan van Vliet <SebastiaanVliet@gmail.com>
+ * @version 1.0
+ * @since   1.0
+ */
+
 public class AI {
 	
 	private TicTacToe ticTacToe;
@@ -16,16 +26,22 @@ public class AI {
 	public AI() {
 		
 	}
-	
+
 	public void setTicTacToe(TicTacToe ticTacToe) {
 		this.ticTacToe = ticTacToe;
 	}
-	
+
 	public void setReversi(Reversi reversi) {
 		this.reversi = reversi;
 	}
 	
-	// Calculate the best move for player
+	/**
+	 * Deze functie berekent wat de beste zet is voor TicTacToe.
+	 * 
+	 * @param board  Het huidige bord
+	 * @param player De speler die een zet wilt doen
+	 * @return
+	 */
 	public int calculateMove(Board board, Player player) {
 		Random rand = new Random();
 		int move = 0;
@@ -41,6 +57,15 @@ public class AI {
 		return move;
 	}
 	
+	/**
+	 * Deze functie doet een random zet op het veld. Dit doet dit
+	 * algoritme door de valide zetten op te vragen en van die zetten
+	 * een willekeurige waarde te pakken.
+	 * 
+	 * @param b 		Het huidige bord
+	 * @param player	De speler die een zet wilt doen
+	 * @return			De zet die berekend is
+	 */
 	public int random(Board b, Player player) {
 		// haal mogelijke zetten op
 		ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.color);
@@ -53,9 +78,13 @@ public class AI {
 		return move;
 	}
 	
+	/**
+
+	 */
 	public ArrayList<ArrayList<Integer>> removeBadMoves(ArrayList<ArrayList<Integer>> list, Board b, Player player) {
 		int boardSize = b.getBoardSize();
 		int[][] currentBoard = b.getBoard();
+		// Backup maken van het bord
 		int[][] backup = new int[boardSize][boardSize];
 		for (int i = 0; i < boardSize; i++) {
 			backup[i] = Arrays.copyOf(currentBoard[i], currentBoard[i].length);
@@ -78,9 +107,11 @@ public class AI {
 				}
 
 			}
+			// Goede move toevoegen aan lijst
 			if (goodMoveLeft == true){
 				newList.add(list.get(i));
 			}
+			// Bord naar oude staat terug brengen
 			int[][] restore = new int[boardSize][boardSize];
 			for (int j = 0; j < boardSize; j++) {
 			  restore[j] = Arrays.copyOf(backup[j], backup[j].length);
@@ -91,6 +122,13 @@ public class AI {
 		return newList;
 
 	}
+	/**
+	 * Deze functie berekent de beste zet, op basis van de boardweight
+	 * 
+	 * @param b 		Het huidige bord
+	 * @param player	De speler die een zet wilt doen
+	 * @return			De zet die berekend is
+	 */
 	public int boardWeighting(Board b, Player player) {
 		int bestMoveValue = -200;
 		int bestMove = -1;
@@ -111,21 +149,34 @@ public class AI {
 		
 		return bestMove;
 	}
+	/**
+	 * Deze functie berekend of het mogelijk is om een zet te doen die er voor zorgt
+	 * dat de tegenstander geen mogelijke zetten meer heeft.
+	 * 
+	 * @param list		Lijst met mogelijke zetten
+	 * @param b 		Het huidige bord
+	 * @param player	De speler die een zet wilt doen
+	 * @return			De zet die berekend is, of -1 als er
+	 * 					geen zet gevonden is.
+	 */
 	public int blockingMove(ArrayList<ArrayList<Integer>> list, Board b, Player player) {
 		int boardSize = b.getBoardSize();
 		int[][] currentBoard = b.getBoard();
+		// Backup van het bord maken
 		int[][] backup = new int[boardSize][boardSize];
 		for (int i = 0; i < boardSize; i++) {
 			backup[i] = Arrays.copyOf(currentBoard[i], currentBoard[i].length);
 		}
 		 
 		boolean block = false;
+		// Kijk of er zetten zijn die er voor zorgen dat de tegenstander geen zet kan doen de volgende beurt
 		for (int i = 0; i < list.size(); i++) {
 			int move = list.get(i).get(0) + (list.get(i).get(1)*8);
 			if(reversi.getValidMoves(reversi.makeForwardMove(player, move, b), player.opponent).size() == 0){
 				System.out.println("You got blocked, son");
 				block = true;
 			}
+			// Zet het bord terug in de oude staat
 			int[][] restore = new int[boardSize][boardSize];
 			for (int j = 0; j < boardSize; j++) {
 			  restore[j] = Arrays.copyOf(backup[j], backup[j].length);
@@ -138,6 +189,13 @@ public class AI {
 		return -1;
 	}
 	
+	/**
+	 * Deze functie verandert de waardes van de boardweight afhankelijk van de stand van het bord.
+	 * 
+	 * @param b 		Het huidige bord
+	 * @param player	De speler die aan zet is
+	 * @return			De waardes van elk bord vak
+	 */
 	int[] areaValue(Board b, Player player) {
 		// geef waardes aan elke zet
 		int[] boardValue = new int[64];
@@ -160,16 +218,6 @@ public class AI {
 		k = 30;
 		l = -51;
 		
-		/*if (board[0][2] == player.opponent && board[0][3] == player.id) {
-			boardValue[1] = k;
-		}			
-		else
-		if (board[0][2] == player.id) {
-			boardValue[1] = i;
-		}
-		else {
-			boardValue[1] = j;
-		}*/
 		if (board[0][0] == player.color) {
 			boardValue[1] = k;
 		} else if (board[0][0] == player.opponent) {
@@ -355,6 +403,23 @@ public class AI {
 		return boardValue;
 	}
 
+	/**
+	 * Deze functie berekend de best mogelijke zet door middel van een minimax algoritme dat gebruik
+	 * maakt van alpha-beta pruning. Er wordt vooral gekeken naar mobility, maar er wordt ook in
+	 * sommige gevallen gekeken naar, stability, corner grab, board state, boardweight, score
+	 * en time passed.
+	 * 
+	 * @param b 			Het huidige bord
+	 * @param player		De speler die een zet wilt doen
+	 * @param depth			Hoe diep het minimax algoritme is
+	 * @param maxDepth		Hoe diep het minimax algortime moet gaan
+	 * @param chosenScore	De score van de vorige diepte
+	 * @param chosenMove	De zet die gekozen was in de vorige diepte
+	 * @param alpha			Alpha waarde van vorige diepte
+	 * @param beta			Beta waarde van vorige diepte
+	 * @param time			Hoeveel tijd er voorbij is sinds de 1ste loop
+	 * @return				De zet die berekend is
+	 */
 	public int minimaxAvailableMoves(Board b, Player player, int depth, int maxDepth, int chosenScore, int chosenMove, int alpha, int beta, long time){
 		ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.color);		
     	long endTime = time;
@@ -412,7 +477,8 @@ public class AI {
 					//list = stableMoves;
 				}
 			}
-		}				
+		}
+		// Als de tijd op is, stop het algoritme
 		if (System.currentTimeMillis() > endTime) {
 			ArrayList<ArrayList<Integer>> goodList = (ArrayList<ArrayList<Integer>>) list.clone();
 	    	
@@ -442,7 +508,7 @@ public class AI {
 		for (int i = 0; i < boardSize; i++) {
 		  backup[i] = Arrays.copyOf(currentBoard[i], currentBoard[i].length);
 		}
-		
+		// Als de max diepte bereikt is
 	    if (depth == maxDepth) {
 	    	ArrayList<ArrayList<Integer>> goodList = (ArrayList<ArrayList<Integer>>) list.clone();
 	    	
@@ -522,38 +588,49 @@ public class AI {
 	                nextPlayer.setTurn(true);
 	                player.setTurn(false);
 	                
+	             // Ga 1 stap dieper in de minimax boom
 	                int score = minimaxAvailableMoves(b, nextPlayer, depth+1, maxDepth, currentscore, move, alpha, beta, endTime);
+	                
+	                // Zet het bord terug naar de oude situatie
 	                int[][] restore = new int[boardSize][boardSize];
 	        		for (int j = 0; j < boardSize; j++) {
 	        		  restore[j] = Arrays.copyOf(backup[j], backup[j].length);
 	        		}
 	                b.setBoard(restore);
 	                
+	                // Kijk of er al een best move is, zo niet, is de huidige move de beste move.
 	                if (bestMove == -1) {
 	                	bestScore = score;
 	                    bestMove = move;
 	                }
-	                	                	
+	                
+	                // Als de diepte even is
                 	if (depth%2 == 0) {
+                		// Als de score beter is dat de beste score, is er een nieuwe beste zet
 	                	if (score > bestScore){
 		                    bestScore = score;
 		                    bestMove = move;
 		                }
+	                	// Als de score hoger is dan alpha, is er een nieuwe alpha.
 	                	if(score > alpha) {
 	                		alpha = score;
 	                	}
+	                	// Als alpha groter is dan Beta, zal deze node nooit gekozen worden, dus word er uit de loop gebroken.
 	                	if(beta <= alpha) {
 	                		break;
 	                	}
 	                }
 	                else {
+	                	// Als de score beter is dat de beste score, is er een nieuwe beste zet
 	                	if (score < bestScore){
 		                    bestScore = score;
 		                    bestMove = move;
 		                }
+	                	// Als de score lager is dan beta, is er een nieuwe beta.
 	                	if(score < beta) {
 	                		beta = score;
 	                	}
+	                	// Als alpha groter is dan Beta, zal deze node nooit gekozen worden, dus word er uit de loop gebroken.
 	                	if(beta <= alpha) {
 	                		break;
 	                	}
@@ -566,149 +643,22 @@ public class AI {
 	        }
 
 	    }
-	    /*if (chosenMove == -1) {
-	    	return boardWeighting(b, player);
-	    }*/
 	    if (depth != 0) {
 	    	return chosenScore;
 	    } 
 	    else {  
 	    	return chosenMove;
 	    }
-	}
+	}	
 	
-	public int minimax(Board b, Player player, int depth, int maxDepth, int chosenScore, int chosenMove, int alpha, int beta, long time, int deadlock){
-		long endTime = time;
-		if (depth == 0) {
-			// Time check
-			long start = System.currentTimeMillis();
-			endTime = start + 8*1000;
-		}
-		
-		if (System.currentTimeMillis() > endTime) {
-			if (depth % 2 == 0) {
-	    		return reversi.calculateScore(player.color);
-	    	}
-	    	else {
-	    		return reversi.calculateScore(player.opponent);
-	    	}
-		}
-		
-		int boardSize = b.getBoardSize();
-		int[][] currentBoard = b.getBoard();
-		
-		int[][] backup = new int[boardSize][boardSize];
-		for (int i = 0; i < boardSize; i++) {
-		  backup[i] = Arrays.copyOf(currentBoard[i], currentBoard[i].length);
-		}
-		
-	    if (depth == maxDepth) {
-	    	if (depth % 2 == 0) {
-	    		return reversi.calculateScore(player.color);
-	    	}
-	    	else {
-	    		return reversi.calculateScore(player.opponent);
-	    	}
-	    }
-
-	    
-	    else {
-	    	int bestScore = 100;
-	    	int bestMove = -1;
-	    	ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.color);
-	        if (list.size() == 0) {
-	        	if (depth % 2 == 0) {
-	        		if (deadlock == 1) {
-		        		Player nextPlayer;
-		        		if (player.color == 1) {
-		                	nextPlayer = new Player(PlayerType.AI, 2);
-		                }
-		                else {
-		                	nextPlayer = new Player(PlayerType.AI, 1);	           
-		                }
-		        		nextPlayer.setTurn(true);
-		                player.setTurn(false);
-		                
-		                chosenScore = minimax(b, nextPlayer, depth, maxDepth, chosenScore, chosenMove, alpha, beta, endTime, 1);
-	        		}
-		    	}
-		    	else {
-		    		if (depth % 2 == 0) {
-			    		return reversi.calculateScore(player.color);
-			    	}
-			    	else {
-			    		return reversi.calculateScore(player.opponent);
-			    	}
-		    	}
-	        }
-	        else {
-	            for (int i = 0; i < (list.size()); i++) {	                
-	                int move = list.get(i).get(0) + (list.get(i).get(1)*8);
-	                reversi.makeForwardMove(player, move, b);
-	                int score = reversi.calculateScore(player.color);
-
-	                Player nextPlayer;
-	                if (player.color == 1) {
-	                	nextPlayer = new Player(PlayerType.AI, 2);
-	                }
-	                else {
-	                	nextPlayer = new Player(PlayerType.AI, 1);	           
-	                }
-	                nextPlayer.setTurn(true);
-	                player.setTurn(false);
-	                
-	                score = minimax(b, nextPlayer, depth+1, maxDepth, score, move, alpha, beta, endTime, 0);
-	                int[][] restore = new int[boardSize][boardSize];
-	        		for (int j = 0; j < boardSize; j++) {
-	        		  restore[j] = Arrays.copyOf(backup[j], backup[j].length);
-	        		}
-	                b.setBoard(restore);
-	                
-	                if (bestMove == -1) {
-	                	bestScore = score;
-	                    bestMove = move;
-	                }
-	                
-                	if (depth%2 == 0) {
-	                	if (score > bestScore){
-		                    bestScore = score;
-		                    bestMove = move;
-		                }
-	                	if(score > alpha) {
-	                		alpha = score;
-	                	}
-	                	if(beta <= alpha) {
-	                		break;
-	                	}
-	                }
-	                else {
-	                	if (score < bestScore){
-		                    bestScore = score;
-		                    bestMove = move;
-		                }
-	                	if(score < beta) {
-	                		beta = score;
-	                	}
-	                	if(beta <= alpha) {
-	                		break;
-	                	}
-	                }
-	                		        	                
-	            }
-	            
-	            chosenScore = bestScore;
-	            chosenMove = bestMove;
-	        }
-	    }
-	    if (depth != 0) {
-	    	return chosenScore;
-	    }
-	    else {
-	    	return chosenMove;
-	    }
-	}
-	
-	
+	/**
+	 * Deze functie kijkt of er hoeken in bezig zijn van de speler die meegegeven
+	 * wordt in de parameters.
+	 * 
+	 * @param b 		Het huidige bord
+	 * @param player	De speler die aan zet is
+	 * @return			Geef terug welke hoeken de speler heeft
+	 */
 	public ArrayList<int[]> checkCorners (Board b, Player player) {
 		ArrayList<int[]> cornersTaken = new ArrayList<int[]>();
 		
@@ -735,6 +685,15 @@ public class AI {
 		return cornersTaken;		
 	}
 	
+	/**
+	 * Deze functie kijkt of er stabiele zetten mogelijk zijn. Stabiele zetten
+	 * zijn zetten die voor de rest van de game niet meer overgenomen kunnen worden.
+	 * 
+	 * @param list		Lijst met mogelijke zetten
+	 * @param b 		Het huidige bord
+	 * @param player	De speler die een zet wilt doen
+	 * @return			Geef terug een lijst met stabiele zetten.
+	 */
 	public ArrayList<ArrayList<Integer>> stability (ArrayList<ArrayList<Integer>> list, Board b, Player player) {
 		ArrayList<int[]> cornersTaken = checkCorners(b, player);
 		int boardSize = b.getBoardSize();
@@ -831,6 +790,22 @@ public class AI {
 	
 	
 	
+	/**
+	 * Deze functie berekend de best mogelijke zet door middel van een minimax algoritme dat gebruik
+	 * maakt van alpha-beta pruning. Er wordt vooral gekeken naar score en corner grab, maar er wordt ook in
+	 * sommige gevallen gekeken naar, stability, mobiliy, board state, boardweight, en time passed
+	 * 
+	 * @param b 			Het huidige bord
+	 * @param player		De speler die een zet wilt doen
+	 * @param depth			Hoe diep het minimax algoritme is
+	 * @param maxDepth		Hoe diep het minimax algortime moet gaan
+	 * @param chosenScore	De score van de vorige diepte
+	 * @param chosenMove	De zet die gekozen was in de vorige diepte
+	 * @param alpha			Alpha waarde van vorige diepte
+	 * @param beta			Beta waarde van vorige diepte
+	 * @param time			Hoeveel tijd er voorbij is sinds de 1ste loop
+	 * @return				De zet die berekend is
+	 */
 	public int minimaxTest(Board b, Player player, int depth, int maxDepth, int chosenScore, int chosenMove, int alpha, int beta, long time){
 		ArrayList<ArrayList<Integer>> list = reversi.getValidMoves(b, player.color);		
     	long endTime = time;
@@ -878,7 +853,8 @@ public class AI {
 					//list = stableMoves;
 				}
 			}
-		}				
+		}	
+		// Als de tijd op is, stop het algoritme
 		if (System.currentTimeMillis() > endTime) {
 			ArrayList<ArrayList<Integer>> goodList = (ArrayList<ArrayList<Integer>>) list.clone();
 	    	
@@ -908,7 +884,7 @@ public class AI {
 		for (int i = 0; i < boardSize; i++) {
 		  backup[i] = Arrays.copyOf(currentBoard[i], currentBoard[i].length);
 		}
-		
+		// Als de max diepte bereikt is
 	    if (depth == maxDepth) {
 	    	ArrayList<ArrayList<Integer>> goodList = (ArrayList<ArrayList<Integer>>) list.clone();
 	    	
@@ -1014,38 +990,49 @@ public class AI {
 	                nextPlayer.setTurn(true);
 	                player.setTurn(false);
 	                
+	                // Ga 1 stap dieper in de minimax boom
 	                int score = minimaxAvailableMoves(b, nextPlayer, depth+1, maxDepth, currentscore, move, alpha, beta, endTime);
+	                
+	                // Zet het bord terug naar de oude situatie
 	                int[][] restore = new int[boardSize][boardSize];
 	        		for (int j = 0; j < boardSize; j++) {
 	        		  restore[j] = Arrays.copyOf(backup[j], backup[j].length);
 	        		}
 	                b.setBoard(restore);
 	                
+	                // Kijk of er al een best move is, zo niet, is de huidige move de beste move.
 	                if (bestMove == -1) {
 	                	bestScore = score;
 	                    bestMove = move;
 	                }
-	                	                	
+	                
+	                // Als de diepte even is
                 	if (depth%2 == 0) {
+                		// Als de score beter is dat de beste score, is er een nieuwe beste zet
 	                	if (score > bestScore){
 		                    bestScore = score;
 		                    bestMove = move;
 		                }
+	                	// Als de score hoger is dan alpha, is er een nieuwe alpha.
 	                	if(score > alpha) {
 	                		alpha = score;
 	                	}
+	                	// Als alpha groter is dan Beta, zal deze node nooit gekozen worden, dus word er uit de loop gebroken.
 	                	if(beta <= alpha) {
 	                		break;
 	                	}
 	                }
 	                else {
+	                	// Als de score beter is dat de beste score, is er een nieuwe beste zet
 	                	if (score < bestScore){
 		                    bestScore = score;
 		                    bestMove = move;
 		                }
+	                	// Als de score lager is dan beta, is er een nieuwe beta.
 	                	if(score < beta) {
 	                		beta = score;
 	                	}
+	                	// Als alpha groter is dan Beta, zal deze node nooit gekozen worden, dus word er uit de loop gebroken.
 	                	if(beta <= alpha) {
 	                		break;
 	                	}
@@ -1058,9 +1045,7 @@ public class AI {
 	        }
 
 	    }
-	    /*if (chosenMove == -1) {
-	    	return boardWeighting(b, player);
-	    }*/
+
 	    if (depth != 0) {
 	    	return chosenScore;
 	    } 
