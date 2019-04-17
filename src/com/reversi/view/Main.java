@@ -29,7 +29,7 @@ public class Main extends Application {
 	public static final int SCREEN_HEIGHT = 680;
 
 	private GameModel model;
-	private ViewController userController;
+	private ViewController viewController;
 
 	private HBox hBox;
 	private StackPane gamePane;
@@ -44,7 +44,7 @@ public class Main extends Application {
 
 		// Give model to controllers because they must have a model
 		ClientController clientController = new ClientController(model);
-		userController = new ViewController(model);
+		viewController = new ViewController(model);
 
 		// Make a client that connects to the server
 		Client client = new Client(clientController);
@@ -75,8 +75,8 @@ public class Main extends Application {
 		controlPane.setPadding(new Insets(10, 10, 10, 10));
 		controlPane.prefWidthProperty().bind(hBox.widthProperty());
 
-		GameView gameView = new GameView(userController, gamePane);
-		ControlView controlView = new ControlView(userController, controlPane);
+		GameView gameView = new GameView(viewController, gamePane);
+		ControlView controlView = new ControlView(viewController, controlPane);
 
 		// Add the view references to the model
 		model.addView(gameView);
@@ -97,7 +97,7 @@ public class Main extends Application {
 	}
 
 	public ViewController getUserController() {
-		return userController;
+		return viewController;
 	}
 
 	public static void main(String[] args) {
