@@ -28,8 +28,8 @@ public class ControlView extends View {
 	private Button subReversiButton;
 	private Button subTictactoeButton;
 
-	private Button playReversiButton;
-	private Button playTictactoeButton;
+	private Button playAsBlackButton;
+	private Button playAsWhiteButton;
 
 	public ControlView(ViewController userController, StackPane controlPane) {
 		super(userController);
@@ -40,8 +40,8 @@ public class ControlView extends View {
 		subTictactoeButton.setDisable(true);
 		subTictactoeButton.setPrefWidth(130);
 
-		playReversiButton = new Button("Play Reversi");
-		playTictactoeButton = new Button("Play Tic-tac-toe");
+		playAsBlackButton = new Button("Play as Black");
+		playAsWhiteButton = new Button("Play as White");
 
 		GridPane gridPane = new GridPane();
 		gridPane.setAlignment(Pos.TOP_CENTER);
@@ -147,17 +147,17 @@ public class ControlView extends View {
 		gridPane.add(separator2, 1, 20);
 
 		// Buttons to subscribe
-		playReversiButton.setOnAction(e -> {
+		playAsBlackButton.setOnAction(e -> {
 			viewController.notifyModel(Controller.START_REVERSI_SINGLEPLAYER, null);
 		});
-		playTictactoeButton.setOnAction(e -> {
-			viewController.notifyModel(Controller.START_TICTACTOE_SINGLEPLAYER, null);
+		playAsWhiteButton.setOnAction(e -> {
+			viewController.notifyModel(Controller.START_REVERSI_SINGLEPLAYER, null);
 		});
 
-		gridPane.add(playReversiButton, 0, 21);
+		gridPane.add(playAsBlackButton, 0, 21);
 		HBox alignButtonRight = new HBox();
 		alignButtonRight.setAlignment(Pos.CENTER_RIGHT);
-		alignButtonRight.getChildren().add(playTictactoeButton);
+		alignButtonRight.getChildren().add(playAsWhiteButton);
 		gridPane.add(alignButtonRight, 1, 21);
 	}
 

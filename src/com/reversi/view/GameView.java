@@ -58,15 +58,15 @@ public class GameView extends View {
 		// boardPane.setStyle("-fx-background-color: purple;");
 		boardPane.setAlignment(Pos.BOTTOM_CENTER);
 
-		blackScore = new Label("2");
+		blackScore = new Label("0");
 		blackScore.setStyle("-fx-text-fill: white; -fx-font: bold 20px 'Serif';");
-		whiteScore = new Label("2");
+		whiteScore = new Label("0");
 		whiteScore.setStyle("-fx-font: bold 20px 'Serif';");
 
-		blackPlayer = new Label("You");
+		blackPlayer = new Label("-");
 		blackPlayer.setPadding(new Insets(0, 0, 0, 25));
 		blackPlayer.setStyle("-fx-font: bold 20px 'Serif';");
-		whitePlayer = new Label("Computer");
+		whitePlayer = new Label("-");
 		whitePlayer.setPadding(new Insets(0, 25, 0, 0));
 		whitePlayer.setStyle("-fx-font: bold 20px 'Serif';");
 
@@ -74,7 +74,7 @@ public class GameView extends View {
 		gameName.setStyle("-fx-font: bold 20px 'Serif';");
 		gameMode = new Label("Offline");
 		gameMode.setStyle("-fx-font: 15px 'Serif';");
-		hasTurnText = new Label("Black has the turn");
+		hasTurnText = new Label("Game not started");
 		hasTurnText.setStyle("-fx-font: 15px 'Serif';");
 
 		scanInput = new Scanner(System.in);
@@ -119,20 +119,23 @@ public class GameView extends View {
 		infoPane.add(hBoxLeft, 0, 0);
 		infoPane.add(hBoxCenter, 1, 0);
 		infoPane.add(hBoxRight, 2, 0);
+		
+		infoPane.setDisable(true);
+		boardPane.setDisable(true);
 
 		gamePane.getChildren().addAll(infoPane, boardPane);
 		
-		int[][] board = new int[][] {
-			{0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0},
-			{0,0,0,2,1,0,0,0},
-			{0,0,0,1,2,0,0,0},
-			{0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0}
-		};
-			
+//		int[][] board = new int[][] {
+//			{0,0,0,0,0,0,0,0},
+//			{0,0,0,0,0,0,0,0},
+//			{0,0,0,0,0,0,0,0},
+//			{0,0,0,2,1,0,0,0},
+//			{0,0,0,1,2,0,0,0},
+//			{0,0,0,0,0,0,0,0},
+//			{0,0,0,0,0,0,0,0},
+//			{0,0,0,0,0,0,0,0}
+//		};
+		int[][] board = new int[8][8];
 		updateBoard(board, null);
 	}
 
@@ -144,6 +147,9 @@ public class GameView extends View {
 	 */
 	@Override
 	protected void update(Model model) {
+		infoPane.setDisable(false);
+		boardPane.setDisable(false);
+		
 		GameModel gameModel = (GameModel) model; // cast
 
 		Player[] players = gameModel.getPlayers();
