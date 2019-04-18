@@ -23,7 +23,6 @@ import javafx.concurrent.Task;
  */
 public class GameModel extends Model {
 
-	private TicTacToe ticTacToe;
 	private Reversi reversi;
 
 	private GameType currentGameType; // Tic-tac-toe or reversi
@@ -35,7 +34,6 @@ public class GameModel extends Model {
 	private String opponentName;
 
 	public GameModel() {
-		ticTacToe = null;
 		reversi = null;
 
 		currentGameMode = null;
@@ -87,17 +85,6 @@ public class GameModel extends Model {
 				reversi.player2.setName(opponentName);
 				break;
 			}
-		case TICTACTOE:
-			if (gameMode.equals(GameMode.SINGLEPLAYER)) {
-				ticTacToe = new TicTacToe(GameMode.SINGLEPLAYER);
-				reversi.player1.setName(loginName);
-				break;
-			} else {
-				ticTacToe = new TicTacToe(GameMode.ONLINE);
-				reversi.player1.setName(loginName);
-				reversi.player2.setName(opponentName);
-				break;
-			}
 		default:
 			throw new IllegalStateException();
 		}
@@ -111,7 +98,6 @@ public class GameModel extends Model {
 		currentGameType = null;
 
 		reversi = null;
-		ticTacToe = null;
 
 		notifyViews();
 	}
@@ -131,17 +117,6 @@ public class GameModel extends Model {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
-			break;
-		case TICTACTOE:
-			if (currentGameMode.equals(GameMode.ONLINE)) {
-				try {
-					// ticTacToe.setMove(intMove, playerID);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else {// Offline
-
 			}
 			break;
 		default:
@@ -309,8 +284,6 @@ public class GameModel extends Model {
 		switch (currentGameType) {
 		case REVERSI:
 			return reversi.board.getBoard();
-		case TICTACTOE:
-			return ticTacToe.board.getBoard();
 		default:
 			return null;
 		}
@@ -325,8 +298,6 @@ public class GameModel extends Model {
 		switch (currentGameType) {
 		case REVERSI:
 			return reversi.getPlayers();
-		case TICTACTOE:
-			return ticTacToe.getPlayers();
 		default:
 			return null;
 		}
