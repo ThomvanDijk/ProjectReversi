@@ -11,9 +11,6 @@ import com.reversi.model.Game.GameMode;
 import com.reversi.model.Game.GameType;
 import com.reversi.model.Player.PlayerType;
 
-import javafx.application.Platform;
-import javafx.concurrent.Task;
-
 /**
  * This class manages the different games that are being played.
  * 
@@ -34,7 +31,7 @@ public class GameModel extends Model {
 	private String opponentName;
 
 	public GameModel() {
-		reversi = null;
+		reversi = new Reversi(GameMode.SINGLEPLAYER);
 
 		currentGameMode = null;
 		currentGameType = null;
@@ -45,16 +42,7 @@ public class GameModel extends Model {
 	}
 
 	public void subscribeToGame(GameType gameType) {
-		switch (gameType) {
-		case REVERSI:
-			client.sendCommand("subscribe Reversi");
-			break;
-		case TICTACTOE:
-			client.sendCommand("subscribe Tic-tac-toe");
-			break;
-		default:
-			throw new IllegalStateException();
-		}
+		client.sendCommand("subscribe Reversi");
 	}
 
 	public void startGame(GameMode gameMode, GameType gameType, String[] players) {
@@ -73,20 +61,13 @@ public class GameModel extends Model {
 			}
 		}
 
-		switch (gameType) {
-		case REVERSI:
-			if (gameMode.equals(GameMode.SINGLEPLAYER)) {
-				reversi = new Reversi(GameMode.SINGLEPLAYER, null);
-				reversi.player1.setName(loginName);
-				break;
-			} else {
-				reversi = new Reversi(GameMode.ONLINE, startPlayer);
-				reversi.player1.setName(loginName);
-				reversi.player2.setName(opponentName);
-				break;
-			}
-		default:
-			throw new IllegalStateException();
+		if (gameMode.equals(GameMode.SINGLEPLAYER)) {
+			reversi.startGame(GameMode.SINGLEPLAYER, startPlayer);
+			reversi.player1.setName(loginName);
+		} else {
+			reversi.startGame(GameMode.ONLINE, startPlayer);
+			reversi.player1.setName(loginName);
+			reversi.player2.setName(opponentName);
 		}
 
 		notifyViews();
@@ -96,8 +77,6 @@ public class GameModel extends Model {
 	public void endGame() {
 		currentGameMode = null;
 		currentGameType = null;
-
-		reversi = null;
 
 		notifyViews();
 	}
@@ -295,12 +274,7 @@ public class GameModel extends Model {
 	 * @return Array of players.
 	 */
 	public Player[] getPlayers() {
-		switch (currentGameType) {
-		case REVERSI:
-			return reversi.getPlayers();
-		default:
-			return null;
-		}
+		return reversi.getPlayers();
 	}
 
 }

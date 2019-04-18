@@ -22,15 +22,30 @@ public class Reversi extends Game {
 	public static final int WHITE = 2;
 
 	/**
-	 * De constructor vraagt de game modus op en de speler die start.
-	 * In deze klasse word het gametype altijd overschreven met Reversi.
+	 * De constructor vraagt de game modus op en de speler die start. In deze klasse
+	 * word het gametype altijd overschreven met Reversi.
 	 * 
-	 * @param gameMode		De game modus van het spel.
-	 * @param startPlayer	De speler die start.
+	 * @param gameMode    De game modus van het spel.
+	 * @param startPlayer De speler die start.
 	 */
-	public Reversi(GameMode gameMode, PlayerType startPlayer) {
-		super(GameType.REVERSI, gameMode);
+	public Reversi(GameMode gameMode) {
+		super(GameType.REVERSI);
 
+		// Set turn
+		turn = 0;
+
+		// Set the first pieces
+		try {
+			board.setPiece(3, 3, WHITE);
+			board.setPiece(3, 4, BLACK);
+			board.setPiece(4, 3, BLACK);
+			board.setPiece(4, 4, WHITE);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void startGame(GameMode gameMode, PlayerType startPlayer) {
 		// Set which player is AI, SERVER or HUMAN also set the correct color for the
 		// start player
 		if (gameMode.equals(GameMode.SINGLEPLAYER)) {
@@ -59,33 +74,20 @@ public class Reversi extends Game {
 		// Set the scores
 		player1.setScore(2);
 		player2.setScore(2);
-
-		// Set turn
-		turn = 0;
-
-		// Set the first pieces
-		try {
-			board.setPiece(3, 3, WHITE);
-			board.setPiece(3, 4, BLACK);
-			board.setPiece(4, 3, BLACK);
-			board.setPiece(4, 4, WHITE);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**
-	 * Deze kijkt voor 1 bracket of het een steen op de
-	 * coordinaten van x en y een geldige zet is.
+	 * Deze kijkt voor 1 bracket of het een steen op de coordinaten van x en y een
+	 * geldige zet is.
 	 *
-	 * @param  x 		Coordinaat x van de zet die gechecked moet worden
-	 * @param  y 		Coordinaat y van de zet die gechecked moet worden
-	 * @param  intX 	De richting van X (1 = oost, -1 = west)
-	 * @param  intY 	De richting van Y (1 = noord, -1 = zuid)
+	 * @param  x        Coordinaat x van de zet die gechecked moet worden
+	 * @param  y        Coordinaat y van de zet die gechecked moet worden
+	 * @param  intX     De richting van X (1 = oost, -1 = west)
+	 * @param  intY     De richting van Y (1 = noord, -1 = zuid)
 	 * @param  playerID Het ID van de speler die de zet wilt doen
-	 * @param  b 		Het huidige board waar op gespeeld wordt
-	 * @return 			Stuur zet terug met mogelijke stenen die overgenomen
-	 * 					zouden worden als er een zet zou gedaan worden op deze plek.
+	 * @param  b        Het huidige board waar op gespeeld wordt
+	 * @return          Stuur zet terug met mogelijke stenen die overgenomen zouden
+	 *                  worden als er een zet zou gedaan worden op deze plek.
 	 */
 	public ArrayList<ArrayList<Integer>> getValidMoves(Board b, int playerID) {
 		// Array met mogelijke zetten
@@ -151,20 +153,19 @@ public class Reversi extends Game {
 
 		return validMoves;
 	}
-	
+
 	/**
-	 * Deze functie kijkt voor 1 bracket of het plaatsen van een 
-	 * steen op de coordinaten van x en y een geldige zet is voor
-	 * die bracket.
+	 * Deze functie kijkt voor 1 bracket of het plaatsen van een steen op de
+	 * coordinaten van x en y een geldige zet is voor die bracket.
 	 *
-	 * @param  x 		Coordinaat x van de zet die gechecked moet worden
-	 * @param  y 		Coordinaat y van de zet die gechecked moet worden
-	 * @param  intX 	De richting van X (1 = oost, -1 = west)
-	 * @param  intY 	De richting van Y (1 = noord, -1 = zuid)
+	 * @param  x        Coordinaat x van de zet die gechecked moet worden
+	 * @param  y        Coordinaat y van de zet die gechecked moet worden
+	 * @param  intX     De richting van X (1 = oost, -1 = west)
+	 * @param  intY     De richting van Y (1 = noord, -1 = zuid)
 	 * @param  playerID Het ID van de speler die de zet wilt doen
-	 * @param  b 		Het huidige board waar op gespeeld wordt
-	 * @return 			Stuur zet terug met mogelijke stenen die overgenomen
-	 * 					zouden worden als er een zet zou gedaan worden op deze plek.
+	 * @param  b        Het huidige board waar op gespeeld wordt
+	 * @return          Stuur zet terug met mogelijke stenen die overgenomen zouden
+	 *                  worden als er een zet zou gedaan worden op deze plek.
 	 */
 	public ArrayList<Integer> checkDirection(int x, int y, int intX, int intY, int playerID, Board b) {
 		ArrayList<Integer> fields = new ArrayList<Integer>();
@@ -223,15 +224,15 @@ public class Reversi extends Game {
 
 		return fields;
 	}
+
 	/**
 	 * Deze functie voert de zet uit die meegegeven wordt.
 	 *
-	 * @param  input 		De move die gedaan moet worden
-	 * @param  validMoves 	Alle geldige moves die de speler op
-	 * 						dat moment kan doen
-	 * @param  playerID 	Het ID van de speler die de zet doet
-	 * @param  b 			Het huidige board waar op gespeeld wordt
-	 * @return 				Stuur terug of het een geldige zet was of niet.
+	 * @param  input      De move die gedaan moet worden
+	 * @param  validMoves Alle geldige moves die de speler op dat moment kan doen
+	 * @param  playerID   Het ID van de speler die de zet doet
+	 * @param  b          Het huidige board waar op gespeeld wordt
+	 * @return            Stuur terug of het een geldige zet was of niet.
 	 */
 	public boolean setMove(int input, ArrayList<ArrayList<Integer>> validMoves, int playerID, Board b) {
 		int row = 0;
@@ -299,15 +300,13 @@ public class Reversi extends Game {
 	}
 
 	/**
-	 * Deze functie wordt gebruikt om door de AI, als
-	 * hij gebruik maakt van minimax, om vooruit te kijken.
+	 * Deze functie wordt gebruikt om door de AI, als hij gebruik maakt van minimax,
+	 * om vooruit te kijken.
 	 *
-	 * @param player  	De speler die de zet wilt doen
-	 * @param move  	De zet die minimax wilt proberen
-	 * @param b  		Het huidige board waar minimax op aan
-	 * 					het simuleren is
-	 * @return 			De status van het board, voor de volgende tak
-	 * 					van minimax
+	 * @param  player De speler die de zet wilt doen
+	 * @param  move   De zet die minimax wilt proberen
+	 * @param  b      Het huidige board waar minimax op aan het simuleren is
+	 * @return        De status van het board, voor de volgende tak van minimax
 	 */
 	public Board makeForwardMove(Player player, int move, Board b) {
 		if (!player1.getType().equals(PlayerType.HUMAN)) {
@@ -365,10 +364,9 @@ public class Reversi extends Game {
 	}
 
 	/**
-	 * Deze functie wordt gebruikt om een zet van de
-	 * AI te spelen.
+	 * Deze functie wordt gebruikt om een zet van de AI te spelen.
 	 *
-	 * @param player  De speler die de zet wilt doen
+	 * @param player De speler die de zet wilt doen
 	 */
 	public int makeAIMove(Player player) {
 		int input = -1;
@@ -383,36 +381,37 @@ public class Reversi extends Game {
 		while (validMove == false) {
 			// Check if there are any possible moves
 			if (!validMoves.isEmpty()) {
-				// Als er een blocking move gedaan kan worden, wordt dit gedaan. Dit heeft nummer 1 prioriteit.
+				// Als er een blocking move gedaan kan worden, wordt dit gedaan. Dit heeft
+				// nummer 1 prioriteit.
 				int blockMove = player.ai.blockingMove(validMoves, board, player);
 				if (blockMove != -1) {
 					input = blockMove;
-				// Random zet, gebeurt op dit moment nooit
+					// Random zet, gebeurt op dit moment nooit
 				} else if (turn < 0) {
 					input = player.ai.random(board, player);
-				// Zet gebaseerd op boardweight, gebeurt op dit moment nooit
+					// Zet gebaseerd op boardweight, gebeurt op dit moment nooit
 				} else if (turn < 0) {
 					input = player.ai.boardWeighting(board, player);
-				// Minimax, 8 diep, gebeurt tussen beurt 0 en 30
+					// Minimax, 8 diep, gebeurt tussen beurt 0 en 30
 				} else if (turn < 30) {
 					input = player.ai.minimaxAvailableMoves(board, player, 0, 8, 0, 0, Integer.MIN_VALUE,
 							Integer.MAX_VALUE, 0);
-				// Minimax, 9 diep, gebeurt tussen beurt 30 en 40
+					// Minimax, 9 diep, gebeurt tussen beurt 30 en 40
 				} else if (turn < 40) {
 					input = player.ai.minimaxAvailableMoves(board, player, 0, 9, 0, 0, Integer.MIN_VALUE,
 							Integer.MAX_VALUE, 0);
-				// Minimax, 10 diep, gebeurt tussen beurt 40 en 45
+					// Minimax, 10 diep, gebeurt tussen beurt 40 en 45
 				} else if (turn < 45) {
 					input = player.ai.minimaxAvailableMoves(board, player, 0, 10, 0, 0, Integer.MIN_VALUE,
 							Integer.MAX_VALUE, 0);
-				// Minimax, 16 diep, gebeurt tussen beurt 45 en 60
+					// Minimax, 16 diep, gebeurt tussen beurt 45 en 60
 				} else {
 					input = player.ai.minimaxTest(board, player, 0, 16, 0, 0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
 				}
-				
+
 				// Voer de move die gevonden is uit.
 				validMove = setMove(input, validMoves, player.color, board);
-				
+
 				if (validMove == true) {
 					turn++;
 				}
@@ -437,11 +436,10 @@ public class Reversi extends Game {
 	}
 
 	/**
-	 * Deze functie wordt gebruikt om een zet van de
-	 * server te spelen.
+	 * Deze functie wordt gebruikt om een zet van de server te spelen.
 	 *
-	 * @param player  	De speler die de zet wilt doen
-	 * @param input  	De zet die gespeeld wordt
+	 * @param player De speler die de zet wilt doen
+	 * @param input  De zet die gespeeld wordt
 	 */
 	public void makeMove(Player player, int input) {
 		// Get all the valid moves if there are any
@@ -467,13 +465,11 @@ public class Reversi extends Game {
 			switchTurn(player);
 		}
 	}
-	
+
 	/**
-	 * Deze functie zorgt ervoor dat de volgende speler
-	 * de beurt krijgt.
+	 * Deze functie zorgt ervoor dat de volgende speler de beurt krijgt.
 	 *
-	 * @param player  	De speler die op dat moment aan de
-	 * 					beurt is
+	 * @param player De speler die op dat moment aan de beurt is
 	 */
 	public void switchTurn(Player player) {
 		// debugMove(player.color, board);
@@ -509,13 +505,13 @@ public class Reversi extends Game {
 			}
 		}
 	}
-	
+
 	/**
-	 * Deze functie printte de mogelijke zetten in de console,
-	 * voordat er een GUI aanwezig was.
+	 * Deze functie printte de mogelijke zetten in de console, voordat er een GUI
+	 * aanwezig was.
 	 *
-	 * @param validMoves  	Alle mogelijke zetten op dat moment
-	 * @param b  			Het bord waarop dat moment gespeeld wordt
+	 * @param validMoves Alle mogelijke zetten op dat moment
+	 * @param b          Het bord waarop dat moment gespeeld wordt
 	 */
 	public void printValidMoves(ArrayList<ArrayList<Integer>> validMoves, Board b) {
 		System.out.print("Valid moves: ");
@@ -531,13 +527,11 @@ public class Reversi extends Game {
 	}
 
 	/**
-	 * Deze functie werd gebruikt om het scoreboard en
-	 * statistieken uit te printen in de console, voordat er
-	 * een GUI gebouwd was.
+	 * Deze functie werd gebruikt om het scoreboard en statistieken uit te printen
+	 * in de console, voordat er een GUI gebouwd was.
 	 *
-	 * @param playerID  	Het ID van de speler die op dat moment 
-	 * 						aan de beurt is
-	 * @param playerID b  	Het bord waarop dat moment gespeeld wordt
+	 * @param playerID Het ID van de speler die op dat moment aan de beurt is
+	 * @param playerID b Het bord waarop dat moment gespeeld wordt
 	 */
 	public void debugMove(int playerID, Board b) {
 		// Show updated score
@@ -563,13 +557,13 @@ public class Reversi extends Game {
 		}
 		return parts;
 	}
-	
+
 	/**
 	 * Deze functie geeft de score terug van een speler.
 	 *
-	 * @param  	Het ID van de speler wiens score opgevraagt wordt.
-	 * @return 	De score van de speler wiens ID opgegeven is,
-	 * 			min de score van de tegenstander.
+	 * @param  Het ID van de speler wiens score opgevraagt wordt.
+	 * @return     De score van de speler wiens ID opgegeven is, min de score van de
+	 *             tegenstander.
 	 */
 	public int calculateScore(int playerID) {
 		if (playerID == 1) {

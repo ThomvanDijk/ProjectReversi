@@ -92,7 +92,7 @@ public class Main extends Application {
 		Scene scene = new Scene(hBox, SCREEN_WIDTH, SCREEN_HEIGHT);
 		stage.setScene(scene);
 		stage.setResizable(false);
-		stage.setTitle("Abstract strategy games");
+		stage.setTitle("Reversi");
 		stage.show();
 	}
 

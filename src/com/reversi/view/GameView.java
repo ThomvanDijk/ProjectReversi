@@ -121,8 +121,19 @@ public class GameView extends View {
 		infoPane.add(hBoxRight, 2, 0);
 
 		gamePane.getChildren().addAll(infoPane, boardPane);
-		boardPane.setVisible(true);
-		infoPane.setVisible(false);
+		
+		int[][] board = new int[][] {
+			{0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0},
+			{0,0,0,2,1,0,0,0},
+			{0,0,0,1,2,0,0,0},
+			{0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0}
+		};
+			
+		updateBoard(board, null);
 	}
 
 	/**
@@ -135,28 +146,20 @@ public class GameView extends View {
 	protected void update(Model model) {
 		GameModel gameModel = (GameModel) model; // cast
 
-		if (gameModel.getCurrentGameType() != null) {
-			boardPane.setVisible(true);
-			infoPane.setVisible(true);
+		Player[] players = gameModel.getPlayers();
+		updateGameState(players);
 
-			Player[] players = gameModel.getPlayers();
-			updateGameState(players);
-
-			if (players[0].hasTurn()) {
-				updateBoard(gameModel.getBoard(), players[0]);
-			} else {
-				updateBoard(gameModel.getBoard(), players[1]);
-			}
-
-			gameName.setText(gameModel.getCurrentGameType().name());
-
-			// Make only the first letter a capital
-			String gameModeString = gameModel.getCurrentGameMode().name().toLowerCase();
-			gameMode.setText(gameModeString.substring(0, 1).toUpperCase() + gameModeString.substring(1));
+		if (players[0].hasTurn()) {
+			updateBoard(gameModel.getBoard(), players[0]);
 		} else {
-			boardPane.setVisible(false);
-			infoPane.setVisible(false);
+			updateBoard(gameModel.getBoard(), players[1]);
 		}
+
+		gameName.setText(gameModel.getCurrentGameType().name());
+
+		// Make only the first letter a capital
+		String gameModeString = gameModel.getCurrentGameMode().name().toLowerCase();
+		gameMode.setText(gameModeString.substring(0, 1).toUpperCase() + gameModeString.substring(1));
 	}
 
 	public void updateGameState(Player[] players) {
@@ -202,7 +205,9 @@ public class GameView extends View {
 				boardButton.setPrefHeight(squareSize);
 				boardButton.setStyle("-fx-background-color: darkseagreen; -fx-text-fill: white;");
 
-				if (player.getType().equals(PlayerType.HUMAN)) {
+				if(player == null) {
+					
+				} else if (player.getType().equals(PlayerType.HUMAN)) {
 					boardButton.setOnAction(e -> {
 
 //						Task<Void> task = new Task<Void>() {

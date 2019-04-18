@@ -22,7 +22,6 @@ public abstract class Game {
 
 	private final GameType gameType;
 	protected Board board;
-	protected GameMode gameMode;
 	protected boolean noWinner;
 	protected int noWinnerCount;
 	protected Player player1;
@@ -35,9 +34,8 @@ public abstract class Game {
 	 * @param gameType Het type van het spel (Reversi/TicTacToe
 	 * @param gameMode De modus van het spel (Singleplayer/Multiplayer)
 	 */
-	public Game(GameType gameType, GameMode gameMode) {
+	public Game(GameType gameType) {
 		this.gameType = gameType;
-		this.gameMode = gameMode;
 
 		noWinnerCount = 0;
 
